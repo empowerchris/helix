@@ -1,9 +1,27 @@
-<ion-view view-title="New Pickup">
-  <ion-content>
-    <h1>From</h1>
-    <h1>To</h1>
-    <div>
-      map
+<ion-view view-title="Pickup">
+  <ion-content scroll="false">
+    <div class="card location-selectors">
+      <div class="item location-selector">
+        <i class="icon ion-ios-search-strong"></i>
+        <p class="location-selector-title">PICKUP LOCATION</p>
+        <p class="location">Torstrasee 120</p>
+      </div>
+      <div class="item location-selector">
+        <i class="icon ion-ios-calendar-outline"></i>
+        <p class="location-selector-title">PICKUP DATE</p>
+        <p class="location">July 23rd</p>
+      </div>
+      <div class="item location-selector">
+        <i class="icon ion-ios-clock-outline"></i>
+        <p class="location-selector-title">PICKUP TIME</p>
+        <p class="location"><strong>09:00</strong> to <strong>15:00</strong></p>
+      </div>
+      </div>
+    </div>
+    <div class="maps-bg-container">
+      <ui-gmap-google-map center="map.center" zoom="map.zoom" dragging="false">
+
+      </ui-gmap-google-map>
     </div>
   </ion-content>
 </ion-view>

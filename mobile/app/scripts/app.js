@@ -1,4 +1,8 @@
-angular.module('helix', ['ionic', 'helix.controllers'])
+angular.module('helix', [
+  'ionic',
+  'helix.controllers',
+  'uiGmapgoogle-maps'
+])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
