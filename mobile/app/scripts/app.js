@@ -1,8 +1,10 @@
 angular.module('helix', [
   'ionic',
   'helix.controllers',
+  'helix.directives',
   'uiGmapgoogle-maps',
-  'ion-autocomplete'
+  'ion-autocomplete',
+  'ngGPlaces'
 ])
 
   .run(function ($ionicPlatform) {

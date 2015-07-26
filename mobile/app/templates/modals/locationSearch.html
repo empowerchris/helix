@@ -1,27 +1,30 @@
 <ion-modal-view ng-controller="LocationSearchCtrl">
-  <ion-header-bar>
+  <ion-header-bar class="item-input-inset">
     <label class="item-input-wrapper">
       <i class="icon ion-search placeholder-icon"></i>
-      <input type="search" ng-model="searchQuery" placeholder="{{placeholder}}"/>
+      <input type="search" ng-model="searchQuery"
+             autofocus
+             ng-model-options="{debounce: 500}" placeholder="{{placeholder}}"/>
     </label>
 
     <div class="ion-autocomplete-loading-icon" ng-if="showLoadingIcon">
       <ion-spinner icon="{{loadingIcon || 'ion-load-d'}}"></ion-spinner>
     </div>
-    <button class="button button-clear" ng-click="cancel()">{{cancelLabel || 'Cancel'}}</button>
+    <button class="button button-clear button-positive" ng-click="cancel()">{{cancelLabel || 'Cancel'}}</button>
   </ion-header-bar>
-  <ion-content>
-    <ion-list>
-      <ion-item class="item-divider" ng-show="selectedItems.length > 0">{{selectedItemsLabel}}</ion-item>
-      <ion-item ng-repeat="selectedItem in selectedItems track by $index" type="item-text-wrap" class="item-icon-left item-icon-right">
-        <i class="icon ion-checkmark"></i>
-        {{getItemValue(selectedItem, itemViewValueKey)}}
-        <i class="icon ion-trash-a" style="cursor:pointer" ng-click="removeItem($index)"></i>
-      </ion-item>
-      <ion-item class="item-divider" ng-show="items.length > 0">{{selectItemsLabel}}</ion-item>
-      <ion-item collection-repeat="item in items" item-height="55" item-width="100%" type="item-text-wrap" ng-click="selectItem(item)">
-        {{getItemValue(item, itemViewValueKey)}}
-      </ion-item>
+  <ion-content class="light-bg">
+    <ion-list ng-if="suggestions.length">
+      <div class="card light-shadow packed-list">
+        <div class="item item-text-wrap item-icon-left" ng-repeat="item in suggestions">
+          <i class="icon ion-location"></i>
+          <h3>{{item.name}}</h3>
+          <p>{{item.vicinity}}</p>
+        </div>
+      </div>
     </ion-list>
+    <div class="text-center" ng-if="suggestions.length">
+      <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white2.png"/>
+      <br>
+    </div>
   </ion-content>
 </ion-modal-view>

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="styles/main.css" />
     <!-- endbuild -->
 
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+
     <!-- ionic/angularjs js -->
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
@@ -30,17 +32,18 @@
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
     <script src="bower_components/ion-autocomplete/dist/ion-autocomplete.js"></script>
+    <script src="bower_components/angularjs-google-places/src/angularjs-google-places.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
-    <script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
 
     <!-- your app's js -->
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers.js"></script>
+    <script src="scripts/directives.js"></script>
     <script src="scripts/configuration.js"></script>
     <script src="scripts/newPickup/newPickup.controller.js"></script>
     <script src="scripts/locationSearch.controller.js"></script>
