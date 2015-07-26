@@ -1,7 +1,10 @@
 <ion-modal-view ng-controller="LocationSearchCtrl">
   <ion-header-bar class="item-input-inset">
     <label class="item-input-wrapper">
-      <i class="icon ion-search placeholder-icon"></i>
+      <i class="icon ion-search placeholder-icon" ng-hide="loading"></i>
+      <span class="icon" ng-show="loading">
+        <ion-spinner icon="dots" class="loading-indicator"></ion-spinner>
+      </span>
       <input type="search" ng-model="searchQuery"
              autofocus
              ng-model-options="{debounce: 500}" placeholder="{{placeholder}}"/>
@@ -13,12 +16,27 @@
     <button class="button button-clear button-positive" ng-click="cancel()">{{cancelLabel || 'Cancel'}}</button>
   </ion-header-bar>
   <ion-content class="light-bg">
-    <ion-list ng-if="suggestions.length">
+
+    <ion-list ng-if="selectedPlace">
       <div class="card light-shadow packed-list">
-        <div class="item item-text-wrap item-icon-left" ng-repeat="item in suggestions">
-          <i class="icon ion-location"></i>
+        <div class="item item-text-wrap item-icon-left item-icon-left">
+          <i class="icon ion-location" style="font-size: x-large"></i>
           <!--<h3>{{item.place_id}}</h3>-->
-          <p>{{item.formatted_address}}</p>
+          <h4>{{selectedPlace.formatted_address}}</h4>
+          <i class="icon ion-location" style="font-size: x-large"></i>
+        </div>
+      </div>
+    </ion-list>
+
+    <ion-list ng-if="suggestions.length && !selectedPlace">
+      <div class="card light-shadow packed-list">
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation(item)"
+             ng-repeat="item in suggestions">
+          <i class="icon ion-location" style="font-size: x-large"></i>
+          <!--<h3>{{item.place_id}}</h3>-->
+          <h4>{{item.formatted_address}}</h4>
+          <i class="icon ion-location" style="font-size: x-large"></i>
         </div>
       </div>
     </ion-list>

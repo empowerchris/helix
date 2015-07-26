@@ -55,3 +55,14 @@
     color: darkgrey;
   }
 }
+
+.loading-indicator {
+  svg {
+    margin-left: -6px;
+    margin-top: 6px;
+    margin-right: -5px;
+    height: 20px;
+    stroke: $positive;
+    fill: $positive;
+  }
+}

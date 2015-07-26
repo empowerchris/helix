@@ -4,41 +4,38 @@ angular.module('helix.controllers')
 
     $scope.searchQuery = '';
 
+    $scope.selectedPlace = null;
+
     $scope.cancel = function () {
       $scope.modal.hide();
     };
 
     var geocoder = new google.maps.Geocoder();
-    var service = new google.maps.places.PlacesService(null);
 
     $scope.$watch('searchQuery', function (query) {
       if (!query) return;
-      if (query.length < 3);
+      if (query.length < 3) return;
+
+      $scope.loading = true;
+      $scope.suggestions = [];
 
       var req = {};
       req.address = query;
 
       geocoder.geocode(req, function (results, status) {
+        $scope.loading = false;
+
         if (status == google.maps.GeocoderStatus.OK) {
           $scope.$apply(function () {
             $scope.suggestions = results;
-
-            /*for (var i = 0; i < results.length; i++) {
-              console.log(results[i]);
-
-              service.getDetails({
-                placeId: results[i].place_id
-              }, function (place, status) {
-                if (status == google.maps.places.PlacesServiceStatus.OK) {
-                  console.log(place);
-                }
-              });
-            }*/
-
           });
         } else {
-          // @TODO: Figure out what to do when the geocoding fails
+          // TODO: Figure out what to do when the geocoding fails
         }
       });
-    })
+    });
+
+    $scope.selectLocation = function (location) {
+      $scope.selectedPlace = location;
+    }
   });
