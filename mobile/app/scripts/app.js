@@ -2,7 +2,8 @@ angular.module('helix', [
   'ionic',
   'helix.controllers',
   'helix.directives',
-  'uiGmapgoogle-maps'
+  'uiGmapgoogle-maps',
+  'google.places'
 ])
 
   .run(function ($ionicPlatform) {
