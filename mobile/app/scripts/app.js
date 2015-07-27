@@ -12,8 +12,7 @@ angular.module('helix', [
       // for form inputs)
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
-
+        cordova.plugins.Keyboard.disableScroll(false);
       }
       if (window.StatusBar) {
         // org.apache.cordova.statusbar required

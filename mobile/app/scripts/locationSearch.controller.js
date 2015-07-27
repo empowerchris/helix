@@ -17,7 +17,6 @@ angular.module('helix.controllers')
       if (query.length < 3) return;
 
       $scope.loading = true;
-      $scope.suggestions = [];
 
       var req = {};
       req.address = query;
@@ -31,6 +30,7 @@ angular.module('helix.controllers')
           });
         } else {
           // TODO: Figure out what to do when the geocoding fails
+          console.error(status);
         }
       });
     });
