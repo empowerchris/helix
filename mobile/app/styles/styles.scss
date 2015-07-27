@@ -41,6 +41,10 @@ body {
     color: $positive;
     margin: 0;
   }
+
+  .content {
+    font-size: 1em;
+  }
 }
 
 .light-bg {
@@ -75,4 +79,14 @@ body {
 
 .bold {
   font-weight: bold;
+}
+
+.big-bar {
+  height: 70px;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  button {
+    font-size: 2em;
+  }
 }

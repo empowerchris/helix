@@ -6,6 +6,7 @@
         <ion-spinner icon="dots" class="loading-indicator"></ion-spinner>
       </span>
         <input type="search" ng-model="searchQuery"
+               ng-click="selectedPlace = null;"
                focus-me
                ng-model-options="{debounce: 250}" placeholder="{{placeholder}}"/>
       </label>
