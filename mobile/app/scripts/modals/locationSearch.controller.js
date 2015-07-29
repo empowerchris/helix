@@ -1,5 +1,7 @@
 angular.module('helix.controllers')
   .controller('LocationSearchCtrl', function ($scope) {
+    $scope.loading = false;
+
     $scope.placeholder = 'Enter pickup address';
 
     $scope.searchQuery = '';
@@ -27,6 +29,7 @@ angular.module('helix.controllers')
         if (status == google.maps.GeocoderStatus.OK) {
           $scope.$apply(function () {
             $scope.suggestions = results;
+            console.log(results);
           });
         } else {
           // TODO: Figure out what to do when the geocoding fails

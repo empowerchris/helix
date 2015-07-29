@@ -1,26 +1,24 @@
 <ion-modal-view ng-controller="DateSelectionCtrl">
   <ion-header-bar>
-    <h1 class="title">Pick a Date</h1>
+    <h1 class="title">Pickup Date</h1>
 
     <button class="button button-clear button-positive" ng-click="cancel()">{{cancelLabel || 'Cancel'}}</button>
   </ion-header-bar>
   <ion-content class="light-bg">
     <ion-list>
-      <div class="" style="padding:1em">
+      <div style="padding:1em">
         <p style="opacity:0.7">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-           commodo
-           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-           pariatur.</p>
+           commodo consequat. </p>
       </div>
       <label class="item item-input">
         <span class="input-label">Date</span>
-        <input type="date" focus-me>
+        <input type="date" ng-model="pickupDate">
       </label>
 
-      <div class="" style="padding: 10px;">
+      <div style="padding: 10px;">
         <button class="button button-block button-positive light-shadow bold"
-                ng-click="cancel()">
+                ng-click="save()">
           Save
         </button>
       </div>

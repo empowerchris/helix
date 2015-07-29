@@ -3,27 +3,29 @@
     <div class="card location-selectors">
       <div class="item location-selector" ng-click="editPickupLocation()">
         <i class="icon ion-ios-search-strong"></i>
+
         <p class="location-selector-title">PICKUP LOCATION</p>
+
         <p class="content">Torstrasee 120</p>
       </div>
       <div class="item location-selector" ng-click="editDate()">
         <i class="icon ion-ios-calendar-outline"></i>
+
         <p class="location-selector-title">PICKUP DATE</p>
-        <p class="content">July 23rd</p>
+
+        <p class="content">{{date | date:'fullDate'}}</p>
       </div>
       <div class="item location-selector" ng-click="editTime()">
         <i class="icon ion-ios-clock-outline"></i>
+
         <p class="location-selector-title">PICKUP TIME</p>
-        <p class="content">09:00 to 15:00</p>
-      </div>
+
+        <p class="content">{{time.from | date:'hh:mm a'}} to {{time.to | date:'hh:mm a'}}</p>
       </div>
     </div>
     <div class="maps-bg-container">
-      <ui-gmap-google-map center="map.center"
-                          zoom="map.zoom"
-                          dragging="false"
-        options="options">
-
+      <ui-gmap-google-map center="map.center" zoom="map.zoom" dragging="false" options="options">
+        <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
       </ui-gmap-google-map>
     </div>
   </ion-content>
@@ -35,6 +37,6 @@
     <div class="buttons" ng-click="doSomething()">
       <button class="button">Right Button</button>
     </div>-->
-
+    <button class="button button-block button-positive main-button">Continue to dropoff</button>
   </ion-footer-bar>
 </ion-view>
