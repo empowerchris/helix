@@ -8,5 +8,5 @@ module.exports = {
     uri: 'mongodb://localhost/helix-dev'
   },
 
-  seedDB: true
+  seedDB: false
 };
