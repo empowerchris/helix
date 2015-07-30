@@ -1,17 +1,17 @@
 angular.module('helix', [
   'ionic',
   'ngCordova',
+  'ngStorage',
+  'helix.components',
   'helix.controllers',
   'helix.directives',
   'uiGmapgoogle-maps'
 ])
 
-  .constant("Velocity", $.Velocity)
+  .constant('Velocity', $.Velocity)
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
@@ -23,7 +23,7 @@ angular.module('helix', [
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $stateProvider
 
       .state('app', {
@@ -33,52 +33,62 @@ angular.module('helix', [
         controller: 'AppCtrl'
       })
 
+      .state('login', {
+        url: '/login',
+        abstract: true,
+        templateUrl: 'templates/login.html',
+        controller: 'LoginCtrl'
+      })
+
       .state('app.newPickup', {
-        url: '/new',
+        url: '/pickup/new',
         views: {
           'menuContent': {
             templateUrl: 'templates/newPickup.html',
             controller: 'NewPickupCtrl'
           }
         }
-      })
+      });
 
-      .state('app.search', {
-        url: '/search',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/search.html'
-          }
-        }
-      })
+    $urlRouterProvider.otherwise('/app/pickup/new');
 
-      .state('app.browse', {
-        url: '/browse',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/browse.html'
-          }
-        }
-      })
-      .state('app.playlists', {
-        url: '/playlists',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/playlists.html',
-            controller: 'PlaylistsCtrl'
-          }
-        }
-      })
+    $httpProvider.interceptors.push('authInterceptor');
+  })
 
-      .state('app.single', {
-        url: '/playlists/:playlistId',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/playlist.html',
-            controller: 'PlaylistCtrl'
-          }
+  .factory('authInterceptor', function ($rootScope, $q, $localStorage, $location) {
+    return {
+      // Add authorization token to headers
+      request: function (config) {
+        config.headers = config.headers || {};
+        if ($localStorage.token) {
+          config.headers.Authorization = 'Bearer ' + $localStorage.token;
+        }
+        return config;
+      },
+
+      // Intercept 401s and redirect to login
+      responseError: function(response) {
+        if(response.status === 401) {
+          $location.path('/login');
+          // remove any stale tokens
+          delete $localStorage.token;
+          return $q.reject(response);
+        }
+        else {
+          return $q.reject(response);
+        }
+      }
+    };
+  })
+
+  .run(function ($rootScope, $location, Auth) {
+    // Redirect to login if route requires auth and user is not logged in
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      Auth.isLoggedInAsync(function(loggedIn) {
+        if (next.authenticate && !loggedIn) {
+          event.preventDefault();
+          $location.path('/login');
         }
       });
-    // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/playlists');
+    });
   });

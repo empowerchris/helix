@@ -88,7 +88,7 @@ angular.module('helix.controllers')
             duration: 200,
             easing: "swing",
             complete: function () {
-              
+
             }
           });
         }
