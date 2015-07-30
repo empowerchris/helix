@@ -1,5 +1,5 @@
 angular.module('helix.controllers')
-  .controller('NewPickupCtrl', function ($scope, $ionicModal) {
+  .controller('NewPickupCtrl', function ($scope, $ionicModal, Velocity) {
     $scope.map = {
       center: {
         latitude: 45,
@@ -22,7 +22,7 @@ angular.module('helix.controllers')
       icon: 'images/ionic.png'
     };
 
-    $scope.time = {}
+    $scope.time = {};
     $scope.time.from = new Date(1970, 0, 1, 9, 0, 0);
     $scope.time.to = new Date(1970, 0, 1, 17, 0, 0);
 
@@ -72,4 +72,26 @@ angular.module('helix.controllers')
         $scope.modal.show();
       });
     };
+
+    var container = angular.element(document.querySelector('#pickupCards'));
+
+    $scope.continueToDropOff = function () {
+      Velocity(container, {
+        scale: 1.1
+      }, {
+        duration: 100,
+        easing: "swing",
+        complete: function () {
+          Velocity(container, {
+            scale: 0.1
+          }, {
+            duration: 200,
+            easing: "swing",
+            complete: function () {
+              
+            }
+          });
+        }
+      });
+    }
   });
