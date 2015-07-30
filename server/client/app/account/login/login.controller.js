@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helixApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location) {
+  .controller('LoginCtrl', function ($scope, Auth, $location, $window) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -23,4 +23,7 @@ angular.module('helixApp')
       }
     };
 
+    $scope.loginOauth = function(provider) {
+      $window.location.href = '/auth/' + provider;
+    };
   });
