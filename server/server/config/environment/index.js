@@ -60,7 +60,13 @@ var all = {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
-  }
+  },
+
+  concur: {
+    clientID:     process.env.FACEBOOK_ID || 'gQA72oS3Zz3fmW8WI2BXTq',
+    clientSecret: process.env.FACEBOOK_SECRET || 'uMFxYuFqWH3qRkqrvRfIR9ajrFGWQQ7A',
+    callbackURL:  (process.env.DOMAIN || '') + '/auth/concur/callback'
+  },
 };
 
 // Export the config object based on the NODE_ENV

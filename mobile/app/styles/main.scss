@@ -1,7 +1,6 @@
 @charset "UTF-8";
 
-@import "variables";
-
-@import "../bower_components/ionic/scss/ionic";
+$positive: #049e02 !default;
 
 @import "styles";
+@import "../bower_components/ionic/scss/ionic";
