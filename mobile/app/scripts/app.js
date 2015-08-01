@@ -48,9 +48,19 @@ angular.module('helix', [
             controller: 'NewPickupCtrl'
           }
         }
+      })
+
+      .state('app.whereNext', {
+        url: '/step1',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/whereNext.html',
+            controller: 'WhereNextCtrl'
+          }
+        }
       });
 
-    $urlRouterProvider.otherwise('/app/pickup/new');
+    $urlRouterProvider.otherwise('/app/step1');
 
     $httpProvider.interceptors.push('authInterceptor');
   })
@@ -67,8 +77,8 @@ angular.module('helix', [
       },
 
       // Intercept 401s and redirect to login
-      responseError: function(response) {
-        if(response.status === 401) {
+      responseError: function (response) {
+        if (response.status === 401) {
           $location.path('/login');
           // remove any stale tokens
           delete $localStorage.token;
@@ -84,7 +94,7 @@ angular.module('helix', [
   .run(function ($rootScope, $location, Auth) {
     // Redirect to login if route requires auth and user is not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
-      Auth.isLoggedInAsync(function(loggedIn) {
+      Auth.isLoggedInAsync(function (loggedIn) {
         if (next.authenticate && !loggedIn) {
           event.preventDefault();
           $location.path('/login');

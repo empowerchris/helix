@@ -1,0 +1,51 @@
+<ion-view view-title="">
+  <ion-content style="background-color: #F3F3F3; top: -20px" id="content">
+    <div id="where-next" style="padding-top: 60px">
+      <h2 style="text-align: center; text-align: center;font-weight: 200;padding: 10%;font-weight: 200;padding: 10%;color: #666666;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 1);">
+        Where are your travels taking you next?
+      </h2>
+
+      <div class="card location-selectors" id="pickupCards">
+        <div class="item location-selector" ng-click="ezditPickupLocation()">
+          <i class="icon ion-ios-search-strong"></i>
+
+          <p class="content" style="padding: 10px;text-align: left; padding-left: 45px">
+            Search for a city
+          </p>
+        </div>
+      </div>
+
+      <div class="map" style="z-index: -2;background: linear-gradient(rgba(243, 243, 243, 0) 0, #F3F3F3 90%, #F3F3F3 100%);">
+      </div>
+      <div class="map" style="-webkit-filter: blur(0px) contrast(0.8); opacity: 0.3;">
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" dragging="false" options="options">
+          <!--<ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">-->
+        </ui-gmap-google-map>
+      </div>
+    </div>
+
+    <div class="card location-selectors" id="suggestions" style="margin-top: 10px; z-index: 999;">
+      <div class="item location-selector" ng-click="ezditPickupLocation()">
+        <p class="content" style="padding: 10px;">
+          New York
+        </p>
+      </div>
+      <div class="item location-selector" ng-click="ezditPickupLocation()">
+        <p class="content" style="padding: 10px;">
+          Los Angeles
+        </p>
+      </div>
+      <div class="item location-selector" ng-click="ezditPickupLocation()">
+        <p class="content" style="padding: 10px;">
+          Seattle
+        </p>
+      </div>
+      <div class="item location-selector" ng-click="ezditPickupLocation()">
+        <p class="content" style="padding: 10px;">
+          Boston
+        </p>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
