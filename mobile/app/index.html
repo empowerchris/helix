@@ -1,72 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title>Helix</title>
 
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css" />
-    <link rel="stylesheet" href="bower_components/ion-autocomplete/dist/ion-autocomplete.css" />
-    <link rel="stylesheet" href="bower_components/angular-google-places-autocomplete/src/autocomplete.css" />
-    <link rel="stylesheet" href="bower_components/angular-google-places-autocomplete/dist/autocomplete.min.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- <link href="styles/style.css" rel="stylesheet"> -->
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css"/>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <link href="styles/style.css" rel="stylesheet">
 
-    <!-- build:css({.temp,app}) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css" />
-    <!-- endbuild -->
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+  <link href="styles/ionic.app.css" rel="stylesheet">
+  -->
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+  <!-- ionic/angularjs js -->
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/ionic/release/js/ionic.js"></script>
+  <script src="bower_components/ionic/release/js/ionic-angular.js"></script>
+  <script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
 
-    <!-- ionic/angularjs js -->
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/ionic/release/js/ionic.js"></script>
-    <script src="bower_components/ionic/release/js/ionic-angular.js"></script>
-    <script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
-    <script src="bower_components/lodash/lodash.js"></script>
-    <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
-    <script src="bower_components/ion-autocomplete/dist/ion-autocomplete.js"></script>
-    <script src="bower_components/angular-google-places-autocomplete/src/autocomplete.js"></script>
-    <script src="bower_components/angular-google-places-autocomplete/dist/autocomplete.min.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/angular-moment/angular-moment.js"></script>
-    <script src="bower_components/velocity/velocity.js"></script>
-    <script src="bower_components/velocity/velocity.ui.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/ngstorage/ngStorage.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
 
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
-
-    <!-- your app's js -->
-    <!-- build:js scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
-    <script src="scripts/components.js"></script>
-    <script src="scripts/controllers.js"></script>
-    <script src="scripts/directives.js"></script>
-    <script src="scripts/configuration.js"></script>
-    <script src="scripts/newPickup/newPickup.controller.js"></script>
-    <script src="scripts/modals/locationSearch.controller.js"></script>
-    <script src="scripts/modals/dateSelection.controller.js"></script>
-    <script src="scripts/modals/timeSelection.controller.js"></script>
-    <script src="scripts/login/login.controller.js"></script>
-    <script src="scripts/whereNext/whereNext.controller.js"></script>
-    <!-- endbuild -->
-  </head>
-
-  <body ng-app="helix">
-    <ion-nav-view></ion-nav-view>
-  </body>
+  <!-- your app's js -->
+  <!-- build:js scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers.js"></script>
+  <script src="scripts/services.js"></script>
+  <script src="scripts/configuration.js"></script>
+  <!-- endbuild -->
+</head>
+<body ng-app="starter">
+<!--
+<ion-nav-bar class="bar-stable">
+  <ion-nav-back-button>
+  </ion-nav-back-button>
+</ion-nav-bar>
+-->
+<ion-nav-view></ion-nav-view>
+</body>
 </html>

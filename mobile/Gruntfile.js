@@ -1,4 +1,4 @@
-// Generated on 2015-07-26 using generator-ionic 0.7.3
+// Generated on 2015-08-02 using generator-ionic 0.7.3
 'use strict';
 
 var _ = require('lodash');
@@ -161,7 +161,7 @@ module.exports = function (grunt) {
       }
     },
 
-
+    
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
         }
       }
     },
-
+    
 
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
@@ -222,24 +222,12 @@ module.exports = function (grunt) {
     },
 
     // The following *-min tasks produce minified files in the dist folder
-    /*cssmin: {
+    cssmin: {
       options: {
         //root: '<%= yeoman.app %>',
         noRebase: true
       }
-    },*/
-
-    cssmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '.temp/<%= yeoman.styles %>',
-          src: ['*.css'],
-          dest: '<%= yeoman.dist %>/<%= yeoman.styles %>'
-        }]
-      }
     },
-
     htmlmin: {
       dist: {
         options: {
@@ -302,7 +290,7 @@ module.exports = function (grunt) {
         dest: '<%= yeoman.dist %>/',
         src: [
           '**/*',
-          '!**/*.css'
+          '!**/*.(scss,sass,css)',
         ]
       },
       tmp: {
@@ -554,11 +542,6 @@ module.exports = function (grunt) {
     'autoprefixer',
     'concat',
     'ngAnnotate',
-    'compass:dist',
-    'copy:tmp',
-    'copy:styles',
-    'copy:vendor',
-    'copy:fonts',
     'copy:dist',
     'cssmin',
     'uglify',
@@ -566,7 +549,7 @@ module.exports = function (grunt) {
     'htmlmin'
   ]);
 
-  grunt.registerTask('coverage',
+  grunt.registerTask('coverage', 
     ['karma:continuous',
     'connect:coverage:keepalive'
   ]);
