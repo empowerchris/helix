@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('helix', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('helix', ['ionic', 'helix.controllers', 'helix.services', 'helix.directives'])
 
   .run(function ($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function () {

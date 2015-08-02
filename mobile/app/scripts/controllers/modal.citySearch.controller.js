@@ -1,23 +1,14 @@
-angular.module('starter.controllers')
+"use strict";
+
+angular.module('helix.controllers')
   .controller('ModalCitySearchCtrl', function ($scope, $rootScope) {
     $rootScope.$broadcast('defaultStatusBar');
-
     $scope.loading = false;
-
-    $scope.cancel = function () {
-      $rootScope.$broadcast('blueStatusBar');
-      $scope.modal.hide();
-    };
 
     var autocompleteService = new google.maps.places.AutocompleteService();
 
-    $scope.$watch('searchQuery', function (query) {
-      if (!query) return;
-
-      getResultsForQuery(query);
-    });
-
     function getResultsForQuery(query) {
+      if (!autocompleteService) return;
       $scope.loading = true;
 
       autocompleteService.getPlacePredictions({
@@ -26,7 +17,7 @@ angular.module('starter.controllers')
           componentRestrictions: {country: 'us'}
         },
         function listentoresult(list, status) {
-          if (list !== null && list.length !== 0) {
+          if (list !== null && list.length > 0) {
             $scope.$apply(function () {
               $scope.results = list;
               $scope.loading = false;
@@ -35,7 +26,16 @@ angular.module('starter.controllers')
         });
     }
 
-    getResultsForQuery('a');
+    $scope.cancel = function () {
+      $rootScope.$broadcast('blueStatusBar');
+      $scope.modal.hide();
+    };
+
+    $scope.$watch('searchQuery', function (query) {
+      if (!query) return;
+
+      getResultsForQuery(query);
+    });
 
     $scope.selectLocation = function (location) {
       $scope.selectedPlace = location;

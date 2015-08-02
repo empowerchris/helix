@@ -1,4 +1,6 @@
-angular.module('starter.controllers', [])
+"use strict";
+
+angular.module('helix.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
 

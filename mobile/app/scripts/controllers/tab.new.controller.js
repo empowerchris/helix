@@ -1,3 +1,5 @@
+"use strict";
+
 angular.module('starter.controllers')
   .controller('NewCtrl', function($scope, $ionicModal, $rootScope) {
     $scope.openSearchCityModal = function () {

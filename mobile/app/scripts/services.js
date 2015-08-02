@@ -1,4 +1,6 @@
-angular.module('starter.services', [])
+"use strict";
+
+angular.module('helix.services', [])
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
