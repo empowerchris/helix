@@ -1,1 +1,83 @@
-// Your application styles go here
+@charset "UTF-8";
+
+$positive: #F58B1F !default;
+$secondary: #27316D !default;
+
+@import "../bower_components/ionic/scss/ionic";
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,600);
+
+* {
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Source Sans Pro', sans-serif !important;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.grey-bg {
+  background-color: #fafafa;
+}
+
+.positive-bg {
+  background-color: $positive;
+}
+
+.secondary-bg {
+  background-color: $secondary;
+}
+
+#tab-new {
+  .hero {
+    padding: 3vh 3vw;
+    text-align: center;
+
+    .brand {
+      * {
+        color: white;
+      }
+    }
+
+    img {
+      height: 15vh;
+    }
+  }
+
+  .search-bar {
+    text-align: center;
+    padding: 0.3em !important;
+
+    .icon {
+      font-size: 1.5em;
+      padding: 0.6em;
+      clear: both;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    p {
+      text-align: left;
+      margin-left: 2em;
+      font-size: 1em;
+    }
+  }
+
+  .location-suggestion {
+    .subtitle {
+      font-size: 0.7em;
+      font-weight: bold;
+      color: $positive;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1.1em;
+    }
+  }
+
+  .location-suggestion.two-lines {
+    padding: 0.5em
+  }
+}

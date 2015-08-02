@@ -1,16 +1,65 @@
 <ion-view view-title="New Trip">
-  <ion-content>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+  <ion-content class="secondary-bg">
+    <div id="tab-new">
+      <div class="hero">
+        <img src="images/Helix_Logo_Icon1_orangesolid.png"/>
 
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
+        <div class="brand">
+          <h2 class="no-margin">Helix</h2>
+
+          <h3 class="no-margin">Effortless travel</h3>
+        </div>
+
+        <div class="card search-bar">
+          <div class="item">
+            <i class="icon ion-ios-search-strong"></i>
+
+            <p>
+              Search for a city
+            </p>
+          </div>
+        </div>
+
+        <div class="card location-suggestions">
+          <div class="item location-suggestion two-lines">
+            <p class="subtitle">
+              CONCUR BOOKING
+            </p>
+
+            <p>
+              New York
+            </p>
+          </div>
+        </div>
+
+        <div class="card location-suggestions">
+          <div class="item location-suggestion">
+            <p>
+              San Francisco
+            </p>
+          </div>
+          <div class="item location-suggestion">
+            <p>
+              Los Angeles
+            </p>
+          </div>
+          <div class="item location-suggestion">
+            <p>
+              Seattle
+            </p>
+          </div>
+          <div class="item location-suggestion">
+            <p>
+              Boston
+            </p>
+          </div>
+          <div class="item location-suggestion">
+            <p>
+              Austin
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>
