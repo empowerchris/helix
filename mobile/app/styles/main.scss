@@ -5,6 +5,7 @@ $secondary: #27316D !default;
 
 @import "../bower_components/ionic/scss/ionic";
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,600);
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
 
 * {
   text-rendering: geometricPrecision;
@@ -36,11 +37,17 @@ $secondary: #27316D !default;
     .brand {
       * {
         color: white;
+        font-family: 'Source Code Pro', monospace;
       }
+    }
+
+    .padded {
+      padding: 1em;
     }
 
     img {
       height: 15vh;
+      margin: 3vh 3vw;
     }
   }
 
