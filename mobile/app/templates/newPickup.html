@@ -1,4 +1,4 @@
-<ion-view view-title="Pickup">
+<ion-view view-title="New York">
   <ion-content scroll="false" style="height: 100vh">
     <div class="card location-selectors" id="pickupCards">
       <div class="item location-selector" ng-click="editPickupLocation()">
@@ -23,13 +23,16 @@
         <p class="content">{{time.from | date:'hh:mm a'}} to {{time.to | date:'hh:mm a'}}</p>
       </div>
     </div>
+    <div class="map top-gradient">
+
+    </div>
     <div class="maps-bg-container">
       <ui-gmap-google-map center="map.center" zoom="map.zoom" dragging="false" options="options">
         <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
       </ui-gmap-google-map>
     </div>
   </ion-content>
-  <ion-footer-bar align-title="left" class="bar-stable big-footer transparent">
+  <ion-footer-bar align-title="left" class="">
     <!--<div class="buttons">
       <button class="button">Left Button</button>
     </div>
