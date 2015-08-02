@@ -9,24 +9,19 @@ angular.module('helix', ['ionic', 'helix.controllers', 'helix.services', 'helix.
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
-
       }
-      function blueStatusBar() {
+
+      StatusBar.overlaysWebView(true);
+
+      $rootScope.$on('blueStatusBar', function () {
         if (window.StatusBar) {
-          StatusBar.overlaysWebView(false);
           StatusBar.styleLightContent();
           StatusBar.backgroundColorByHexString("#27316D");
         }
-      }
-      blueStatusBar();
-
-      $rootScope.$on('blueStatusBar', function () {
-        blueStatusBar();
       });
 
       $rootScope.$on('defaultStatusBar', function () {
         if (window.StatusBar) {
-          StatusBar.overlaysWebView(true);
           StatusBar.styleDefault();
         }
       });
@@ -55,6 +50,16 @@ angular.module('helix', ['ionic', 'helix.controllers', 'helix.services', 'helix.
           'tab-new': {
             templateUrl: 'templates/tab-new.html',
             controller: 'NewCtrl'
+          }
+        }
+      })
+
+      .state('tab.new-places', {
+        url: '/new/places',
+        views: {
+          'tab-new': {
+            templateUrl: 'templates/tab-new-places.html',
+            controller: 'NewPlacesCtrl'
           }
         }
       })
