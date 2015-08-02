@@ -25,13 +25,20 @@ $secondary: #27316D !default;
   background-color: $positive;
 }
 
+.positive {
+  color: $positive;
+
+  * {
+    color: $positive;
+  }
+}
+
 .secondary-bg {
   background-color: $secondary;
 }
 
 #tab-new {
   .hero {
-    padding: 3vh 3vw;
     text-align: center;
 
     .brand {
@@ -43,11 +50,12 @@ $secondary: #27316D !default;
 
     .padded {
       padding: 1em;
+      padding-top: 0.5em;
     }
 
     img {
-      height: 15vh;
-      margin: 3vh 3vw;
+      height: 16vh;
+      margin-top: 5vh;
     }
   }
 
