@@ -20,7 +20,6 @@ angular.module('helix', ['ionic', 'helix.controllers', 'helix.services', 'helix.
       }
       blueStatusBar();
 
-
       $rootScope.$on('blueStatusBar', function () {
         blueStatusBar();
       });

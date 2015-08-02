@@ -37,6 +37,14 @@ $secondary: #27316D !default;
   background-color: $secondary;
 }
 
+.input-spinner {
+  position: relative;
+  background-color: #EEEEEE;
+  height: 25px;
+  fill: $positive;
+  display: block;
+}
+
 #tab-new {
   .hero {
     text-align: center;

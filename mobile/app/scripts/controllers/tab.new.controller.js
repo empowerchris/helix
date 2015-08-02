@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('starter.controllers')
+angular.module('helix.controllers')
   .controller('NewCtrl', function($scope, $ionicModal, $rootScope) {
     $scope.openSearchCityModal = function () {
       $ionicModal.fromTemplateUrl('templates/modal-city-search.html', {
