@@ -1,12 +1,61 @@
-<ion-view view-title="Loading...">
+<ion-view view-title="{{title || 'Loading...'}}" hide-nav-bar="false">
   <ion-nav-bar>
     <ion-nav-back-button class="button-clear button-positive">
-      <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i> City
+      <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+      <!-- City -->
     </ion-nav-back-button>
+    <ion-nav-buttons side="secondary">
+      <button class="button button-clear button-positive bold" ng-click="doSomething()">
+        Next
+      </button>
+    </ion-nav-buttons>
   </ion-nav-bar>
   <ion-content class="grey-bg">
-    <div id="tab-places">
+    <div id="tab-new-places">
+      <div class="top-map">
+        <!--<div class="gradient-mask"></div>-->
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" dragging="false" options="options">
+          <ui-gmap-marker ng-repeat="marker in markers"
+                          coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
+        </ui-gmap-google-map>
+      </div>
+      <div class="fields">
+        <div class="card location-suggestions text-center">
+          <div class="item card-field two-lines" ng-click="selectCity('concur')">
+            <p class="subtitle">
+              ARRIVING ON
+            </p>
 
+            <p>
+              Select Date
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="selectCity('concur')">
+            <p class="subtitle">
+              STAYING AT
+            </p>
+
+            <p>
+              Select Location in {{cityName}}
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="selectCity('concur')">
+            <p class="subtitle">
+              DEPARTING FROM
+            </p>
+
+            <p>
+              Select Location
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </ion-content>
+  <!--<ion-footer-bar align-title="left" class="bar-stable big-footer">
+    <button class="button button-block button-positive rounded button-continue">
+      Continue
+      <span class="icon ion-ios-arrow-forward"></span>
+    </button>
+  </ion-footer-bar>-->
 </ion-view>

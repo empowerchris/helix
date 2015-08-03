@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 angular.module('helix.controllers')
-  .controller('NewCtrl', function($scope, $ionicModal, $rootScope, $state) {
+  .controller('NewCtrl', function($scope, $ionicModal, $rootScope, $state, $localStorage) {
     $rootScope.$broadcast('blueStatusBar');
 
     $scope.openSearchCityModal = function () {
@@ -15,8 +15,9 @@ angular.module('helix.controllers')
       });
     };
 
-    $scope.selectCity = function(placeId) {
-      console.log('Selected', placeId);
+    $scope.selectCity = function(location) {
+      console.log('Selected city', location);
+      $localStorage.city = location;
       $rootScope.$broadcast('defaultStatusBar');
       $state.go('tab.new-places');
     }

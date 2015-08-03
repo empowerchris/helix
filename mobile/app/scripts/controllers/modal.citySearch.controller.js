@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 angular.module('helix.controllers')
   .controller('ModalCitySearchCtrl', function ($scope, $rootScope) {
@@ -38,7 +38,8 @@ angular.module('helix.controllers')
     });
 
     $scope.selectLocation = function (location) {
-      $scope.selectedPlace = location;
+      $scope.modal.hide();
+      $scope.selectCity(location);
     }
   });
 

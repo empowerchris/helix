@@ -1,6 +1,13 @@
-"use strict";
+'use strict';
 
-angular.module('helix', ['ionic', 'helix.controllers', 'helix.services', 'helix.directives'])
+angular.module('helix', [
+  'ionic',
+  'helix.controllers',
+  'helix.services',
+  'helix.directives',
+  'ngStorage',
+  'uiGmapgoogle-maps'
+])
 
   .run(function ($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function () {
@@ -11,12 +18,14 @@ angular.module('helix', ['ionic', 'helix.controllers', 'helix.services', 'helix.
         cordova.plugins.Keyboard.disableScroll(true);
       }
 
-      StatusBar.overlaysWebView(true);
+      if (window.StatusBar) {
+        StatusBar.overlaysWebView(true);
+      }
 
       $rootScope.$on('blueStatusBar', function () {
         if (window.StatusBar) {
           StatusBar.styleLightContent();
-          StatusBar.backgroundColorByHexString("#27316D");
+          StatusBar.backgroundColorByHexString('#27316D');
         }
       });
 

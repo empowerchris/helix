@@ -112,3 +112,80 @@ $secondary: #27316D !default;
     padding: 0.5em
   }
 }
+
+.card-field {
+  .subtitle {
+    font-size: 0.7em;
+    font-weight: bold;
+    color: $positive;
+    margin: 0.3em;
+  }
+
+  p {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+  }
+}
+
+.card-field.two-lines {
+  padding: 1em
+}
+
+.top-map {
+  width: 100vw;
+  height: 130px;
+  z-index: -99;
+  margin-top: -1px;
+
+  .gradient-mask {
+    background: linear-gradient(rgba(243, 243, 243, 0) 0%, rgba(243, 243, 243, 0) 90%, #FAFAFA 95%, #FAFAFA 100%);
+    height: 130px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    z-index: 2;
+  }
+
+  .angular-google-map-container {
+    height: 130px;
+    border: 1px solid #DDDDDD;
+    z-index: -1;
+
+    * {
+      height: inherit;
+    }
+  }
+}
+
+.rounded {
+  border-radius: 200px;
+}
+
+.big-footer {
+  height: 60px;
+  padding: 0 10px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.button-continue {
+  font-size: larger !important;
+  height: 40px;
+
+  .icon {
+    float: right;
+    margin-right: 5px;
+  }
+}
+
+#tab-new-places {
+  .fields {
+
+    * {
+      z-index: 100;
+    }
+  }
+}
