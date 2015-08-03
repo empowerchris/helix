@@ -9,6 +9,7 @@ angular.module('helix.controllers')
 
     var placesService;
     var hasLoaded = false;
+    var map;
 
     $scope.map = {
       center: {
@@ -17,10 +18,11 @@ angular.module('helix.controllers')
       },
       zoom: 2,
       events: {
-        tilesloaded: function (map) {
+        tilesloaded: function (_map) {
           if (!hasLoaded) {
             $scope.$apply(function () {
               console.log('tilesloaded');
+              map = _map;
               placesService = new google.maps.places.PlacesService(map);
               centerOnCity();
             });
@@ -80,8 +82,6 @@ angular.module('helix.controllers')
           opacity: 1
         }
       });
-
-      console.log($scope.polylines);
     };
 
     function placeMarkerForPlaceId(placeId) {
@@ -105,6 +105,16 @@ angular.module('helix.controllers')
 
               $scope.markers.push(marker);
               $scope.coords.push(coords);
+
+              // TODO: bound map to markers
+              /*var bounds = new google.maps.LatLngBounds();
+              for (var i = 0; i < $scope.coords.length; i++) {
+                bounds.extend({
+                  lat: $scope.coords[i].latitude,
+                  long: $scope.coords[i].longitude
+                })
+              }
+              map.fitBounds(bounds);*/
 
               if ($scope.coords.length === 2) {
                 $scope.placeLines();
