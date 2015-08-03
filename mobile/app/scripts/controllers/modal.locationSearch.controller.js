@@ -47,6 +47,7 @@ angular.module('helix.controllers')
 
     $scope.selectLocation = function (location) {
       $localStorage[$scope.locationToSave] = location;
+      $scope.placeMarkers();
       $scope.locationModal.hide();
     };
   });

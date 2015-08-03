@@ -19,10 +19,13 @@
         <!--<div class="gradient-mask"></div>-->
         <ui-gmap-google-map center="map.center" zoom="map.zoom" dragging="false" options="options"
                             events="map.events">
+          <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                            geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
           <ui-gmap-marker ng-repeat="marker in markers"
                           coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
         </ui-gmap-google-map>
       </div>
+
       <div class="fields">
         <div class="card location-suggestions text-center">
           <div class="item card-field two-lines" ng-click="openDateSelectModal()">
