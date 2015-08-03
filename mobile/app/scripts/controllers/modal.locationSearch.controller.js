@@ -5,6 +5,18 @@ angular.module('helix.controllers')
     $rootScope.$broadcast('defaultStatusBar');
     $scope.loading = false;
 
+    $scope.results = [];
+
+    $scope.$on('$ionicView.beforeEnter', function () {
+      $scope.searchQuery = '';
+      console.log('hey');
+    });
+
+    $scope.$on('$ionicView.enter', function () {
+      $scope.searchQuery = '';
+      console.log('enter');
+    });
+
     var autocompleteService = new google.maps.places.AutocompleteService();
 
     var options = {

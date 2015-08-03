@@ -15,11 +15,9 @@ angular.module('helix', [
 
   .run(function ($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function () {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
+        //cordova.plugins.Keyboard.disableScroll(true);
       }
 
       if (window.StatusBar) {
@@ -53,6 +51,7 @@ angular.module('helix', [
       .state('tab', {
         url: '/tab',
         abstract: true,
+        controller: 'TabsCtrl',
         templateUrl: 'templates/tabs.html'
       })
 
@@ -77,6 +76,46 @@ angular.module('helix', [
         }
       })
 
+      .state('tab.new-size', {
+        url: '/new/size',
+        views: {
+          'tab-new': {
+            templateUrl: 'templates/tab-new-size.html',
+            controller: 'NewSizeCtrl'
+          }
+        }
+      })
+
+      .state('tab.new-options', {
+        url: '/new/options',
+        views: {
+          'tab-new': {
+            templateUrl: 'templates/tab-new-options.html',
+            controller: 'NewOptionsCtrl'
+          }
+        }
+      })
+
+      .state('tab.new-review', {
+        url: '/new/review',
+        views: {
+          'tab-new': {
+            templateUrl: 'templates/tab-new-review.html',
+            controller: 'NewReviewCtrl'
+          }
+        }
+      })
+
+      .state('tab.new-done', {
+        url: '/new/done',
+        views: {
+          'tab-new': {
+            templateUrl: 'templates/tab-new-done.html',
+            controller: 'NewDoneCtrl'
+          }
+        }
+      })
+
       .state('tab.account', {
         url: '/account',
         views: {
@@ -89,5 +128,4 @@ angular.module('helix', [
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/new');
-
   });

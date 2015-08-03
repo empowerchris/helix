@@ -2,29 +2,52 @@
 
 angular.module('helix.controllers', [])
 
-.controller('DashCtrl', function() {})
+  .controller('TabsCtrl', function ($scope, $rootScope) {
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+    /*$scope.tabs = [{
+      title: 'New Trip',
+      iconOff: 'ion-ios-plus-outline',
+      iconOn: 'ion-ios-plus',
+      href: '#/tab/new',
+      navView: 'tab-new'
+    }, {
+      title: 'Trips',
+      iconOff: 'ion-ios-briefcase-outline',
+      iconOn: 'ion-ios-briefcase',
+      href: '#/tab/trips',
+      navView: 'tab-trips'
+    }, {
+      title: 'Notifications',
+      iconOff: 'ion-ios-bell-outline',
+      iconOn: 'ion-ios-bell',
+      href: '#/tab/notifications',
+      navView: 'tab-notifications',
+      hidden: true
+    }, {
+      title: 'Account',
+      iconOff: 'ion-ios-person-outline',
+      iconOn: 'ion-ios-person',
+      href: '#/tab/account',
+      navView: 'tab-account'
+    }];
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
+    for (var i = 0; i < $scope.tabs.length; i++) {
+      $scope.tabs[i].badge = '0';
+    }*/
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+    $scope.badges = [0,0,0,0];
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-});
+    $rootScope.$on('incrementBadge', function (event, tabIndex) {
+      $scope.badges[tabIndex] = $scope.badges[tabIndex] + 1
+    });
+
+    $rootScope.$on('setBadge', function (tabIndex, badge) {
+      $scope.badges[tabIndex] = badge;
+    });
+  })
+
+  .controller('AccountCtrl', function ($scope) {
+    $scope.settings = {
+      enableFriends: true
+    };
+  });

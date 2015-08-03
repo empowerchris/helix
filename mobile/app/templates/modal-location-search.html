@@ -8,7 +8,7 @@
       <i class="icon ion-search placeholder-icon"></i>
       <input type="search" ng-model="searchQuery"
              id="search-input"
-             ng-model-options="{debounce: 250}" placeholder="Enter an address or a hotel name"/>
+             ng-model-options="{debounce: 300}" placeholder="Enter an address or a hotel name"/>
       <ion-spinner icon="dots" class="input-spinner"
                    ng-show="loading"></ion-spinner>
     </label>
@@ -23,9 +23,9 @@
            ng-click="selectLocation(item)"
            ng-repeat="item in results">
         <i class="icon ion-location" style="font-size: x-large"></i>
-        <h3>{{item.terms[0].value}}</h3>
+        <h3 style="font-size: 1em;">{{item.terms[0].value}}</h3>
         <p><span ng-repeat="term in item.terms | after:1">
-          {{term.value}}<span ng-if="$index + 1 < item.terms.length">, </span>
+          {{term.value}}<span ng-if="$index + 2 < item.terms.length">, </span>
         </span></p>
       </div>
     </ion-list>

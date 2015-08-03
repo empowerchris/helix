@@ -31,13 +31,14 @@ angular.module('helix.controllers')
       $scope.modal.hide();
     };
 
-    $scope.$watch('searchQuery', function (query) {
+    var unregister = $scope.$watch('searchQuery', function (query) {
       if (!query) return;
 
       getResultsForQuery(query);
     });
 
     $scope.selectLocation = function (location) {
+      unregister();
       $scope.modal.hide();
       $scope.selectCity(location);
     }

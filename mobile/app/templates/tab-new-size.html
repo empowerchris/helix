@@ -1,0 +1,41 @@
+<ion-view>
+  <ion-nav-bar class="bar-positive">
+    <ion-nav-back-button class="button-clear no-back-text">
+      <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+    </ion-nav-back-button>
+    <ion-nav-title>
+      {{title}}
+    </ion-nav-title>
+    <ion-nav-buttons side="secondary">
+      <button class="button button-clear"
+              ng-click="next()">
+        Next
+      </button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+  <ion-content class="grey-bg">
+    <div id="tab-new-options">
+      <div class="item item-divider">
+        Luggage Size
+      </div>
+      <div class="card">
+        <div class="item" ng-repeat="size in sizes">
+          <ion-checkbox ng-model="size.selected" ng-change="changedSize(size)">
+            {{size.name}}
+            <p>{{size.dimensions}}</p>
+          </ion-checkbox>
+        </div>
+      </div>
+      <div class="item item-divider">
+        Luggage Weight
+      </div>
+      <div class="card">
+        <h2 class="text-center">{{weight}} lb</h2>
+        <div class="item range range-positive">
+          <input type="range" name="weight" ng-model="weight" min="1" max="200">
+        </div>
+      </div>
+    </div>
+    </div>
+  </ion-content>
+</ion-view>

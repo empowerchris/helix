@@ -34,7 +34,7 @@ $secondary: #27316D !default;
 }
 
 .secondary-bg {
-  background-color: $secondary;
+  background-color: $secondary !important;
 }
 
 .xx-large {
@@ -217,4 +217,28 @@ $secondary: #27316D !default;
   ._day.-selectable {
     color: $positive;
   }
+}
+
+#tab-new-options {
+  .item {
+    padding: 0.5em;
+  }
+
+  .item-content {
+    margin-left: 4em;
+  }
+
+  .right {
+    float: right;
+    font-weight: bold;
+
+    .price {
+      color: $positive;
+    }
+
+    .difference {
+      opacity: 0.6;
+    }
+  }
+
 }

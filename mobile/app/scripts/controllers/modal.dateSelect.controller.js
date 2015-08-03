@@ -23,7 +23,7 @@ angular.module('helix.controllers')
         return $cordovaDialogs.alert('Pickups can only be selected a maximum of 7 days in advance.', 'Sorry', 'OK');
       }
 
-      $localStorage.arrivalDate = date;
+      $localStorage.arrivalDate = new Date(date);
       $scope.modal.hide();
     };
   });

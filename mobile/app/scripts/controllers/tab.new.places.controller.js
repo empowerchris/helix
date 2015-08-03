@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('NewPlacesCtrl', function ($scope, $ionicModal, $stateParams, $localStorage, $cordovaDialogs) {
-    console.log($localStorage.city);
-
+  .controller('NewPlacesCtrl', function ($scope, $ionicModal, $stateParams, $localStorage,
+                                         $state, $cordovaDialogs, $location, $rootScope) {
     $scope.cityName = $localStorage.city.terms[0].value;
     $scope.title = 'Trip to ' + $scope.cityName;
 
@@ -21,10 +20,9 @@ angular.module('helix.controllers')
         tilesloaded: function (_map) {
           if (!hasLoaded) {
             $scope.$apply(function () {
-              console.log('tilesloaded');
               map = _map;
               placesService = new google.maps.places.PlacesService(map);
-              centerOnCity();
+              //centerOnCity();
             });
             hasLoaded = true;
           }
@@ -70,7 +68,7 @@ angular.module('helix.controllers')
     };
 
     $scope.placeLines = function () {
-      console.log('Placing lines', $scope.coords);
+      //console.log('Placing lines', $scope.coords);
 
       $scope.polylines = [];
 
@@ -85,7 +83,7 @@ angular.module('helix.controllers')
     };
 
     function placeMarkerForPlaceId(placeId) {
-      console.log('Placing marker', placeId);
+      //console.log('Placing marker', placeId);
 
       placesService.getDetails({
           'placeId': placeId
@@ -103,7 +101,7 @@ angular.module('helix.controllers')
                 icon: ''
               };
 
-              $scope.markers.push(marker);
+              //$scope.markers.push(marker);
               $scope.coords.push(coords);
 
               // TODO: bound map to markers
@@ -162,25 +160,33 @@ angular.module('helix.controllers')
       if (!$localStorage.departingFrom) {
         return $cordovaDialogs.alert('Please select a location.', 'Missing Departing From', 'OK');
       }
+
+      $state.go('tab.new-size');
     };
 
-    $ionicModal.fromTemplateUrl('templates/modal-location-search.html', {
-      scope: $scope,
-      animation: 'slide-in-up',
-      focusFirstInput: true
-    }).then(function (modal) {
-      $scope.locationModal = modal;
-    });
-
     $scope.openStayingAtModal = function () {
-      $scope.locationToSave = 'stayingAt';
-      $scope.locationModalTitle = 'Where are you staying?';
-      $scope.locationModal.show();
+      $ionicModal.fromTemplateUrl('templates/modal-location-search.html', {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
+      }).then(function (modal) {
+        $scope.locationModal = modal;
+        $scope.locationToSave = 'stayingAt';
+        $scope.locationModalTitle = 'Where are you staying?';
+        $scope.locationModal.show();
+      });
     };
 
     $scope.openDepartingFromModal = function () {
-      $scope.locationToSave = 'departingFrom';
-      $scope.locationModalTitle = 'Where are you departing from?';
-      $scope.locationModal.show();
+      $ionicModal.fromTemplateUrl('templates/modal-location-search.html', {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
+      }).then(function (modal) {
+        $scope.locationModal = modal;
+        $scope.locationToSave = 'departingFrom';
+        $scope.locationModalTitle = 'Departing from...';
+        $scope.locationModal.show();
+      });
     };
   });
