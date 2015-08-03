@@ -5,8 +5,12 @@ angular.module('helix', [
   'helix.controllers',
   'helix.services',
   'helix.directives',
+  'ngCordova',
   'ngStorage',
-  'uiGmapgoogle-maps'
+  'uiGmapgoogle-maps',
+  'mp.datePicker',
+  'angular-momentjs',
+  'angular.filter'
 ])
 
   .run(function ($ionicPlatform, $rootScope) {

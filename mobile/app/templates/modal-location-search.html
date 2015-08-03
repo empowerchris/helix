@@ -1,0 +1,37 @@
+<ion-modal-view ng-controller="ModalLocationSearchCtrl">
+  <ion-header-bar>
+    <h1 class="title">{{locationModalTitle}}</h1>
+    <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
+  </ion-header-bar>
+  <ion-header-bar class="bar-subheader item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" ng-model="searchQuery"
+             id="search-input"
+             ng-model-options="{debounce: 250}" placeholder="Enter an address or a hotel name"/>
+      <ion-spinner icon="dots" class="input-spinner"
+                   ng-show="loading"></ion-spinner>
+    </label>
+
+    <div class="ion-autocomplete-loading-icon" ng-if="showLoadingIcon">
+      <ion-spinner icon="ion-load-d"></ion-spinner>
+    </div>
+  </ion-header-bar>
+  <ion-content class="grey-bg" style="margin-top: -2px">
+    <ion-list ng-if="results.length">
+      <div class="item item-text-wrap item-icon-left item-icon-left"
+           ng-click="selectLocation(item)"
+           ng-repeat="item in results">
+        <i class="icon ion-location" style="font-size: x-large"></i>
+        <h3>{{item.terms[0].value}}</h3>
+        <p><span ng-repeat="term in item.terms | after:1">
+          {{term.value}}<span ng-if="$index + 1 < item.terms.length">, </span>
+        </span></p>
+      </div>
+    </ion-list>
+    <!--<div class="text-center" ng-if="suggestions.length">
+      <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white2.png"/>
+      <br>
+    </div>-->
+  </ion-content>
+</ion-modal-view>
