@@ -9,8 +9,12 @@
   </ion-nav-bar>
   <ion-content class="grey-bg">
     <div id="tab-new-review">
+      <ion-item class="item-text-wrap">
+        Explanation text. Your card will be charged an authorization blah blah blah.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </ion-item>
       <div class="fields">
-        <div class="item item-divider">
+        <!--<div class="item item-divider">
           Pickup
         </div>
         <ion-item>
@@ -31,11 +35,11 @@
           <br>Luggage
         </div>
         <ion-item>
-          {{storage.size.name}} ({{storage.size.dimensions}}), {{storage.weight}} lbs
-        </ion-item>
+          {{storage.size.name}} ({{storage.size.dimensions}}), {{storage.size.weight}}
+        </ion-item>-->
 
         <div class="item item-divider">
-          <br>Payment Information
+          <br>Card
         </div>
         <!--<div class="padded">
           <label class="item item-input">
@@ -62,6 +66,20 @@
             {{card.name}} ···· ···· ···· {{card.last4}}
           </div>
         </ion-radio>
+        <div class="item item-divider">
+          <br>Concur Expense
+        </div>
+        <ion-checkbox ng-model="isChecked">Add to expense report</ion-checkbox>
+        <ion-item class="item-input item-select">
+          <div class="input-label">
+            Expense Report
+          </div>
+          <select>
+            <option>Name A</option>
+            <option>Name B</option>
+            <option>Name C</option>
+          </select>
+        </ion-item>
         <br>
         <br>
       </div>

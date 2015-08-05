@@ -65,8 +65,8 @@ $secondary: #27316D !default;
     }
 
     .padded {
-      padding: 1em;
-      padding-top: 0.5em;
+      padding: 2em;
+      padding-top: 1em;
     }
 
     img {
@@ -240,5 +240,11 @@ $secondary: #27316D !default;
       opacity: 0.6;
     }
   }
+}
 
+#tab-new-estimate {
+  .input-label {
+    color: #B2B2B2;
+    opacity: 1;
+  }
 }

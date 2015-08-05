@@ -1,0 +1,48 @@
+<ion-view>
+  <ion-nav-bar class="bar-positive">
+    <ion-nav-back-button class="button-clear no-back-text">
+      <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+    </ion-nav-back-button>
+    <ion-nav-title>
+      {{title}}
+    </ion-nav-title>
+    <ion-nav-buttons side="secondary">
+      <button class="button button-clear"
+              ng-click="next()">
+        Next
+      </button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+  <ion-content class="grey-bg">
+    <div id="tab-new-estimate">
+      <div class="estimate text-center" style="padding: 4em">
+        <h1>$45 - $56</h1>
+        <p>Explanation text</p>
+      </div>
+      <div class="card">
+        <ion-item>
+          <div class="input-label">
+            Pick Up
+          </div>
+          {{storage.departingFrom.description}}
+        </ion-item>
+        <ion-item>
+          <div class="input-label">
+            Shipping method
+          </div>
+          {{storage.shippingMethod.name}}
+          ({{storage.shippingMethod.days}} day<span ng-if="storage.shippingMethod.days > 1">s</span>),
+        <span ng-repeat="size in storage.bags" ng-if="size.amount">
+          {{size.amount}} x {{size.name}} bag<span ng-if="size.amount > 1">s</span>,
+        </span>
+        </ion-item>
+        <ion-item>
+          <div class="input-label">
+            Drop Off
+          </div>
+          {{storage.stayingAt.description}}
+        </ion-item>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

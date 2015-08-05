@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('NewReviewCtrl', function ($scope, $localStorage, $state) {
+  .controller('NewReviewCtrl', function ($scope, $localStorage, $state, $ionicLoading, $timeout) {
     $scope.title = 'Review Order';
 
     $scope.storage = $localStorage;
@@ -35,6 +35,12 @@ angular.module('helix.controllers')
     $scope.selectedCard = $scope.cards[0];
 
     $scope.pay = function() {
-      $state.go('tab.new-done');
+      $ionicLoading.show({
+        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Processing payment..."
+      });
+      $timeout(function() {
+        $ionicLoading.hide();
+        $state.go('tab.new-done');
+      }, 2500);
     }
   });

@@ -15,38 +15,58 @@
   </ion-nav-bar>
   <ion-content class="grey-bg">
     <div id="tab-new-options">
-      <div class="fields">
+      <div id="tab-new-options">
         <div class="item item-divider">
-          Delivery Speed
+          Luggage
         </div>
-        <div class="card">
-          <div class="item" ng-repeat="method in shippingMethods">
-            <ion-checkbox ng-model="method.selected" ng-change="changedShipping(method)">
-              {{method.name}}
-              <div class="right">
-                <span class="price">{{method.price | currency}}</span><br>
-                <span class="difference">
-                  <span ng-if="method.difference > 0">+</span>{{method.difference}}
-                </span>
-              </div>
-              <p>Pickup on {{method.pickupDate | date}}</p>
-              <p>{{method.days}} days before departure</p>
-            </ion-checkbox>
+        <div class="item row" ng-repeat="size in sizes">
+          <div class="col">
+            <!--<ion-checkbox ng-model="size.selected" ng-change="changedSize(size)">-->
+            {{size.name}}
+            <p>{{size.dimensions}}<br>
+               {{size.weight}}</p>
+            <!--</ion-checkbox>-->
           </div>
-        </div>
-        <div class="item item-divider">
-          Pickup Time
-        </div>
-        <div class="card">
-          <h3 class="text-center">{{formatHour(earliest)}} to {{formatHour(latest)}}</h3>
-          <div class="item range range-positive">
-            Earliest<input type="range" name="earliest" ng-model="earliest" min="0" max="24">
-          </div>
-          <div class="item range range-positive">
-            Latest<input type="range" name="latest" ng-model="latest" min="0" max="24">
+          <div class="col">
+            <div class="button-bar">
+              <button class="button button-icon ion-minus" ng-click=" (size.amount) > 0 ?size.amount = size.amount - 1:null"></button>
+              <button class="button button-clear"
+                      ng-class="{'button-positive': size.amount > 0}">{{size.amount}}
+              </button>
+              <button class="button button-icon ion-plus" ng-click="size.amount = size.amount + 1"></button>
+            </div>
           </div>
         </div>
       </div>
+      <div class="item item-divider">
+        Pickup Date
+      </div>
+      <div class="item">
+        <div ng-repeat="method in shippingMethods">
+          <ion-checkbox ng-model="method.selected" ng-change="changedShipping(method)">
+            {{method.name}}
+            <!--<div class="right">
+              <span class="price">{{method.price | currency}}</span><br>
+              <span class="difference">
+                <span ng-if="method.difference > 0">+</span>{{method.difference}}
+              </span>
+            </div>-->
+            <p>Pickup on {{method.pickupDate | date}}</p>
+
+            <p>{{method.days}} days before departure</p>
+        </div>
+        </ion-checkbox>
+      </div>
+      <div class="item item-divider">
+        Pickup Time
+      </div>
+      <div class="item text-center" ng-click="openTimeSelectModal()">
+        <br>
+        {{formatHour(pickup.earliest)}} to {{formatHour(pickup.latest)}}
+        <br><span style="opacity: 0">i</span>
+      </div>
+      <br>
+      <br>
     </div>
   </ion-content>
 </ion-view>

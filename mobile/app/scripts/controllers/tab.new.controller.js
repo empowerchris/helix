@@ -8,7 +8,7 @@ angular.module('helix.controllers')
       $ionicModal.fromTemplateUrl('templates/modal-city-search.html', {
         scope: $scope,
         animation: 'slide-in-up',
-        focusFirstInput: true
+        focusFirstInput: false
       }).then(function (modal) {
         $scope.modal = modal;
         $scope.modal.show();

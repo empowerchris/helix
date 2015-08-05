@@ -161,7 +161,7 @@ angular.module('helix.controllers')
         return $cordovaDialogs.alert('Please select a location.', 'Missing Departing From', 'OK');
       }
 
-      $state.go('tab.new-size');
+      $state.go('tab.new-options');
     };
 
     $scope.openStayingAtModal = function () {

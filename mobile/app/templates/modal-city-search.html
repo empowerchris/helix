@@ -4,7 +4,7 @@
       <i class="icon ion-search placeholder-icon"></i>
       <input type="search" ng-model="searchQuery"
              id="search-input"
-             ng-model-options="{debounce: 250}" placeholder="Where are you going?"/>
+             ng-model-options="{debounce: 250}" placeholder="Search for a city"/>
       <ion-spinner icon="dots" class="input-spinner"
                    ng-show="loading"></ion-spinner>
     </label>
@@ -15,6 +15,62 @@
     <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
   </ion-header-bar>
   <ion-content class="grey-bg" style="margin-top: -2px">
+    <ion-list ng-if="!results.length">
+      <div class="card light-shadow packed-list">
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation(item)">
+          <i class="icon ion-ios-navigate-outline" style="font-size: x-large"></i>
+
+          <h3>New York</h3>
+
+          <p>Upcoming Concur booking</p>
+        </div>
+      </div>
+      <div class="card light-shadow packed-list">
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation(item)">
+          <i class="icon ion-ios-home" style="font-size: x-large"></i>
+
+          <h3>Home</h3>
+
+          <p>Address, County, State, USA</p>
+        </div>
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation(item)">
+          <i class="icon ion-ios-star" style="font-size: x-large"></i>
+
+          <h3>Work</h3>
+
+          <p>Address, County, State, USA</p>
+        </div>
+      </div>
+      <div class="card light-shadow packed-list">
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation(item)">
+          <i class="icon ion-location" style="font-size: x-large"></i>
+
+          <h3>Location used before</h3>
+
+          <p>Address, County, State, USA</p>
+        </div>
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation(item)">
+          <i class="icon ion-location" style="font-size: x-large"></i>
+
+          <h3>Location used before 2</h3>
+
+          <p>Address, County, State, USA</p>
+        </div>
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation(item)">
+          <i class="icon ion-location" style="font-size: x-large"></i>
+
+          <h3>Location used before 3</h3>
+
+          <p>Address, County, State, USA</p>
+        </div>
+      </div>
+    </ion-list>
     <ion-list ng-if="results.length">
       <div class="item item-text-wrap item-icon-left item-icon-left"
            ng-click="selectLocation(item)"

@@ -76,22 +76,22 @@ angular.module('helix', [
         }
       })
 
-      .state('tab.new-size', {
-        url: '/new/size',
-        views: {
-          'tab-new': {
-            templateUrl: 'templates/tab-new-size.html',
-            controller: 'NewSizeCtrl'
-          }
-        }
-      })
-
       .state('tab.new-options', {
         url: '/new/options',
         views: {
           'tab-new': {
             templateUrl: 'templates/tab-new-options.html',
             controller: 'NewOptionsCtrl'
+          }
+        }
+      })
+
+      .state('tab.new-estimate', {
+        url: '/new/estimate',
+        views: {
+          'tab-new': {
+            templateUrl: 'templates/tab-new-estimate.html',
+            controller: 'NewEstimateCtrl'
           }
         }
       })
