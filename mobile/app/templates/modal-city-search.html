@@ -5,83 +5,40 @@
       <input type="search" ng-model="searchQuery"
              id="search-input"
              ng-model-options="{debounce: 250}" placeholder="Search for a city"/>
-      <ion-spinner icon="dots" class="input-spinner"
-                   ng-show="loading"></ion-spinner>
+      <div ng-show="loading" style="transform: scale(0.8);">
+        <ion-spinner icon="lines" class="spinner-energized"></ion-spinner>
+      </div>
     </label>
 
-    <div class="ion-autocomplete-loading-icon" ng-if="showLoadingIcon">
-      <ion-spinner icon="ion-load-d"></ion-spinner>
-    </div>
     <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
   </ion-header-bar>
   <ion-content class="grey-bg" style="margin-top: -2px">
     <ion-list ng-if="!results.length">
-      <div class="card light-shadow packed-list">
-        <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="selectLocation(item)">
-          <i class="icon ion-ios-navigate-outline" style="font-size: x-large"></i>
-
-          <h3>New York</h3>
-
-          <p>Upcoming Concur booking</p>
-        </div>
-      </div>
-      <div class="card light-shadow packed-list">
-        <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="selectLocation(item)">
-          <i class="icon ion-ios-home" style="font-size: x-large"></i>
-
-          <h3>Home</h3>
-
-          <p>Address, County, State, USA</p>
+      <div ng-repeat="suggestion in suggestions">
+        <div class="item item-divider" ng-show="suggestion.title">
+          {{suggestion.title}}
         </div>
         <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="selectLocation(item)">
-          <i class="icon ion-ios-star" style="font-size: x-large"></i>
+             ng-click="selectLocation(item)"
+             ng-repeat="item in suggestion.items">
+          <i class="icon {{item.icon}}" style="font-size: x-large"></i>
 
-          <h3>Work</h3>
+          <h3>{{item.description}}</h3>
 
-          <p>Address, County, State, USA</p>
-        </div>
-      </div>
-      <div class="card light-shadow packed-list">
-        <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="selectLocation(item)">
-          <i class="icon ion-location" style="font-size: x-large"></i>
-
-          <h3>Location used before</h3>
-
-          <p>Address, County, State, USA</p>
-        </div>
-        <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="selectLocation(item)">
-          <i class="icon ion-location" style="font-size: x-large"></i>
-
-          <h3>Location used before 2</h3>
-
-          <p>Address, County, State, USA</p>
-        </div>
-        <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="selectLocation(item)">
-          <i class="icon ion-location" style="font-size: x-large"></i>
-
-          <h3>Location used before 3</h3>
-
-          <p>Address, County, State, USA</p>
+          <p>{{item.subtitle}}</p>
         </div>
       </div>
     </ion-list>
+
     <ion-list ng-if="results.length">
       <div class="item item-text-wrap item-icon-left item-icon-left"
            ng-click="selectLocation(item)"
            ng-repeat="item in results">
         <i class="icon ion-location" style="font-size: x-large"></i>
         {{item.description}}
-        <!--<h3>{{item.description.split(',')[0]}}</h3>
-        <p>{{item.description.split(',')[1]}}</p>-->
       </div>
     </ion-list>
-    <!--<div class="text-center" ng-if="suggestions.length">
+    <!--<div class="text-center" ng-if="results.length">
       <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white2.png"/>
       <br>
     </div>-->

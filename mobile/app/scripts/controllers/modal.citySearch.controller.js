@@ -2,8 +2,9 @@
 
 angular.module('helix.controllers')
   .controller('ModalCitySearchCtrl', function ($scope, $rootScope) {
-    $rootScope.$broadcast('defaultStatusBar');
     $scope.loading = false;
+
+    $scope.suggestions = $scope.data.suggestions;
 
     var autocompleteService = new google.maps.places.AutocompleteService();
 
@@ -14,10 +15,12 @@ angular.module('helix.controllers')
       autocompleteService.getPlacePredictions({
           input: query,
           types: ['(cities)'],
-          componentRestrictions: {country: 'us'}
+          componentRestrictions: {
+            country: 'us'
+          }
         },
         function listentoresult(list, status) {
-          if (list !== null && list.length > 0) {
+          if (status === 'OK') {
             $scope.$apply(function () {
               $scope.results = list;
               $scope.loading = false;
@@ -27,7 +30,6 @@ angular.module('helix.controllers')
     }
 
     $scope.cancel = function () {
-      $rootScope.$broadcast('blueStatusBar');
       $scope.modal.hide();
     };
 
@@ -37,10 +39,10 @@ angular.module('helix.controllers')
       getResultsForQuery(query);
     });
 
-    $scope.selectLocation = function (location) {
+    $scope.selectCity = function (location) {
       unregister();
       $scope.modal.hide();
       $scope.selectCity(location);
-    }
+    };
   });
 

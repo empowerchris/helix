@@ -5,7 +5,6 @@ $secondary: #27316D !default;
 
 @import "../bower_components/ionic/scss/ionic";
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,600);
-@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
 
 * {
   text-rendering: geometricPrecision;
@@ -75,26 +74,6 @@ $secondary: #27316D !default;
     }
   }
 
-  .search-bar {
-    text-align: center;
-    padding: 0.3em !important;
-
-    .icon {
-      font-size: 1.5em;
-      padding: 0.6em;
-      clear: both;
-      position: absolute;
-      top: 0px;
-      left: 0px;
-    }
-
-    p {
-      text-align: left;
-      margin-left: 2em;
-      font-size: 1em;
-    }
-  }
-
   .location-suggestion {
     .subtitle {
       font-size: 0.7em;
@@ -110,6 +89,26 @@ $secondary: #27316D !default;
 
   .location-suggestion.two-lines {
     padding: 0.5em
+  }
+}
+
+.search-bar {
+  text-align: center;
+  padding: 0.3em !important;
+
+  .icon {
+    font-size: 1.5em;
+    padding: 0.6em;
+    clear: both;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+
+  p {
+    text-align: left;
+    margin-left: 2em;
+    font-size: 1em;
   }
 }
 
@@ -242,9 +241,7 @@ $secondary: #27316D !default;
   }
 }
 
-#tab-new-estimate {
-  .input-label {
-    color: #B2B2B2;
-    opacity: 1;
-  }
+.input-label {
+  color: #B2B2B2;
+  opacity: 1;
 }

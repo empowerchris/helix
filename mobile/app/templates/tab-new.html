@@ -1,72 +1,67 @@
-<ion-view view-title="Helix" hide-nav-bar="true" hide-back-button="true">
-  <ion-nav-bar class="bar-positive secondary-bg">
-    <ion-nav-back-button class="button-clear no-back-text">
-      <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
-    </ion-nav-back-button>
-    <ion-nav-title>
-      title
-    </ion-nav-title>
-  </ion-nav-bar>
-  <ion-content class="secondary-bg">
+<ion-view view-title="Helix" hide-back-button="true">
+  <ion-nav-back-button class="button-clear no-back-text">
+    <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+  </ion-nav-back-button>
+  <ion-nav-title>
+    Helix
+  </ion-nav-title>
+  <ion-content class="grey-bg">
     <div id="tab-new">
-      <div class="hero">
-        <img src="images/Helix_Logo_Icon1_orangesolid.png"/>
-
-        <div class="brand">
-          <!--<h2 class="no-margin">Helix</h2>-->
-
-          <h3 class="padded">Where are you going?</h3>
-        </div>
-
-        <div class="card search-bar" ng-click="openSearchCityModal()">
-          <div class="item">
-            <i class="icon ion-ios-search-strong"></i>
-
-            <p>
-              Search for a city
-            </p>
-          </div>
-        </div>
-
-        <!--<div class="card location-suggestions">
-          <div class="item location-suggestion two-lines">
+      <div class="fields">
+        <div class="card text-center">
+          <div class="item card-field two-lines" ng-click="openSearchCityModal()">
             <p class="subtitle">
-              CONCUR BOOKING
+              PICKUP MY LUGGAGE IN...
             </p>
 
-            <p>
-              New York
+            <p ng-if="storage.pickup.city.place_id">
+              {{storage.pickup.city.description}}
+            </p>
+            <p ng-if="!storage.pickup.city.place_id">
+              Select City
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="openDropoffCityModal()">
+            <p class="subtitle">
+              DELIVER MY LUGGAGE TO...
+            </p>
+
+            <p ng-if="storage.stayingAt">
+              {{storage.stayingAt.terms[0].value}}
+            </p>
+            <p ng-if="!storage.stayingAt">
+              Select City
             </p>
           </div>
         </div>
+        <div class="card text-center">
+          <div class="item card-field two-lines" ng-click="openDateSelectModal()">
+            <p class="subtitle">
+              LUGGAGE DETAILS
+            </p>
 
-        <div class="card location-suggestions">
-          <div class="item location-suggestion">
-            <p>
-              San Francisco
+            <p ng-if="storage.luggageDetails">
+              {{storage.luggageDetails}}
+            </p>
+            <p ng-if="!storage.luggageDetails">
+              Select number of bags
             </p>
           </div>
-          <div class="item location-suggestion">
-            <p>
-              Los Angeles
+        </div>
+        <div class="card text-center">
+          <div class="item card-field two-lines" ng-click="openDateSelectModal()">
+            <p class="subtitle">
+              PICKUP DATE
+            </p>
+
+            <p ng-if="storage.luggageDetails">
+              {{storage.pickupDate}}
+            </p>
+            <p ng-if="!storage.luggageDetails">
+              Select Pickup Date
             </p>
           </div>
-          <div class="item location-suggestion">
-            <p>
-              Seattle
-            </p>
-          </div>
-          <div class="item location-suggestion">
-            <p>
-              Boston
-            </p>
-          </div>
-          <div class="item location-suggestion">
-            <p>
-              Austin
-            </p>
-          </div>
-        </div>-->
+        </div>
       </div>
     </div>
   </ion-content>
