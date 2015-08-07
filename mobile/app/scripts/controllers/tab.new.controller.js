@@ -18,33 +18,12 @@ angular.module('helix.controllers')
         $scope.modal.hide();
       };
 
-      $scope.suggestions = [{
-        title: 'Pick Up',
-        items: [{
-          icon: 'ion-ios-navigate-outline',
-          description: 'Berlin',
-          subtitle: 'Current city',
-          place_id: 'ChIJVTPokywQkFQRmtVEaUZlJRA'
-        }]
-      }, {
-        title: 'From your history',
-        items: [{
-          icon: 'ion-ios-clock-outline',
-          description: 'Seattle',
-          subtitle: '',
-          place_id: 'ChIJVTPokywQkFQRmtVEaUZlJRA'
-        }, {
-          icon: 'ion-ios-clock-outline',
-          description: 'San Francisco',
-          subtitle: '',
-          place_id: 'ChIJmQdYUK8L9ocRN63SN2-JktY'
-        }]
-      }];
+      $scope.title = 'Pickup Address';
 
-      $ionicModal.fromTemplateUrl('templates/modal-city-search.html', {
+      $ionicModal.fromTemplateUrl('templates/modal-address-search.html', {
         scope: $scope,
         animation: 'slide-in-up',
-        focusFirstInput: true
+        focusFirstInput: false
       }).then(function (modal) {
         $scope.modal = modal;
         $scope.modal.show();
@@ -56,29 +35,6 @@ angular.module('helix.controllers')
         $localStorage.dropoff.city = location;
         $scope.modal.hide();
       };
-
-      $scope.suggestions = [{
-        title: 'Drop Off',
-        items: [{
-          icon: 'ion-ios-navigate-outline',
-          description: 'New York',
-          subtitle: 'Concur Booking',
-          place_id: 'ChIJVTPokywQkFQRmtVEaUZlJRA'
-        }]
-      }, {
-        title: 'From your history',
-        items: [{
-          icon: 'ion-ios-clock-outline',
-          description: 'Seattle',
-          subtitle: '',
-          place_id: 'ChIJVTPokywQkFQRmtVEaUZlJRA'
-        }, {
-          icon: 'ion-ios-clock-outline',
-          description: 'San Francisco',
-          subtitle: '',
-          place_id: 'ChIJmQdYUK8L9ocRN63SN2-JktY'
-        }]
-      }];
 
       $ionicModal.fromTemplateUrl('templates/modal-city-search.html', {
         scope: $scope,

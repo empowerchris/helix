@@ -1,0 +1,83 @@
+<ion-modal-view ng-controller="ModalAddressSearchCtrl">
+  <ion-header-bar class="item-input-inset">
+    <h1 class="title">{{title}}</h1>
+    <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
+  </ion-header-bar>
+  <ion-header-bar class="item-input-inset bar-subheader" style="top:0px" ng-if="searching">
+    <label class="item-input-wrapper">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" ng-model="searchQ.query" id="search-input"
+             ng-model-options="{debounce: 250}"
+             placeholder="{{searchText}}"/>
+
+      <div ng-show="loading" style="transform: scale(1);">
+        <ion-spinner icon="dots" class="spinner-energized"></ion-spinner>
+      </div>
+    </label>
+  </ion-header-bar>
+  <ion-content class="grey-bg">
+    <ion-list ng-if="!searching" style="margin-top: -2px">
+      <div class="item item-divider">
+        Search
+      </div>
+      <div class="item item-text-wrap item-icon-left item-icon-left"
+           ng-click="search('residential')">
+        <i class="icon ion-ios-search-strong" style="font-size: x-large"></i>
+
+        Residential
+        <p>Search by address</p>
+      </div>
+      <div class="item item-text-wrap item-icon-left item-icon-left"
+           ng-click="search('hotel')">
+        <i class="icon ion-ios-search-strong" style="font-size: x-large"></i>
+
+        Hotel
+        <p>Search by hotel name and city</p>
+      </div>
+      <div class="item item-text-wrap item-icon-left item-icon-left"
+           ng-click="search('business')">
+        <i class="icon ion-ios-search-strong" style="font-size: x-large"></i>
+
+        Business
+        <p>Search by business name and city</p>
+      </div>
+      <div class="item item-divider">
+
+      </div>
+      <div class="item item-text-wrap item-icon-left item-icon-left">
+        <i class="icon ion-ios-home-outline" style="font-size: x-large"></i>
+
+        Enter address
+      </div>
+      <div ng-repeat="suggestion in suggestions">
+        <div class="item item-divider" ng-show="suggestion.title">
+          <br>{{suggestion.title}}
+        </div>
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectCity(item)"
+             ng-repeat="item in suggestion.items">
+          <i class="icon {{item.icon}}" style="font-size: x-large"></i>
+
+          <h3>{{item.description}}</h3>
+
+          <p>{{item.subtitle}}</p>
+        </div>
+      </div>
+    </ion-list>
+
+    <ion-list ng-if="searching">
+      <div style="margin-top: 42px;">
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectCity(item)"
+             ng-repeat="item in results">
+          <i class="icon ion-location" style="font-size: x-large"></i>
+          {{item.description}}
+        </div>
+      </div>
+    </ion-list>
+    <!--<div class="text-center" ng-if="results.length">
+      <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white2.png"/>
+      <br>
+    </div>-->
+  </ion-content>
+</ion-modal-view>

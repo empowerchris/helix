@@ -15,7 +15,7 @@
   </ion-nav-bar>
   <ion-content class="grey-bg">
     <div class="item item-divider">
-      {{title}}
+      <br>{{title}}
     </div>
     <div class="">
       <div ng-repeat="method in shippingMethods" ng-if="storage.dropoffDate">
@@ -33,12 +33,13 @@
       </ion-checkbox>
     </div>
     <div class="item item-divider">
-      Pickup Time
+      <br>Pickup Time
     </div>
     <div class="item text-center" ng-click="openTimeSelectModal()">
       <br>
       Between {{formatHour(pickupTime.earliest)}} and {{formatHour(pickupTime.latest)}}
       <br><span style="opacity: 0">i</span>
     </div>
+    <br>
   </ion-content>
 </ion-view>
