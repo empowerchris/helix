@@ -9,7 +9,7 @@
     <div id="tab-new">
       <div class="fields">
         <div class="card text-center">
-          <div class="item card-field two-lines" ng-click="openSearchCityModal()">
+          <div class="item card-field two-lines" ng-click="openPickupCityModal()">
             <p class="subtitle">
               PICKUP MY LUGGAGE IN...
             </p>
@@ -26,24 +26,26 @@
               DELIVER MY LUGGAGE TO...
             </p>
 
-            <p ng-if="storage.stayingAt">
-              {{storage.stayingAt.terms[0].value}}
+            <p ng-if="storage.dropoff.city.place_id">
+              {{storage.dropoff.city.description}}
             </p>
-            <p ng-if="!storage.stayingAt">
+            <p ng-if="!storage.dropoff.city.place_id">
               Select City
             </p>
           </div>
         </div>
         <div class="card text-center">
-          <div class="item card-field two-lines" ng-click="openDateSelectModal()">
+          <div class="item card-field two-lines" ng-click="openBagOptionsModal()">
             <p class="subtitle">
               LUGGAGE DETAILS
             </p>
 
-            <p ng-if="storage.luggageDetails">
-              {{storage.luggageDetails}}
+            <p ng-if="storage.bags">
+              <span ng-repeat="size in storage.bags" ng-if="size.amount">
+                {{size.amount}} x {{size.name}},
+              </span>
             </p>
-            <p ng-if="!storage.luggageDetails">
+            <p ng-if="!storage.bags">
               Select number of bags
             </p>
           </div>
@@ -51,14 +53,14 @@
         <div class="card text-center">
           <div class="item card-field two-lines" ng-click="openDateSelectModal()">
             <p class="subtitle">
-              PICKUP DATE
+              DATE
             </p>
 
             <p ng-if="storage.luggageDetails">
               {{storage.pickupDate}}
             </p>
             <p ng-if="!storage.luggageDetails">
-              Select Pickup Date
+              Select pickup or dropoff date
             </p>
           </div>
         </div>

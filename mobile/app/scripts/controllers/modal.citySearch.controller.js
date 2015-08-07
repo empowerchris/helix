@@ -4,8 +4,6 @@ angular.module('helix.controllers')
   .controller('ModalCitySearchCtrl', function ($scope, $rootScope) {
     $scope.loading = false;
 
-    $scope.suggestions = $scope.data.suggestions;
-
     var autocompleteService = new google.maps.places.AutocompleteService();
 
     function getResultsForQuery(query) {
@@ -29,20 +27,10 @@ angular.module('helix.controllers')
         });
     }
 
-    $scope.cancel = function () {
-      $scope.modal.hide();
-    };
-
     var unregister = $scope.$watch('searchQuery', function (query) {
       if (!query) return;
 
       getResultsForQuery(query);
     });
-
-    $scope.selectCity = function (location) {
-      unregister();
-      $scope.modal.hide();
-      $scope.selectCity(location);
-    };
   });
 

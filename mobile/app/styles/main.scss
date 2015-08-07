@@ -32,6 +32,10 @@ $secondary: #27316D !default;
   }
 }
 
+.pull-right {
+  float: right;
+}
+
 .secondary-bg {
   background-color: $secondary !important;
 }

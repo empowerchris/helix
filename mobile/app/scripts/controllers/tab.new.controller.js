@@ -5,6 +5,7 @@ angular.module('helix.controllers')
     $rootScope.$broadcast('blueStatusBar');
     $scope.storage = $localStorage;
     $localStorage.pickup = $localStorage.pickup || {};
+    $localStorage.dropoff = $localStorage.dropoff || {};
     $scope.data = {};
 
     $ionicModal.fromTemplateUrl('templates/modal-city-search.html', {
@@ -24,7 +25,13 @@ angular.module('helix.controllers')
     });
 
     $scope.openPickupCityModal = function () {
-      $scope.data.suggestions = [{
+      $scope.selectCity = function (location) {
+        console.log(location);
+        $localStorage.pickup.city = location;
+        $scope.modal.hide();
+      };
+
+      $scope.suggestions = [{
         title: 'Pick Up',
         items: [{
           icon: 'ion-ios-navigate-outline',
@@ -51,12 +58,18 @@ angular.module('helix.controllers')
     };
 
     $scope.openDropoffCityModal = function () {
-      $scope.data.suggestions = [{
+      $scope.selectCity = function (location) {
+        console.log(location);
+        $localStorage.dropoff.city = location;
+        $scope.modal.hide();
+      };
+
+      $scope.suggestions = [{
         title: 'Drop Off',
         items: [{
           icon: 'ion-ios-navigate-outline',
-          description: 'Berlin',
-          subtitle: 'Current city',
+          description: 'New York',
+          subtitle: 'Concur Booking',
           place_id: 'ChIJVTPokywQkFQRmtVEaUZlJRA'
         }]
       }, {
@@ -77,18 +90,67 @@ angular.module('helix.controllers')
       $scope.modal.show();
     };
 
-    $scope.openSearchCityModal = function () {
-      $ionicModal.fromTemplateUrl('templates/modal-city-search.html', {
+    $scope.cancel = function() {
+      $scope.modal.hide();
+    };
+
+    $scope.openBagOptionsModal = function() {
+      $ionicModal.fromTemplateUrl('templates/modal-bag-options.html', {
         scope: $scope,
         animation: 'slide-in-up',
-        focusFirstInput: false
+        focusFirstInput: true
       }).then(function (modal) {
         $scope.modal = modal;
         $scope.modal.show();
       });
     };
 
-    $scope.selectCity = function (location) {
-      $localStorage.pickup.city = location;
+    $scope.sizes = $localStorage.bags || [{
+      name: 'Small',
+      dimensions: '21.5 x 14 x 7.5',
+      weight: 'up to 20 lbs.',
+      amount: 0
+    }, {
+      name: 'Medium',
+      dimensions: '25 x 17.5 x 7.5',
+      weight: 'up to 30 lbs.',
+      amount: 0
+    }, {
+      name: 'Large',
+      dimensions: '29.5 x 19.5 x 8.5',
+      weight: 'up to 40 lbs.',
+      amount: 0
+    }, {
+      name: 'Extra Large',
+      dimensions: '30 x 20 x 11',
+      weight: 'up to 50 lbs.',
+      amount: 0
+    }];
+
+    $scope.openPickupDate = function (location) {
+      $localStorage.bags = $scope.sizes;
+      $scope.modal.hide();
+    };
+
+    $scope.openBagOptionsModal = function() {
+      $ionicModal.fromTemplateUrl('templates/modal-bag-options.html', {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
+      }).then(function (modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
+    };
+
+    $scope.openDateSelectModal = function () {
+      $ionicModal.fromTemplateUrl('templates/modal-date-select.html', {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
+      }).then(function (modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
     };
   });

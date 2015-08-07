@@ -1,8 +1,15 @@
 <ion-modal-view ng-controller="ModalDateSelectCtrl">
   <ion-header-bar>
-    <h1 class="title">When do you arrive?</h1>
+    <h1 class="title">Date</h1>
     <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
   </ion-header-bar>
+  <ion-header-bar class="bar-subheader">
+    <div class="button-bar">
+      <a class="button button-positive">Pickup my luggage on...</a>
+      <a class="button">Deliver my luggage on...</a>
+    </div>
+  </ion-header-bar>
+
   <ion-content class="grey-bg" scroll="false">
     <date-picker ng-model="date" on-date-selected="dateSelected(date)">
     </date-picker>

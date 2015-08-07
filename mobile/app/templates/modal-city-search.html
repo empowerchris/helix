@@ -19,7 +19,7 @@
           {{suggestion.title}}
         </div>
         <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="selectLocation(item)"
+             ng-click="selectCity(item)"
              ng-repeat="item in suggestion.items">
           <i class="icon {{item.icon}}" style="font-size: x-large"></i>
 
@@ -32,7 +32,7 @@
 
     <ion-list ng-if="results.length">
       <div class="item item-text-wrap item-icon-left item-icon-left"
-           ng-click="selectLocation(item)"
+           ng-click="selectCity(item)"
            ng-repeat="item in results">
         <i class="icon ion-location" style="font-size: x-large"></i>
         {{item.description}}
