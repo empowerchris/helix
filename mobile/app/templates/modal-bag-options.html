@@ -1,4 +1,4 @@
-<ion-modal-view>
+<ion-modal-view ng-controller="ModalBagOptionsCtrl">
   <ion-header-bar class="item-input-inset">
     <h1 class="title">Luggage Details</h1>
     <!--<button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>-->
@@ -10,21 +10,21 @@
         <br>
         <span style="float: right;margin-right: 15%;">Quantity</span>
       </div>
-      <div class="item row" ng-repeat="size in sizes">
+      <div class="item row" ng-repeat="bag in bags">
         <div class="col">
           <!--<ion-checkbox ng-model="size.selected" ng-change="changedSize(size)">-->
-          {{size.name}}
-          <p>{{size.dimensions}}<br>
-             {{size.weight}}</p>
+          {{bag.name}}
+          <p>{{bag.dimensions}}<br>
+             {{bag.weight}}</p>
           <!--</ion-checkbox>-->
         </div>
         <div class="col">
           <div class="button-bar">
-            <button class="button button-icon ion-minus" ng-click=" (size.amount) > 0 ?size.amount = size.amount - 1:null"></button>
+            <button class="button button-icon ion-minus" ng-click=" (bag.amount) > 0 ? bag.amount = bag.amount - 1:null"></button>
             <button class="button button-clear"
-                    ng-class="{'button-positive': size.amount > 0}">{{size.amount}}
+                    ng-class="{'button-positive': bag.amount > 0}">{{bag.amount}}
             </button>
-            <button class="button button-icon ion-plus" ng-click="size.amount = size.amount + 1"></button>
+            <button class="button button-icon ion-plus" ng-click="bag.amount = bag.amount + 1"></button>
           </div>
         </div>
       </div>

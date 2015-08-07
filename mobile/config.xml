@@ -7,7 +7,7 @@
   <author email="inigobeitia@gmail.com" href="http://ibeitia.com">
     Iñigo Beitia
   </author>
-  <content src="http://192.168.178.205:8100" original-src="index.html"/>
+  <content src="index.html"/>
   <access origin="*"/>
   <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
   <platform name="ios">

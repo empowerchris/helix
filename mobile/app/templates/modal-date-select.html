@@ -5,8 +5,14 @@
   </ion-header-bar>
   <ion-header-bar class="bar-subheader">
     <div class="button-bar">
-      <a class="button button-positive">Pickup my luggage on...</a>
-      <a class="button">Deliver my luggage on...</a>
+      <a class="button"
+         ng-click="toPickupMode()"
+         ng-class="{'button-positive': storage.mode === 'pickup'}">
+        Pickup my luggage on...</a>
+      <a class="button"
+         ng-click="toDropoffMode()"
+         ng-class="{'button-positive': storage.mode === 'dropoff'}">
+        Deliver my luggage on...</a>
     </div>
   </ion-header-bar>
 

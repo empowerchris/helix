@@ -1,0 +1,44 @@
+<ion-view>
+  <ion-nav-bar class="bar-positive">
+    <ion-nav-back-button class="button-clear no-back-text">
+      <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+    </ion-nav-back-button>
+    <ion-nav-title>
+      {{title}}
+    </ion-nav-title>
+    <ion-nav-buttons side="secondary">
+      <button class="button button-clear"
+              ng-click="next()">
+        Next
+      </button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+  <ion-content class="grey-bg">
+    <div class="item item-divider">
+      {{title}}
+    </div>
+    <div class="">
+      <div ng-repeat="method in shippingMethods" ng-if="storage.dropoffDate">
+        <ion-checkbox ng-model="method.selected" ng-change="changedShipping(method)">
+          Pickup on {{method.pickupDate | date}}
+
+          <p>{{method.days}} days before delivery</p>
+      </div>
+      <div ng-repeat="method in shippingMethods" ng-if="storage.pickupDate">
+        <ion-checkbox ng-model="method.selected" ng-change="changedShipping(method)">
+          Deliver on {{method.pickupDate | date}}
+
+          <p>{{method.days}} days after pickup</p>
+      </div>
+      </ion-checkbox>
+    </div>
+    <div class="item item-divider">
+      Pickup Time
+    </div>
+    <div class="item text-center" ng-click="openTimeSelectModal()">
+      <br>
+      Between {{formatHour(pickupTime.earliest)}} and {{formatHour(pickupTime.latest)}}
+      <br><span style="opacity: 0">i</span>
+    </div>
+  </ion-content>
+</ion-view>

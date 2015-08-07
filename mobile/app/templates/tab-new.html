@@ -5,6 +5,12 @@
   <ion-nav-title>
     Helix
   </ion-nav-title>
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear"
+            ng-click="next()">
+      Next
+    </button>
+  </ion-nav-buttons>
   <ion-content class="grey-bg">
     <div id="tab-new">
       <div class="fields">
@@ -56,10 +62,11 @@
               DATE
             </p>
 
-            <p ng-if="storage.luggageDetails">
-              {{storage.pickupDate}}
+            <p ng-if="storage.dropoffDate || storage.pickupDate">
+              <span ng-if="storage.dropoffDate">Deliver on {{storage.dropoffDate | date}}</span>
+              <span ng-if="storage.pickupDate">Pickup on {{storage.pickupDate | date}}</span>
             </p>
-            <p ng-if="!storage.luggageDetails">
+            <p ng-if="!storage.dropoffDate && !storage.pickupDate">
               Select pickup or dropoff date
             </p>
           </div>

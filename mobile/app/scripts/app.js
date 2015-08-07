@@ -66,32 +66,12 @@ angular.module('helix', [
         }
       })
 
-      .state('tab.new-places', {
-        url: '/new/places',
+      .state('tab.new-shipping', {
+        url: '/new/shipping',
         views: {
           'tab-new': {
-            templateUrl: 'templates/tab-new-places.html',
-            controller: 'NewPlacesCtrl'
-          }
-        }
-      })
-
-      .state('tab.new-options', {
-        url: '/new/options',
-        views: {
-          'tab-new': {
-            templateUrl: 'templates/tab-new-options.html',
-            controller: 'NewOptionsCtrl'
-          }
-        }
-      })
-
-      .state('tab.new-estimate', {
-        url: '/new/estimate',
-        views: {
-          'tab-new': {
-            templateUrl: 'templates/tab-new-estimate.html',
-            controller: 'NewEstimateCtrl'
+            templateUrl: 'templates/tab-new-shipping.html',
+            controller: 'NewShippingCtrl'
           }
         }
       })

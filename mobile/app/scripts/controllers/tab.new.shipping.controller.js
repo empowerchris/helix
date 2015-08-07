@@ -1,25 +1,29 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('NewOptionsCtrl', function ($scope, $state, $localStorage, $moment, $cordovaDialogs, $ionicLoading, $timeout, $ionicModal) {
-    $scope.title = 'Pickup Details';
-    $scope.pickup = {
+  .controller('NewShippingCtrl', function ($scope, $state, $localStorage, $moment, $cordovaDialogs, $ionicLoading, $timeout, $ionicModal) {
+    if ($localStorage.dropoffDate) {
+      $scope.title = 'Pickup Date';
+    } else if ($localStorage.pickupDate) {
+      $scope.title = 'Delivery Date';
+    }
+
+    $scope.pickupTime = $localStorage.pickupTime || {
       earliest: 9,
       latest: 17
     };
-    $scope.storage = $localStorage;
 
-    var arrivalDate = $moment($localStorage.arrivalDate);
+    $scope.storage = $localStorage;
 
     $scope.shippingMethods = [{
       name: 'Ground',
       price: 23.50,
-      days: 5
+      days: 4
     }, {
       name: '2nd Day',
       price: 34,
-      days: 3,
-      selected: true,
+      days: 2,
+      selected: true
     }, {
       name: 'Overnight',
       price: 45.0,
@@ -27,7 +31,22 @@ angular.module('helix.controllers')
     }];
 
     for (var i = 0; i < $scope.shippingMethods.length; i++) {
-      $scope.shippingMethods[i].pickupDate = $moment(arrivalDate).add($scope.shippingMethods.days, 'd').toDate();
+      if ($localStorage.dropoffDate) {
+        /*var dat = new Date($localStorage.dropoffDate);
+        dat.setDate(dat.getDate() - $scope.shippingMethods[i].days);*/
+
+        var dropoffDate = $moment($localStorage.dropoffDate);
+        var pickupDate = dropoffDate.subtract($scope.shippingMethods[i].days, 'days');
+
+        $scope.shippingMethods[i].pickupDate = pickupDate.toDate();
+      } else if ($localStorage.pickupDate) {
+        //var dat2 = new Date($localStorage.pickupDate);
+        //dat2.setDate(dat2.getDate() + $scope.shippingMethods[i].days);
+        var pickupDate = $moment($localStorage.pickupDate);
+        var dropoffDate = pickupDate.add($scope.shippingMethods[i].days, 'days');
+
+        $scope.shippingMethods[i].dropoffDate = dropoffDate.toDate();
+      }
     }
 
     $scope.changedShipping = function (selectedMethod) {
@@ -55,39 +74,6 @@ angular.module('helix.controllers')
       }
     };
 
-    $scope.sizes = [{
-      name: 'Small',
-      dimensions: '21.5 x 14 x 7.5',
-      weight: 'up to 20 lbs.',
-      amount: 0
-    }, {
-      name: 'Medium',
-      dimensions: '25 x 17.5 x 7.5',
-      weight: 'up to 30 lbs.',
-      amount: 0
-    }, {
-      name: 'Large',
-      dimensions: '29.5 x 19.5 x 8.5',
-      weight: 'up to 40 lbs.',
-      amount: 0
-    }, {
-      name: 'Extra Large',
-      dimensions: '30 x 20 x 11',
-      weight: 'up to 50 lbs.',
-      amount: 0
-    }];
-
-    $scope.changedSize = function (selectedSize) {
-      $scope.sizes[0].selected = true;
-      for (var i = 0; i < $scope.sizes.length; i++) {
-        if ($scope.sizes[i].name !== selectedSize.name) {
-          $scope.sizes[i].selected = false;
-        }
-      }
-    };
-
-    $scope.changedSize($scope.sizes[0]);
-
     $scope.openTimeSelectModal = function () {
       $ionicModal.fromTemplateUrl('templates/modal-time-select.html', {
         scope: $scope,
@@ -100,18 +86,7 @@ angular.module('helix.controllers')
     };
 
     $scope.next = function () {
-      var numberOfBags = 0;
-      for (var i = 0; i < $scope.sizes.length; i++) {
-        numberOfBags = numberOfBags + $scope.sizes[i].amount;
-      }
-
-      if (numberOfBags < 1) {
-        return $cordovaDialogs.alert('You must select at least one bag size.', 'No bags', 'OK');
-      }
-
-      $localStorage.bags = $scope.sizes;
-
-      $localStorage.pickup = $scope.pickup;
+      $localStorage.pickupTime = $scope.pickupTime;
 
       $ionicLoading.show({
         template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Calculating estimate..."

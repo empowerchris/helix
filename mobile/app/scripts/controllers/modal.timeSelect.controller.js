@@ -4,11 +4,8 @@ angular.module('helix.controllers')
   .controller('ModalTimeSelectCtrl', function ($scope, $rootScope, $cordovaDialogs, $localStorage) {
     $rootScope.$broadcast('defaultStatusBar');
 
-
     $scope.done = function () {
-
-
-      if (($scope.pickup.latest - $scope.pickup.earliest) < 3) {
+      if (($scope.pickupTime.latest - $scope.pickupTime.earliest) < 3) {
         return $cordovaDialogs.alert('Please allow 3 hours or more between earliest and latest pickup time.', 'Pickup Time', 'OK');
       }
 

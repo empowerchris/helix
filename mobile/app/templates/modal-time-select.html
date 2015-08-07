@@ -5,14 +5,14 @@
   </ion-header-bar>
   <ion-content class="grey-bg" scroll="false">
     <h3 class="text-center" style="padding: 2em">
-      {{formatHour(pickup.earliest)}} to {{formatHour(pickup.latest)}}
+      {{formatHour(pickupTime.earliest)}} to {{formatHour(pickupTime.latest)}}
     </h3>
 
     <div class="item range range-positive">
-      Earliest<input type="range" name="earliest" ng-model="pickup.earliest" min="1" max="24">
+      Earliest<input type="range" name="earliest" ng-model="pickupTime.earliest" min="1" max="24">
     </div>
     <div class="item range range-positive">
-      Latest<input type="range" name="latest" ng-model="pickup.latest" min="1" max="24">
+      Latest<input type="range" name="latest" ng-model="pickupTime.latest" min="1" max="24">
     </div>
   </ion-content>
 </ion-modal-view>
