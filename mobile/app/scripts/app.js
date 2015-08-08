@@ -86,15 +86,6 @@ angular.module('helix', [
         }
       })
 
-      .state('tab.new-review', {
-        url: '/new/review',
-        views: {
-          'tab-new': {
-            templateUrl: 'templates/tab-new-review.html',
-            controller: 'NewReviewCtrl'
-          }
-        }
-      })
 
       .state('tab.new-done', {
         url: '/new/done',

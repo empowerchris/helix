@@ -395,7 +395,7 @@ module.exports = function (grunt) {
       },
       continuous: {
         browsers: ['PhantomJS'],
-        singleRun: true,
+        singleRun: true
       }
     },
 
@@ -542,15 +542,19 @@ module.exports = function (grunt) {
     'autoprefixer',
     'concat',
     'ngAnnotate',
+    'copy:styles',
+    'copy:vendor',
+    'copy:fonts',
     'copy:dist',
+    'copy:tmp',
     'cssmin',
     'uglify',
     'usemin',
     'htmlmin'
   ]);
 
-  grunt.registerTask('coverage',
-    ['karma:continuous',
+  grunt.registerTask('coverage', [
+    'karma:continuous',
     'connect:coverage:keepalive'
   ]);
 
