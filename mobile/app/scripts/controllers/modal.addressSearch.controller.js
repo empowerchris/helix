@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('ModalAddressSearchCtrl', function ($scope, $rootScope) {
+  .controller('ModalAddressSearchCtrl', function ($scope, $timeout) {
     $scope.loading = false;
     $scope.searchQ = {
       query: ''
     };
+
+    $scope.selected = false;
 
     $scope.suggestions = [{
       title: 'From your history',
@@ -58,8 +60,6 @@ angular.module('helix.controllers')
           }
         },
         function listentoresult(list, status) {
-          console.log(list);
-
           if (status === 'OK') {
             $scope.$apply(function () {
               $scope.results = list;
@@ -73,5 +73,43 @@ angular.module('helix.controllers')
       if (!query) return;
       getResultsForQuery(query);
     });
+
+    var placesService;
+
+    $timeout(function() {
+      var map = document.getElementById('map');
+      placesService = new google.maps.places.PlacesService(map);
+    }, 1);
+
+    $scope.selectLocation = function (item) {
+      $scope.searching = false;
+      if (!item) {
+        $scope.addressType = 'manual';
+        return $scope.selected = {};
+      }
+
+      placesService.getDetails({
+        placeId: item.place_id
+      }, function callback(place, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          $scope.$apply(function () {
+            console.log(place);
+            $scope.selected = {
+              place: place
+            };
+
+            var components = place.formatted_address.split(', ');
+            $scope.selected.address_1 = components[0];
+            $scope.selected.city = components[1];
+            $scope.selected.postcode = components[2].split(' ')[1];
+            $scope.selected.state = components[2].split(' ')[0];
+          });
+        }
+      });
+    };
+
+    $scope.save = function() {
+      $scope.select($scope.selected);
+    }
   });
 

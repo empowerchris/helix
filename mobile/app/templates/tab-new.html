@@ -20,11 +20,13 @@
               PICKUP MY LUGGAGE IN...
             </p>
 
-            <p ng-if="storage.pickup.city.place_id">
-              {{storage.pickup.city.description}}
+            <p ng-if="storage.pickup">
+              {{storage.pickup.place.name ||
+              storage.pickup.address_1 + ', ' + storage.pickup.city + ', ' + storage.pickup.postcode + ', ' +
+              storage.pickup.state || storage.pickup.place.formatted_address}}
             </p>
-            <p ng-if="!storage.pickup.city.place_id">
-              Select City
+            <p ng-if="!storage.pickup">
+              Select Location
             </p>
           </div>
           <div class="item card-field two-lines" ng-click="openDropoffCityModal()">
@@ -32,11 +34,13 @@
               DELIVER MY LUGGAGE TO...
             </p>
 
-            <p ng-if="storage.dropoff.city.place_id">
-              {{storage.dropoff.city.description}}
+            <p ng-if="storage.dropoff">
+              {{storage.dropoff.place.name ||
+              storage.dropoff.address_1 + ', ' + storage.dropoff.city + ', ' + storage.dropoff.postcode + ', ' +
+              storage.dropoff.state || storage.dropoff.place.formatted_address}}
             </p>
-            <p ng-if="!storage.dropoff.city.place_id">
-              Select City
+            <p ng-if="!storage.dropoff">
+              Select Location
             </p>
           </div>
         </div>
@@ -47,8 +51,8 @@
             </p>
 
             <p ng-if="storage.bags">
-              <span ng-repeat="size in storage.bags" ng-if="size.amount">
-                {{size.amount}} x {{size.name}},
+              <span ng-repeat="size in storage.bags | omit:'!amount'">
+                {{size.amount}} x {{size.name}}<span ng-if="$index + 1 < (storage.bags | omit:'!amount').length">, </span>
               </span>
             </p>
             <p ng-if="!storage.bags">

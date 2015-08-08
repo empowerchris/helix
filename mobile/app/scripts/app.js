@@ -76,6 +76,16 @@ angular.module('helix', [
         }
       })
 
+      .state('tab.new-estimate', {
+        url: '/new/estimate',
+        views: {
+          'tab-new': {
+            templateUrl: 'templates/tab-new-estimate.html',
+            controller: 'NewEstimateCtrl'
+          }
+        }
+      })
+
       .state('tab.new-review', {
         url: '/new/review',
         views: {

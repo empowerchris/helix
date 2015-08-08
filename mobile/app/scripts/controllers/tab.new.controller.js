@@ -4,8 +4,8 @@ angular.module('helix.controllers')
   .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading, $timeout) {
     $rootScope.$broadcast('blueStatusBar');
     $scope.storage = $localStorage;
-    $localStorage.pickup = $localStorage.pickup || {};
-    $localStorage.dropoff = $localStorage.dropoff || {};
+    $localStorage.pickup = $localStorage.pickup || false;
+    $localStorage.dropoff = $localStorage.dropoff || false;
     $scope.data = {};
 
     $scope.cancel = function() {
@@ -13,8 +13,8 @@ angular.module('helix.controllers')
     };
 
     $scope.openPickupCityModal = function () {
-      $scope.selectCity = function (location) {
-        $localStorage.pickup.city = location;
+      $scope.select = function (location) {
+        $localStorage.pickup = location;
         $scope.modal.hide();
       };
 
@@ -31,15 +31,15 @@ angular.module('helix.controllers')
     };
 
     $scope.openDropoffCityModal = function () {
-      $scope.selectCity = function (location) {
-        $localStorage.dropoff.city = location;
+      $scope.select = function (location) {
+        $localStorage.dropoff = location;
         $scope.modal.hide();
       };
 
-      $ionicModal.fromTemplateUrl('templates/modal-city-search.html', {
+      $ionicModal.fromTemplateUrl('templates/modal-address-search.html', {
         scope: $scope,
         animation: 'slide-in-up',
-        focusFirstInput: true
+        focusFirstInput: false
       }).then(function (modal) {
         $scope.modal = modal;
         $scope.modal.show();

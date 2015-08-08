@@ -6,43 +6,68 @@
     <ion-nav-title>
       {{title}}
     </ion-nav-title>
-    <ion-nav-buttons side="secondary">
-      <button class="button button-clear"
-              ng-click="next()">
-        Next
-      </button>
-    </ion-nav-buttons>
   </ion-nav-bar>
   <ion-content class="grey-bg">
     <div id="tab-new-estimate">
-      <div class="estimate text-center" style="padding: 4em">
+      <div class="estimate text-center" style="padding: 2em">
         <h1>$45 - $56</h1>
-        <p>Explanation text</p>
+        <p style="opacity: 0.5; margin-top: 1em">
+          Your card charged will be charged 24 to 48 hours after the pickup date.
+        </p>
       </div>
-      <div class="card">
-        <ion-item>
-          <div class="input-label">
-            Pick Up
-          </div>
-          {{storage.departingFrom.description}}
-        </ion-item>
-        <ion-item>
-          <div class="input-label">
-            Shipping method
-          </div>
-          {{storage.shippingMethod.name}}
-          ({{storage.shippingMethod.days}} day<span ng-if="storage.shippingMethod.days > 1">s</span>),
-        <span ng-repeat="size in storage.bags" ng-if="size.amount">
-          {{size.amount}} x {{size.name}} bag<span ng-if="size.amount > 1">s</span>,
-        </span>
-        </ion-item>
-        <ion-item>
-          <div class="input-label">
-            Drop Off
-          </div>
-          {{storage.stayingAt.description}}
-        </ion-item>
+      <div class="item item-divider">
+        <br>Payment Method
       </div>
+      <!--<div class="padded">
+        <label class="item item-input">
+          <input ng-model="cc.number" payments-validate="card" payments-format="card"
+                 type="tel"
+                 placeholder="1234 5678 9012 3456"/>
+        </label>
+        <label class="item item-input">
+          <input ng-model="cc.expiry" payments-validate="expiry" payments-format="expiry"
+                 type="tel"
+                 placeholder="MM/YY"/>
+        </label>
+        <label class="item item-input">
+          <input ng-model="cc.cvc" payments-validate="cvc" payments-format="cvc"
+                 type="tel"
+                 placeholder="1234"/>
+        </label></div>-->
+
+      <ion-radio ng-repeat="card in cards" class="item"
+                 ng-model="selectedCard" ng-value="card">
+        <div class="item-icon-left" style="padding-left: 42px">
+          <img src="images/credit-card-icons/{{card.type}}-curved-128px.png" class="icon"
+               style="height: 35px;padding-top: 15px;"/>
+          <span style="display: inline">{{card.name}}</span>
+          <p style="display: inline">···· ···· ···· {{card.last4}}</p>
+        </div>
+      </ion-radio>
+      <div class="item item-divider">
+        <br>Concur Expense
+      </div>
+      <ion-checkbox ng-model="concur">Add to expense report</ion-checkbox>
+      <ion-item class="item-input item-select" ng-show="concur">
+        <div class="input-label">
+          Expense Report
+        </div>
+        <select>
+          <option>Name A</option>
+          <option>Name B</option>
+          <option>Name C</option>
+        </select>
+      </ion-item>
+      <br>
+      <br>
+      <br>
     </div>
   </ion-content>
+  <ion-footer-bar align-title="left" class="bar-positive">
+    <button class="button button-block button-clear"
+            ng-click="pay()"
+            style="color: white;margin: 0;">
+      Pay <span class="icon ion-ios-arrow-forward" style="font-size: small"></span>
+    </button>
+  </ion-footer-bar>
 </ion-view>
