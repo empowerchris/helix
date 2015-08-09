@@ -1,6 +1,6 @@
 {
   "name": "Helix",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {},
   "devDependencies": {
@@ -53,10 +53,7 @@
   "cordovaPlugins": [
     "org.apache.cordova.device",
     "org.apache.cordova.console",
-    "com.ionic.keyboard",
-    "org.apache.cordova.console",
-    "com.ionic.keyboard",
-    "org.apache.cordova.device"
+    "com.ionic.keyboard"
   ],
   "cordovaPlatforms": [
     "ios"

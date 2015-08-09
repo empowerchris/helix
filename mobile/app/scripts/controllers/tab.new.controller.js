@@ -2,8 +2,9 @@
 
 angular.module('helix.controllers')
   .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading, $timeout) {
-    $rootScope.$broadcast('blueStatusBar');
+
     $scope.storage = $localStorage;
+
     $localStorage.pickup = $localStorage.pickup || false;
     $localStorage.dropoff = $localStorage.dropoff || false;
     $scope.data = {};

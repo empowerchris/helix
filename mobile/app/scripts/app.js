@@ -13,29 +13,16 @@ angular.module('helix', [
   'angular.filter'
 ])
 
-  .run(function ($ionicPlatform, $rootScope) {
+  .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        //cordova.plugins.Keyboard.disableScroll(true);
+        cordova.plugins.Keyboard.disableScroll(true);
       }
 
       if (window.StatusBar) {
         StatusBar.overlaysWebView(true);
       }
-
-      $rootScope.$on('blueStatusBar', function () {
-        if (window.StatusBar) {
-          StatusBar.styleLightContent();
-          StatusBar.backgroundColorByHexString('#27316D');
-        }
-      });
-
-      $rootScope.$on('defaultStatusBar', function () {
-        if (window.StatusBar) {
-          StatusBar.styleDefault();
-        }
-      });
     });
   })
 
