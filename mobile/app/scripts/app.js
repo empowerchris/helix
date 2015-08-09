@@ -102,8 +102,17 @@ angular.module('helix', [
             controller: 'TripsCtrl'
           }
         }
-      });
+      })
 
+      .state('tab.trips.details', {
+        url: '/detail',
+        views: {
+          'tab-trips': {
+            templateUrl: 'templates/tab-trips-detail.html',
+            controller: 'TripsDetailCtrl'
+          }
+        }
+      });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/new');
   });
