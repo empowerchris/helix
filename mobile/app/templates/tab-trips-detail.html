@@ -1,37 +1,41 @@
-<ion-view view-title="My Trips" hide-back-button="true">
+<ion-view view-title="Trip Details">
   <ion-nav-bar class="bar-positive">
+    <ion-nav-back-button class="button-clear no-back-text">
+      <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+    </ion-nav-back-button>
   </ion-nav-bar>
   <ion-content class="grey-bg">
-    <ion-list>
-      <div class="item item-divider">
-        <br>In Transit
-      </div>
-      <ion-item class="item-icon-right">
-        Boston to New York
-        <p>Will deliver luggage in 2 days</p>
-        <i class="icon ion-ios-arrow-right"></i>
-      </ion-item>
-      <div class="item item-divider">
-        <br>Upcoming
-      </div>
-      <ion-item class="item-icon-right">
-        New York to Seattle
-        <p>Will pickup luggage in 2 days</p>
-        <i class="icon ion-ios-arrow-right"></i>
-      </ion-item>
-      <div class="item item-divider">
-        <br>Past
-      </div>
-      <ion-item class="item-icon-right">
-        San Francisco to Seattle
-        <p>Delivered luggage 2 weeks ago</p>
-        <i class="icon ion-ios-arrow-right"></i>
-      </ion-item>
-      <ion-item class="item-icon-right">
-        Seattle to San Francisco
-        <p>Delivered luggage 3 weeks ago</p>
-        <i class="icon ion-ios-arrow-right"></i>
-      </ion-item>
-    </ion-list>
+    <ion-item class="text-center">
+      <h2>Boston to New York</h2>
+
+      <p style="opacity:0.5">Trip #1243434</p>
+    </ion-item>
+    <div class="item item-divider">
+      <br>Pickup
+    </div>
+    <ion-item>
+      Address
+    </ion-item>
+    <ion-item>
+      9 AM to 3PM
+    </ion-item>
+    <ion-item>
+      <p>Pickup scheduled in 2 days</p>
+    </ion-item>
+    <div class="item item-divider">
+      <br>Dropoff
+    </div>
+    <ion-item>
+      Address
+    </ion-item>
+    <ion-item>
+      <p>Dropoff scheduled in 1 week</p>
+    </ion-item>
+    <div class="item item-divider">
+      <br>Tracking #
+    </div>
+    <ion-item>
+      9999 9999 9999
+    </ion-item>
   </ion-content>
 </ion-view>

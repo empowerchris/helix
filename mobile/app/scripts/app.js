@@ -104,8 +104,8 @@ angular.module('helix', [
         }
       })
 
-      .state('tab.trips.details', {
-        url: '/detail',
+      .state('tab.trip-detail', {
+        url: '/trips/:id',
         views: {
           'tab-trips': {
             templateUrl: 'templates/tab-trips-detail.html',
