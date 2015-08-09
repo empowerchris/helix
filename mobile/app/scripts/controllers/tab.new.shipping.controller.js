@@ -30,20 +30,21 @@ angular.module('helix.controllers')
       days: 1
     }];
 
+    var dropoffDate, pickupDate;
     for (var i = 0; i < $scope.shippingMethods.length; i++) {
       if ($localStorage.dropoffDate) {
         /*var dat = new Date($localStorage.dropoffDate);
         dat.setDate(dat.getDate() - $scope.shippingMethods[i].days);*/
 
-        var dropoffDate = $moment($localStorage.dropoffDate);
-        var pickupDate = dropoffDate.subtract($scope.shippingMethods[i].days, 'days');
+        dropoffDate = $moment($localStorage.dropoffDate);
+        pickupDate = dropoffDate.subtract($scope.shippingMethods[i].days, 'days');
 
         $scope.shippingMethods[i].pickupDate = pickupDate.toDate();
       } else if ($localStorage.pickupDate) {
         //var dat2 = new Date($localStorage.pickupDate);
         //dat2.setDate(dat2.getDate() + $scope.shippingMethods[i].days);
-        var pickupDate = $moment($localStorage.pickupDate);
-        var dropoffDate = pickupDate.add($scope.shippingMethods[i].days, 'days');
+        pickupDate = $moment($localStorage.pickupDate);
+        dropoffDate = pickupDate.add($scope.shippingMethods[i].days, 'days');
 
         $scope.shippingMethods[i].dropoffDate = dropoffDate.toDate();
       }
@@ -64,10 +65,10 @@ angular.module('helix.controllers')
       if (n < 12) {
         return n + ' AM';
       }
-      if (n == 12) {
+      if (n === 12) {
         return '12 PM';
       }
-      if (n == 24) {
+      if (n === 24) {
         return '12 AM';
       } else {
         return n - 12 + ' PM';
@@ -89,7 +90,7 @@ angular.module('helix.controllers')
       $localStorage.pickupTime = $scope.pickupTime;
 
       $ionicLoading.show({
-        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Calculating estimate..."
+        template: '<ion-spinner class=\'spinner-energized\'></ion-spinner><br>Calculating estimate...'
       });
       $timeout(function() {
         $ionicLoading.hide();

@@ -7,8 +7,8 @@
 
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/angular-date-picker/angular-date-picker.css" />
-  <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css" />
+  <link rel="stylesheet" href="bower_components/angular-date-picker/angular-date-picker.css"/>
+  <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css"/>
   <!-- endbower -->
   <!-- endbuild -->
   <link href="styles/main.css" rel="stylesheet">
@@ -45,20 +45,31 @@
   <script src="scripts/services.js"></script>
   <script src="scripts/directives.js"></script>
   <script src="scripts/configuration.js"></script>
-  <script src="scripts/controllers/tab.new.controller.js"></script>
+
   <script src="scripts/controllers/modal.dateSelect.controller.js"></script>
   <script src="scripts/controllers/modal.timeSelect.controller.js"></script>
   <script src="scripts/controllers/modal.bagOptions.controller.js"></script>
+  <script src="scripts/controllers/modal.addressSearch.controller.js"></script>
+
+  <script src="scripts/controllers/tab.new.controller.js"></script>
   <script src="scripts/controllers/tab.new.shipping.controller.js"></script>
   <script src="scripts/controllers/tab.new.done.controller.js"></script>
   <script src="scripts/controllers/tab.new.estimate.controller.js"></script>
-  <script src="scripts/controllers/modal.addressSearch.controller.js"></script>
+
   <script src="scripts/controllers/tab.trips.controller.js"></script>
   <script src="scripts/controllers/tab.trips.detail.controller.js"></script>
+
+  <script src="scripts/controllers/tab.account.controller.js"></script>
+  <script src="scripts/controllers/tab.account.settings.controller.js"></script>
+  <script src="scripts/controllers/tab.account.payment.controller.js"></script>
+  <script src="scripts/controllers/tab.account.connected.controller.js"></script>
   <!-- endbuild -->
 </head>
 <body ng-app="helix" class="grey-bg">
 <ion-nav-bar class="bar-positive">
+  <ion-nav-back-button class="button-clear no-back-text">
+    <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+  </ion-nav-back-button>
 </ion-nav-bar>
 <ion-nav-view></ion-nav-view>
 </body>

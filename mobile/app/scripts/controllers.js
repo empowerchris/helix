@@ -5,16 +5,10 @@ angular.module('helix.controllers', [])
     $scope.badges = [0,0,0,0];
 
     $rootScope.$on('incrementBadge', function (event, tabIndex) {
-      $scope.badges[tabIndex] = $scope.badges[tabIndex] + 1
+      $scope.badges[tabIndex] = $scope.badges[tabIndex] + 1;
     });
 
     $rootScope.$on('setBadge', function (tabIndex, badge) {
       $scope.badges[tabIndex] = badge;
     });
-  })
-
-  .controller('AccountCtrl', function ($scope) {
-    $scope.settings = {
-      enableFriends: true
-    };
   });

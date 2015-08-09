@@ -84,16 +84,6 @@ angular.module('helix', [
         }
       })
 
-      .state('tab.account', {
-        url: '/account',
-        views: {
-          'tab-account': {
-            templateUrl: 'templates/tab-account.html',
-            controller: 'AccountCtrl'
-          }
-        }
-      })
-
       .state('tab.trips', {
         url: '/trips',
         views: {
@@ -110,6 +100,73 @@ angular.module('helix', [
           'tab-trips': {
             templateUrl: 'templates/tab-trips-detail.html',
             controller: 'TripsDetailCtrl'
+          }
+        }
+      })
+
+      .state('tab.account', {
+        url: '/account',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account.html',
+            controller: 'AccountCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-settings', {
+        url: '/account/settings',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-settings.html',
+            controller: 'AccountSettingsCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-payment', {
+        url: '/account/payment',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-payment.html',
+            controller: 'AccountPaymentCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-connected', {
+        url: '/account/connected',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-connected.html',
+            controller: 'AccountConnectedCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-faq', {
+        url: '/account/faq',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-faq.html'
+          }
+        }
+      })
+
+      .state('tab.account-terms', {
+        url: '/account/terms',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-terms.html'
+          }
+        }
+      })
+
+      .state('tab.account-privacy', {
+        url: '/account/privacy',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-privacy.html'
           }
         }
       });

@@ -1,12 +1,58 @@
-<ion-view view-title="Account">
+<ion-view view-title="My Account">
   <ion-nav-bar class="bar-positive">
   </ion-nav-bar>
   <ion-content class="grey-bg">
-    <h3 style="padding: 1em">Account and payment settings will go here.</h3>
     <ion-list>
-      <ion-toggle ng-model="settings.enableFriends">
-        Setting A
-      </ion-toggle>
+      <div class="item item-divider"><br>Account</div>
+      <ion-item class="item item-icon-left item-icon-right" href="#/tab/account/settings">
+        <i class="icon ion-gear-a account-icons"></i>
+        Settings
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <ion-item class="item item-icon-left item-icon-right" href="#/tab/account/payment">
+        <i class="icon ion-card account-icons"></i>
+        Payment Information
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <ion-item class="item item-icon-left item-icon-right" href="#/tab/account/connected">
+        <i class="icon ion-radio-waves account-icons"></i>
+        Connected Accounts
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <div class="item item-divider"><br>Support</div>
+      <ion-item class="item item-icon-left item-icon-right" href="mailto:contact@helixapp.com">
+        <i class="icon ion-email account-icons"></i>
+        Contact us
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <div class="item item-divider"><br>About Helix</div>
+      <ion-item class="item item-icon-left item-icon-right" href="#/tab/account/faq">
+        <i class="icon ion-help-circled account-icons"></i>
+        FAQ
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <ion-item class="item item-icon-left item-icon-right" href="#/tab/account/terms">
+        <i class="icon ion-clipboard account-icons"></i>
+        Terms and Conditions
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <ion-item class="item item-icon-left item-icon-right" href="#/tab/account/privacy">
+        <i class="icon ion-document-text account-icons"></i>
+        Privacy Policy
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <div class="item item-divider"><br></div>
+      <ion-item ng-click="logout()" class="item item-icon-right">
+        Logout
+        <i class="icon ion-log-out positive"></i>
+      </ion-item>
+      <br>
+
+      <div class="text-center">
+        <p><img src="images/Helix_Logo_Icon1_orangesolid.png" height="50px"></p>
+        <p style="opacity: 0.5">v 0.3.0</p>
+      </div>
+      <br>
     </ion-list>
   </ion-content>
 </ion-view>
