@@ -1,4 +1,39 @@
 <ion-view view-title="Account Settings">
-  <ion-content class="grey-bg">
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear" ng-click="edit()">
+      <span ng-if="!editing">Edit</span>
+      <span ng-if="editing">Done</span>
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="">
+    <ion-list>
+      <div class="item item-divider"><br></div>
+      <ion-item class="item item-input item-stacked-label">
+        <span class="input-label">First Name</span>
+        <span ng-if="!editing">{{user.first}}</span>
+        <span ng-if="editing"><input type="text" placeholder="John" ng-model="user.first"></span>
+      </ion-item>
+      <ion-item class="item item-input item-stacked-label">
+        <span class="input-label">Last Name</span>
+        <span ng-if="!editing">{{user.last}}</span>
+        <span ng-if="editing"><input type="text" placeholder="Appleseed" ng-model="user.last"></span>
+      </ion-item>
+      <ion-item class="item item-input item-stacked-label">
+        <span class="input-label">Phone</span>
+        <span ng-if="!editing">{{user.phone}}</span>
+        <span ng-if="editing"><input type="number" placeholder="(555) 123 4567" ng-model="user.phone"></span>
+      </ion-item>
+      <div class="item item-divider"><br></div>
+      <ion-item class="item item-input item-stacked-label">
+        <span class="input-label">Email</span>
+        <span ng-if="!editing">{{user.email}}</span>
+        <span ng-if="editing"><input type="text" placeholder="email@domain.com" ng-model="user.email"></span>
+      </ion-item>
+      <ion-item class="item item-input item-stacked-label">
+        <span class="input-label">Password</span>
+        <span ng-if="!editing">···········</span>
+        <span ng-if="editing"><input type="password" placeholder="···········" ng-model="user.password"></span>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

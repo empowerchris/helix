@@ -32,4 +32,8 @@ angular.module('helix.controllers')
     $scope.next = function() {
       $state.go('tab.new-review');
     };
+
+    $scope.remove = function(card) {
+      console.log($scope.cards.indexOf(card));
+    };
   });

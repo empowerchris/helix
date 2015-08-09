@@ -25,10 +25,10 @@ $secondary: #27316D !default;
 }
 
 .positive {
-  color: $positive;
+  color: $positive !important;
 
   * {
-    color: $positive;
+    color: $positive !important;
   }
 }
 
@@ -253,4 +253,10 @@ $secondary: #27316D !default;
 .account-icons {
   //color: $positive;
   transform: scale(0.7);
+}
+
+.transparent-inputs {
+  input {
+    background: transparent;
+  }
 }

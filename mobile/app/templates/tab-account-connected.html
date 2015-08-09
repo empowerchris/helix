@@ -1,4 +1,16 @@
 <ion-view view-title="Connected Accounts">
   <ion-content class="grey-bg">
+    <div class="item item-divider"><br>Concur</div>
+    <ion-item class="item text-center positive" ng-click="connectConcur()" ng-if="!concur.connected">
+      Connect Concur Account
+    </ion-item>
+    <div ng-if="concur.connected">
+      <ion-item class="item text-center">
+        Connected with {{concur.username}}
+      </ion-item>
+      <ion-item class="item text-center positive" ng-click="concur.connected = false">
+        Disconnect Concur Account
+      </ion-item>
+    </div>
   </ion-content>
 </ion-view>

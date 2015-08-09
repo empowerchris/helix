@@ -1,0 +1,31 @@
+<ion-view view-title="Payment Settings">
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear" ng-click="edit()">
+      <span ng-if="!shouldShowDelete">Edit</span>
+      <span ng-if="shouldShowDelete">Done</span>
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="grey-bg">
+    <div class="item item-divider"><br>My Cards</div>
+    <ion-list show-delete="shouldShowDelete" can-swipe="true">
+      <ion-item ng-repeat="card in cards" class="item">
+        <div class="item-icon-left" style="padding-left: 42px">
+          <img src="images/credit-card-icons/{{card.type}}-curved-128px.png" class="icon"
+               style="height: 35px;padding-top: 15px;"/>
+          <span style="display: inline">{{card.name}}</span>
+
+          <p style="display: inline; float: right">···· ···· ···· {{card.last4}}</p>
+        </div>
+        <ion-delete-button class="ion-minus-circled" ng-click="remove($index)">
+        </ion-delete-button>
+        <ion-option-button class="button-assertive" ng-click="remove($index)">
+          Remove
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+    <div class="item item-divider"><br></div>
+    <ion-item class="item text-center positive" ng-if="!shouldShowDelete" ng-click="addNewCard()">
+      Add a new card
+    </ion-item>
+  </ion-content>
+</ion-view>

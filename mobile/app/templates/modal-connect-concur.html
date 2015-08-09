@@ -1,0 +1,21 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Concur Login</h1>
+    <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
+  </ion-header-bar>
+  <ion-content class="grey-bg" scroll="false">
+    <div class="list">
+      <label class="item item-input">
+        <span class="input-label">Username</span>
+        <input type="text" ng-model="concur.username">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Password</span>
+        <input type="password" ng-model="concur.password">
+      </label>
+    </div>
+    <div class="padding">
+      <button class="button button-block button-positive" ng-click="concurSignIn()">Sign In</button>
+    </div>
+  </ion-content>
+</ion-modal-view>
