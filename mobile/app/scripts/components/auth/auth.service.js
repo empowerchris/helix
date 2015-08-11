@@ -133,6 +133,14 @@ angular.module('helix')
         return currentUser;
       },
 
+      updateCurrentUser: function() {
+        if ($localStorage.token) {
+          currentUser = User.get();
+        }
+
+        return currentUser;
+      },
+
       /**
        * Check if a user is logged in
        *

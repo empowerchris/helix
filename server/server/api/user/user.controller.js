@@ -102,20 +102,46 @@ exports.authCallback = function(req, res, next) {
 
 
 exports.addCard = function(req, res, next) {
-  User.findById(req.user._id, function (err, user) {
-    if (err) return next(err);
-    if (!user) return res.status(404).send('User not found');
+  var cardData = {
+    name: req.body.name,
+    tokenId: req.body.tokenId,
+    last4: req.body.last4
+  };
 
-    user.stripe.cards.push({
-      name: req.body.name,
-      tokenId: req.body.tokenId,
-      last4: req.body.last4
-    });
-
-    user.save(function(err) {
+  User.update({
+      '_id': req.user._id
+    }, {
+      '$push': {
+        'stripe.cards': cardData
+      }
+    }, function(err) {
       if (err) return next(err);
-
       res.status(200).send('OK');
-    })
+    }
+  );
+};
+
+exports.removeCard = function(req, res, next) {
+  User.findById(req.user._id, function(err, user) {
+    if (err) return next(err);
+    if (!user) return res.status(401).send('Unauthorized');
+
+    var cards = user.stripe.cards;
+    var index = -1;
+
+    for (var i = 0; i < cards.length; i++) {
+      if (cards[i].tokenId === req.body.tokenId) {
+        index = i;
+      }
+    }
+
+    if (index === -1) return res.status(404).send('Card not found');
+
+    user.stripe.cards.splice(index, 1);
+
+    user.save(function(err){
+      if (err) return next(err);
+      res.status(200).send('OK')
+    });
   });
 };

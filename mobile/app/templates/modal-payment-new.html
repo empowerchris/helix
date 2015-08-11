@@ -5,16 +5,17 @@
   </ion-header-bar>
   <ion-content class="grey-bg" style="margin-top: -2px">
     <ion-list>
-      <div class="item item-divider"><br></div>
-      <ion-item class="item-input item-stacked-label" style="background-color: white">
-        <span class="input-label">Card Number</span>
-        <input type="text" ng-model="card.number" cc-number cc-format cc-type="cardType"
-               autofocus placeholder="4242 4242 4242 4242"/>
-      </ion-item>
-      <ion-item class="item-input item-stacked-label" style="background-color: white">
-        <span class="input-label">Verification Code</span>
-        <input type="text" ng-model="card.cvc" cc-type="cardNumber.$ccType" placeholder="123"/>
-      </ion-item>
+      <form name="paymentForm">
+        <div class="item item-divider"><br></div>
+        <ion-item class="item-input item-stacked-label" style="background-color: white">
+          <span class="input-label">Card Number</span>
+          <input type="text" ng-model="card.number" name="cardNumber" cc-number cc-format
+                 cc-type="card.cardType" autofocus placeholder="4242 4242 4242 4242"/>
+        </ion-item>
+        <ion-item class="item-input item-stacked-label" style="background-color: white">
+          <span class="input-label">Verification Code</span>
+          <input type="text" ng-model="card.cvc" cc-type="cardNumber.$ccType" placeholder="123"/>
+        </ion-item>
       <span cc-exp>
       <ion-item class="item-input item-stacked-label" style="background-color: white">
         <span class="input-label">Expiration Month</span>
@@ -26,11 +27,13 @@
       </ion-item>
         </span>
 
-      <div class="item item-divider"><br></div>
-      <ion-item class="item-input item-stacked-label" style="background-color: white">
-        <span class="input-label">Alias for this card</span>
-        <input type="text" ng-model="card.name" placeholder="Optional"/>
-      </ion-item>
+        <div class="item item-divider"><br></div>
+        <ion-item class="item-input item-stacked-label" style="background-color: white">
+          <span class="input-label">Alias for this card</span>
+          <input type="text" ng-model="card.name"
+                 placeholder="{{paymentForm.cardNumber.$ccType || 'Alias'}}"/>
+        </ion-item>
+      </form>
       <div class="item item-divider"><br><br></div>
     </ion-list>
   </ion-content>

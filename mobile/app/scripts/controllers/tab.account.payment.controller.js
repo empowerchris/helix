@@ -1,27 +1,28 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('AccountPaymentCtrl', function ($scope, $ionicModal, $ionicLoading, $cordovaDialogs, stripe, $http, Api) {
+  .controller('AccountPaymentCtrl', function ($scope, $ionicModal, $ionicLoading, Auth, $cordovaDialogs, stripe, $http, Api) {
     $scope.shouldShowDelete = false;
 
-    $scope.cards = [{
-      id: 1,
-      type: 'visa',
-      last4: '3325',
-      name: 'Personal'
-    }, {
-      id: 2,
-      type: 'mastercard',
-      last4: '4457',
-      name: 'Work'
-    }];
+    $scope.loading = true;
+
+    Auth.getCurrentUser().$promise.then(function (user) {
+      $scope.cards = user.stripe.cards;
+      $scope.loading = false;
+    });
 
     $scope.edit = function () {
       $scope.shouldShowDelete = !$scope.shouldShowDelete;
     };
 
-    $scope.remove = function (index) {
-      $scope.cards.splice(index, 1);
+    $scope.remove = function (card, index) {
+      $http.post(Api.endpoint + '/api/users/cards/delete', {
+        tokenId: card.tokenId
+      }).then(function () {
+        $scope.cards.splice(index, 1);
+      }, function (error) {
+        return $cordovaDialogs.alert(error.message || 'Please try again.', 'There was a problem removing your card', 'OK');
+      });
     };
 
     $scope.addNewCard = function () {
@@ -42,14 +43,13 @@ angular.module('helix.controllers')
     };
 
     $scope.saveCard = function () {
+      if (!$scope.card.name) {
+        return $cordovaDialogs.alert('Please enter a card alias.', 'Missing Alias', 'OK');
+      }
+
       $ionicLoading.show({
         template: '<ion-spinner class=\'spinner-energized\'></ion-spinner><br>Validating card...'
       });
-      /*$timeout(function() {
-       $scope.modal.hide();
-       $ionicLoading.hide();
-       //$scope.concur.connected = true;
-       }, 3000);*/
 
       stripe.card.createToken($scope.card)
         .then(function (token) {
@@ -60,15 +60,23 @@ angular.module('helix.controllers')
           $http.post(Api.endpoint + '/api/users/cards', {
             tokenId: token.id,
             last4: $scope.card.number.substr($scope.card.number.length - 4),
-            name: $scope.card.name
+            name: $scope.card.name,
+            type: cardType
           }).then(function (response) {
-            console.log(response);
             $scope.card = {};
+
+            $scope.loading = true;
+
+            Auth.updateCurrentUser().$promise.then(function (user) {
+              $scope.cards = user.stripe.cards;
+              $scope.loading = false;
+            });
+
             $scope.modal.hide();
             $ionicLoading.hide();
           }, function (error) {
             $ionicLoading.hide();
-
+            console.error(error);
             return $cordovaDialogs.alert(error.message || 'Please try again or use another card.', 'There was a problem saving card', 'OK');
           });
         })
