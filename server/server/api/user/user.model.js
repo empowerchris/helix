@@ -7,10 +7,11 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
   name: String,
-  first: String,
-  last: String,
   phone: String,
-  email: {type: String, lowercase: true},
+  email: {
+    type: String,
+    lowercase: true
+  },
   role: {
     type: String,
     default: 'user'
@@ -27,7 +28,7 @@ var UserSchema = new Schema({
     customerId: String,
     cards: [{
       name: String,
-      cardId: {
+      tokenId: {
         type: String,
         required: 'true'
       },

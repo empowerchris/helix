@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading, $timeout) {
+  .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading,
+                                   $timeout, $cordovaDialogs) {
 
     $scope.storage = $localStorage;
 

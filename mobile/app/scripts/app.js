@@ -11,13 +11,17 @@ angular.module('helix', [
   'uiGmapgoogle-maps',
   'mp.datePicker',
   'angular-momentjs',
-  'angular.filter'
+  'angular.filter',
+  'credit-cards',
+  'angular-stripe'
 ])
   .constant('Api', {
     endpoint: 'http://localhost:9000'
   })
 
-  .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+  .constant('STRIPE_KEY', 'pk_test_tBLnCyjvGT1AcTBr7seToAAi')
+
+  .config(function ($stateProvider, $urlRouterProvider, $httpProvider, STRIPE_KEY, stripeProvider) {
     $stateProvider
 
       .state('login', {
@@ -167,7 +171,7 @@ angular.module('helix', [
       });
 
     $urlRouterProvider.otherwise('/tab/new');
-
+    stripeProvider.setPublishableKey(STRIPE_KEY);
     $httpProvider.interceptors.push('authInterceptor');
   })
 

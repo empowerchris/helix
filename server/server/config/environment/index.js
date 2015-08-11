@@ -69,8 +69,8 @@ var all = {
   },
 
   stripe: {
-    apiKey: process.env.STRIPE_KEY || '',
-    stripePubKey: process.env.STRIPE_PUB_KEY || ''
+    apiKey: process.env.STRIPE_KEY || 'sk_test_tiZQODegz7kY5Iea2hxgC4J3',
+    stripePubKey: process.env.STRIPE_PUB_KEY || 'pk_test_tBLnCyjvGT1AcTBr7seToAAi'
   },
 
   easypost: {

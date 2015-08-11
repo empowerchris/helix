@@ -6,21 +6,12 @@
       <div class="list">
         <label class="item item-input">
           <span class="input-label">First Name</span>
-          <input type="text" name="first" ng-model="user.first"
-                 placeholder="Enter first name" autofocus required>
+          <input type="text" name="name" ng-model="user.name"
+                 placeholder="Enter full name" autofocus required>
         </label>
 
-        <p class="text-center assertive" ng-show="form.first.$error.required && submitted">
-          A first name is required
-        </p>
-        <label class="item item-input">
-          <span class="input-label">Last Name</span>
-          <input type="text" name="last" ng-model="user.last"
-                 placeholder="Enter last name" autofocus required>
-        </label>
-
-        <p class="text-center assertive" ng-show="form.last.$error.required && submitted">
-          A last name is required
+        <p class="text-center assertive" ng-show="form.name.$error.required && submitted">
+          A name is required
         </p>
         <br>
         <label class="item item-input">

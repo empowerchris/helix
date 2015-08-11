@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('ModalAddressSearchCtrl', function ($scope, $timeout) {
+  .controller('ModalAddressSearchCtrl', function ($scope, $timeout, $http, $ionicLoading, Api) {
     $scope.loading = false;
     $scope.searchQ = {
       query: ''
@@ -76,7 +76,7 @@ angular.module('helix.controllers')
 
     var placesService;
 
-    $timeout(function() {
+    $timeout(function () {
       var map = document.getElementById('map');
       placesService = new google.maps.places.PlacesService(map);
     }, 1);
@@ -108,8 +108,20 @@ angular.module('helix.controllers')
       });
     };
 
-    $scope.save = function() {
-      $scope.select($scope.selected);
+    $scope.save = function () {
+      $ionicLoading.show({
+        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Verifying address..."
+      });
+
+      $http.post(Api.endpoint + '/api/addresses/verify', $scope.selected)
+        .then(function (response) {
+          $ionicLoading.hide();
+          console.log(response);
+        }, function (response) {
+          $ionicLoading.hide();
+          console.error(response);
+        });
+      //$scope.select($scope.selected);
     }
   });
 
