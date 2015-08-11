@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('helix')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $intercom, $localStorage) {
+  .factory('Auth', function Auth($location, $rootScope, $http, User, $q, $intercom, $localStorage) {
     var currentUser = {};
-    if ($cookieStore.get('token')) {
+    if ($localStorage.token) {
       currentUser = User.get();
     }
 
@@ -24,16 +24,15 @@ angular.module('helix')
           email: user.email,
           password: user.password
         }).success(function (data) {
-            $cookieStore.put('token', data.token);
-            currentUser = User.get();
-            deferred.resolve(data);
-            return cb();
-          }).
-          error(function (err) {
-            this.logout();
-            deferred.reject(err);
-            return cb(err);
-          }.bind(this));
+          $localStorage.token = data.token;
+          currentUser = User.get();
+          deferred.resolve(data);
+          return cb();
+        }).error(function (err) {
+          this.logout();
+          deferred.reject(err);
+          return cb(err);
+        }.bind(this));
 
         return deferred.promise;
       },
@@ -45,7 +44,7 @@ angular.module('helix')
        */
       logout: function () {
         $intercom.shutdown();
-        $cookieStore.remove('token');
+        //delete $localStorage.token;
         $localStorage.$reset();
         currentUser = {};
       },
@@ -62,7 +61,7 @@ angular.module('helix')
 
         return User.save(user,
           function (data) {
-            $cookieStore.put('token', data.token);
+            $localStorage.token = data.token;
             currentUser = User.get();
             return cb(user);
           },
@@ -78,14 +77,12 @@ angular.module('helix')
 
         $http.post('/api/users/reset', {
           email: user.email
-        }).
-          success(function (data) {
-            deferred.resolve(data);
-            return cb();
-          }).
-          error(function (err) {
-            deferred.reject(err);
-          }.bind(this));
+        }).success(function (data) {
+          deferred.resolve(data);
+          return cb();
+        }).error(function (err) {
+          deferred.reject(err);
+        }.bind(this));
 
         return deferred.promise;
       },
@@ -99,10 +96,9 @@ angular.module('helix')
         }).success(function (data) {
           deferred.resolve(data);
           return cb();
-        }).
-          error(function (err) {
-            deferred.reject(err);
-          }.bind(this));
+        }).error(function (err) {
+          deferred.reject(err);
+        }.bind(this));
 
         return deferred.promise;
       },
@@ -136,7 +132,7 @@ angular.module('helix')
       getCurrentUser: function (ignoreCache, cb) {
         if (ignoreCache) {
           return User.get().$promise.then(function (user) {
-            $q.when(user).then(function(user) {
+            $q.when(user).then(function (user) {
               currentUser = user;
               cb(null, user);
             });
@@ -186,7 +182,7 @@ angular.module('helix')
        * Get auth token
        */
       getToken: function () {
-        return $cookieStore.get('token');
+        return $localStorage.token;
       }
     };
   });

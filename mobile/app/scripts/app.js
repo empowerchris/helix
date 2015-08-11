@@ -12,6 +12,9 @@ angular.module('helix', [
   'angular-momentjs',
   'angular.filter'
 ])
+  .constant('Api', {
+    endpoint: 'http://localhost:9000'
+  })
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
