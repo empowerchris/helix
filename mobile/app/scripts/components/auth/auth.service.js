@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('helix')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $q, $intercom, $localStorage) {
+  .factory('Auth', function Auth($location, $rootScope, $http, User, $q, $localStorage) {
     var currentUser = {};
+
     if ($localStorage.token) {
       currentUser = User.get();
     }
@@ -43,7 +44,6 @@ angular.module('helix')
        * @param  {Function}
        */
       logout: function () {
-        $intercom.shutdown();
         //delete $localStorage.token;
         $localStorage.$reset();
         currentUser = {};

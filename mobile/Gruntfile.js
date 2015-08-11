@@ -84,7 +84,7 @@ module.exports = function (grunt) {
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
+        port: 9900,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost'
       },
@@ -95,7 +95,7 @@ module.exports = function (grunt) {
       },
       coverage: {
         options: {
-          port: 9002,
+          port: 9902,
           open: true,
           base: ['coverage']
         }

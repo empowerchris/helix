@@ -7,6 +7,7 @@ angular.module('helix', [
   'helix.directives',
   'ngCordova',
   'ngStorage',
+  'ngResource',
   'uiGmapgoogle-maps',
   'mp.datePicker',
   'angular-momentjs',
@@ -18,6 +19,12 @@ angular.module('helix', [
 
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $stateProvider
+      .state('login', {
+        url: '/login',
+        controller: 'LoginCtrl',
+        templateUrl: 'templates/login.html'
+      })
+
       .state('tab', {
         url: '/tab',
         abstract: true,
@@ -183,7 +190,7 @@ angular.module('helix', [
     };
   })
 
-  .run(function ($ionicPlatform) {
+  .run(function ($ionicPlatform, $rootScope, $location, Auth) {
     $ionicPlatform.ready(function () {
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -193,5 +200,13 @@ angular.module('helix', [
       if (window.StatusBar) {
         StatusBar.overlaysWebView(true);
       }
+    });
+
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      Auth.isLoggedInAsync(function (loggedIn) {
+        if (next.authenticate && !loggedIn) {
+          $location.path('/login');
+        }
+      });
     });
   });
