@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helix')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $q, $localStorage) {
+  .factory('Auth', function Auth($location, $rootScope, $http, User, $q, $localStorage, Api) {
     var currentUser = {};
 
     if ($localStorage.token) {
@@ -21,7 +21,7 @@ angular.module('helix')
         var cb = callback || angular.noop;
         var deferred = $q.defer();
 
-        $http.post('/auth/local', {
+        $http.post(Api.endpoint + '/auth/local', {
           email: user.email,
           password: user.password
         }).success(function (data) {
@@ -91,7 +91,7 @@ angular.module('helix')
         var cb = callback || angular.noop;
         var deferred = $q.defer();
 
-        $http.post('/api/users/reset/' + user.token, {
+        $http.post(Api.endpoint + '/api/users/reset/' + user.token, {
           password: user.password
         }).success(function (data) {
           deferred.resolve(data);

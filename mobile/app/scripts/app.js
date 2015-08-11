@@ -180,7 +180,7 @@ angular.module('helix', [
         if (response.status === 401) {
           $location.path('/login');
           // remove any stale tokens
-          $cookieStore.remove('token');
+          delete $localStorage.token;
           return $q.reject(response);
         }
         else {
