@@ -7,34 +7,31 @@ angular.module('helix', [
   'helix.directives',
   'ngCordova',
   'ngStorage',
+  'ngResource',
   'uiGmapgoogle-maps',
   'mp.datePicker',
   'angular-momentjs',
   'angular.filter'
 ])
-
-  .run(function ($ionicPlatform) {
-    $ionicPlatform.ready(function () {
-      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
-      }
-
-      if (window.StatusBar) {
-        StatusBar.overlaysWebView(true);
-      }
-    });
+  .constant('Api', {
+    endpoint: 'http://localhost:9000'
   })
 
-  .config(function ($stateProvider, $urlRouterProvider) {
-
-    // Ionic uses AngularUI Router which uses the concept of states
-    // Learn more here: https://github.com/angular-ui/ui-router
-    // Set up the various states which the app can be in.
-    // Each state's controller can be found in controllers.js
+  .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $stateProvider
 
-      // setup an abstract state for the tabs directive
+      .state('login', {
+        url: '/login',
+        controller: 'LoginCtrl',
+        templateUrl: 'templates/login.html'
+      })
+
+      .state('signup', {
+        url: '/signup',
+        controller: 'SignupCtrl',
+        templateUrl: 'templates/signup.html'
+      })
+
       .state('tab', {
         url: '/tab',
         abstract: true,
@@ -42,7 +39,6 @@ angular.module('helix', [
         templateUrl: 'templates/tabs.html'
       })
 
-      // Each tab has its own nav history stack:
       .state('tab.new', {
         url: '/new',
         views: {
@@ -72,7 +68,6 @@ angular.module('helix', [
           }
         }
       })
-
 
       .state('tab.new-done', {
         url: '/new/done',
@@ -170,6 +165,55 @@ angular.module('helix', [
           }
         }
       });
-    // if none of the above states are matched, use this as the fallback
+
     $urlRouterProvider.otherwise('/tab/new');
+
+    $httpProvider.interceptors.push('authInterceptor');
+  })
+
+  .factory('authInterceptor', function ($rootScope, $q, $localStorage, $location) {
+    return {
+      // Add authorization token to headers
+      request: function (config) {
+        config.headers = config.headers || {};
+        if ($localStorage.token) {
+          config.headers.Authorization = 'Bearer ' + $localStorage.token;
+        }
+        return config;
+      },
+
+      // Intercept 401s and redirect you to login
+      responseError: function (response) {
+        if (response.status === 401) {
+          $location.path('/login');
+          // remove any stale tokens
+          delete $localStorage.token;
+          return $q.reject(response);
+        }
+        else {
+          return $q.reject(response);
+        }
+      }
+    };
+  })
+
+  .run(function ($ionicPlatform, $rootScope, $location, Auth) {
+    $ionicPlatform.ready(function () {
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
+      }
+
+      if (window.StatusBar) {
+        StatusBar.overlaysWebView(true);
+      }
+    });
+
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      Auth.isLoggedInAsync(function (loggedIn) {
+        if (next.authenticate && !loggedIn) {
+          $location.path('/login');
+        }
+      });
+    });
   });
