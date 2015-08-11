@@ -10,8 +10,7 @@ angular.module('helix', [
   'uiGmapgoogle-maps',
   'mp.datePicker',
   'angular-momentjs',
-  'angular.filter',
-  'gavruk.card'
+  'angular.filter'
 ])
 
   .run(function ($ionicPlatform) {

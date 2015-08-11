@@ -49,28 +49,4 @@ angular.module('helix.controllers')
         //$scope.concur.connected = true;
       }, 3000);
     };
-
-    $scope.card = {
-      name: 'Mike Brown',
-      number: '5555 4444 3333 1111',
-      expiry: '11 / 2020',
-      cvc: '123'
-    };
-
-    $scope.cardValues = {
-      name: 'Your Full Name',
-      number: 'xxxx xxxx xxxx xxxx',
-      expiry: 'MM/YY',
-      cvc: 'xxx'
-    };
-
-    $scope.cardMessages = {
-      validDate: 'valid\nthru',
-      monthYear: 'MM/YYYY',
-    };
-
-    $scope.cardOptions = {
-      debug: false,
-      formatting: true
-    };
   });
