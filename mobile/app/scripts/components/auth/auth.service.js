@@ -129,17 +129,7 @@ angular.module('helix')
        *
        * @return {Object} user
        */
-      getCurrentUser: function (ignoreCache, cb) {
-        if (ignoreCache) {
-          return User.get().$promise.then(function (user) {
-            $q.when(user).then(function (user) {
-              currentUser = user;
-              cb(null, user);
-            });
-          }).catch(function (err) {
-            cb(err);
-          });
-        }
+      getCurrentUser: function() {
         return currentUser;
       },
 
