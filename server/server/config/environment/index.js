@@ -63,10 +63,15 @@ var all = {
   },
 
   concur: {
-    clientID:     process.env.FACEBOOK_ID || 'gQA72oS3Zz3fmW8WI2BXTq',
-    clientSecret: process.env.FACEBOOK_SECRET || 'uMFxYuFqWH3qRkqrvRfIR9ajrFGWQQ7A',
+    clientID:     process.env.CONCUR_ID || 'gQA72oS3Zz3fmW8WI2BXTq',
+    clientSecret: process.env.CONCUR_SECRET || 'uMFxYuFqWH3qRkqrvRfIR9ajrFGWQQ7A',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/concur/callback'
   },
+
+  stripe: {
+    apiKey: process.env.STRIPE_KEY || '',
+    stripePubKey: process.env.STRIPE_PUB_KEY || ''
+  }
 };
 
 // Export the config object based on the NODE_ENV
