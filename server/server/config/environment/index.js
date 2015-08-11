@@ -71,6 +71,10 @@ var all = {
   stripe: {
     apiKey: process.env.STRIPE_KEY || '',
     stripePubKey: process.env.STRIPE_PUB_KEY || ''
+  },
+
+  easypost: {
+    apiKey: process.env.EASYPOST_KEY || '6pvCWggCww2HmdtIi43HUA'
   }
 };
 
