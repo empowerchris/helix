@@ -7,13 +7,13 @@ var auth = require('../auth.service');
 var router = express.Router();
 
 router
-  .get('/', passport.authenticate('facebook', {
+  .get('/', passport.authenticate('concur', {
     scope: ['email', 'user_about_me'],
     failureRedirect: '/signup',
     session: false
   }))
 
-  .get('/callback', passport.authenticate('facebook', {
+  .get('/callback', passport.authenticate('concur', {
     failureRedirect: '/signup',
     session: false
   }), auth.setTokenCookie);

@@ -7,6 +7,7 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
   name: String,
+  phone: String,
   email: { type: String, lowercase: true },
   role: {
     type: String,
@@ -18,7 +19,8 @@ var UserSchema = new Schema({
   facebook: {},
   twitter: {},
   google: {},
-  github: {}
+  github: {},
+  concur: {}
 });
 
 /**

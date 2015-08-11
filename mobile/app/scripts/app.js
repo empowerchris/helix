@@ -19,10 +19,17 @@ angular.module('helix', [
 
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $stateProvider
+
       .state('login', {
         url: '/login',
         controller: 'LoginCtrl',
         templateUrl: 'templates/login.html'
+      })
+
+      .state('signup', {
+        url: '/signup',
+        controller: 'SignupCtrl',
+        templateUrl: 'templates/signup.html'
       })
 
       .state('tab', {
