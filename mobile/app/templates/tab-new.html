@@ -14,9 +14,7 @@
             </p>
 
             <p ng-if="storage.pickup">
-              {{storage.pickup.place.name ||
-              storage.pickup.address_1 + ', ' + storage.pickup.city + ', ' + storage.pickup.postcode + ', ' +
-              storage.pickup.state || storage.pickup.place.formatted_address}}
+              {{storage.pickup.description || storage.pickup.subtitle}}
             </p>
             <p ng-if="!storage.pickup">
               Select Location
@@ -28,16 +26,24 @@
             </p>
 
             <p ng-if="storage.dropoff">
-              {{storage.dropoff.place.name ||
-              storage.dropoff.address_1 + ', ' + storage.dropoff.city + ', ' + storage.dropoff.postcode + ', ' +
-              storage.dropoff.state || storage.dropoff.place.formatted_address}}
+              {{storage.dropoff.description || storage.dropoff.subtitle}}
             </p>
             <p ng-if="!storage.dropoff">
               Select Location
             </p>
           </div>
-        </div>
-        <div class="card text-center">
+          <div class="item card-field two-lines" ng-click="openDateSelectModal()">
+            <p class="subtitle">
+              PICKUP DATE
+            </p>
+
+            <p ng-if="storage.pickupDate">
+              <span ng-if="storage.pickupDate">Pickup on {{storage.pickupDate | date}}</span>
+            </p>
+            <p ng-if="!storage.pickupDate">
+              Select pickup date
+            </p>
+          </div>
           <div class="item card-field two-lines" ng-click="openBagOptionsModal()">
             <p class="subtitle">
               LUGGAGE DETAILS
@@ -50,21 +56,6 @@
             </p>
             <p ng-if="!storage.bags">
               Select number of bags
-            </p>
-          </div>
-        </div>
-        <div class="card text-center">
-          <div class="item card-field two-lines" ng-click="openDateSelectModal()">
-            <p class="subtitle">
-              DATE
-            </p>
-
-            <p ng-if="storage.dropoffDate || storage.pickupDate">
-              <span ng-if="storage.dropoffDate">Deliver on {{storage.dropoffDate | date}}</span>
-              <span ng-if="storage.pickupDate">Pickup on {{storage.pickupDate | date}}</span>
-            </p>
-            <p ng-if="!storage.dropoffDate && !storage.pickupDate">
-              Select pickup or dropoff date
             </p>
           </div>
         </div>

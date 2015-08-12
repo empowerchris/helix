@@ -4,15 +4,14 @@ var _ = require('lodash');
 var config = require('../../config/environment');
 var easypost = require('node-easypost')(config.easypost.apiKey);
 
-exports.verify = function(req, res) {
-  /*Address.create(req.body, function(err, address) {
-    if(err) { return handleError(res, err); }
-    return res.status(201).json(address);
-  });*/
+var Address = require('./address.model');
 
+exports.verify = function (req, res) {
   var address = {
-    name: req.user.first + req.user.last,
+    name: req.user.name,
+    company: req.body.name,
     street1: req.body.address_1,
+    street2: req.body.address_2,
     city: req.body.city,
     state: req.body.state,
     zip: req.body.postcode,
@@ -21,79 +20,96 @@ exports.verify = function(req, res) {
     residential: true
   };
 
-  console.log(req.user, address);
-
-  easypost.Address.create(address, function(err, easypostAddress) {
+  easypost.Address.create(address, function (err, easypostAddress) {
     console.log(easypostAddress);
 
-    easypostAddress.verify(function(err, response) {
-      console.log(err, response);
+    easypostAddress.verify(function (err, response) {
       if (err) {
-        console.log('Address is invalid.');
+        console.log('Address is invalid.', err);
+        return res.status(400).json(err.message);
       } else if (response.message !== undefined && response.message !== null) {
         console.log('Address is valid but has an issue: ', response.message);
         var verifiedAddress = response.address;
       } else {
         var verifiedAddress = response;
       }
+
+      // Save to user's history
+      Address.create({
+        owner: req.user,
+        easypost: verifiedAddress
+      }, function (err, address) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(201).json(address);
+      });
     });
   });
+};
+
+exports.index = function (req, res) {
+  Address
+    .find({owner: req.user})
+    .sort('-updatedAt')
+    .limit(10)
+    .exec(function (err, addresses) {
+      if (err) return handleError(res, err);
+
+      return res.status(200).json(addresses);
+    });
 };
 
 /*
- var Address = require('./address.model');
 
-// Get list of addresss
-exports.index = function(req, res) {
-  Address.find(function (err, addresss) {
-    if(err) { return handleError(res, err); }
-    return res.status(200).json(addresss);
-  });
-};
 
-// Get a single address
-exports.show = function(req, res) {
-  Address.findById(req.params.id, function (err, address) {
-    if(err) { return handleError(res, err); }
-    if(!address) { return res.status(404).send('Not Found'); }
-    return res.json(address);
-  });
-};
+ // Get list of addresss
 
-// Creates a new address in the DB.
-exports.create = function(req, res) {
-  Address.create(req.body, function(err, address) {
-    if(err) { return handleError(res, err); }
-    return res.status(201).json(address);
-  });
-};
 
-// Updates an existing address in the DB.
-exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  Address.findById(req.params.id, function (err, address) {
-    if (err) { return handleError(res, err); }
-    if(!address) { return res.status(404).send('Not Found'); }
-    var updated = _.merge(address, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.status(200).json(address);
-    });
-  });
-};
+ // Get a single address
+ exports.show = function(req, res) {
+ Address.findById(req.params.id, function (err, address) {
+ if(err) { return handleError(res, err); }
+ if(!address) { return res.status(404).send('Not Found'); }
+ return res.json(address);
+ });
+ };
 
-// Deletes a address from the DB.
-exports.destroy = function(req, res) {
-  Address.findById(req.params.id, function (err, address) {
-    if(err) { return handleError(res, err); }
-    if(!address) { return res.status(404).send('Not Found'); }
-    address.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.status(204).send('No Content');
-    });
-  });
-};*/
+ // Creates a new address in the DB.
+ exports.create = function(req, res) {
+ Address.create(req.body, function(err, address) {
+ if(err) { return handleError(res, err); }
+ return res.status(201).json(address);
+ });
+ };
+
+ // Updates an existing address in the DB.
+ exports.update = function(req, res) {
+ if(req.body._id) { delete req.body._id; }
+ Address.findById(req.params.id, function (err, address) {
+ if (err) { return handleError(res, err); }
+ if(!address) { return res.status(404).send('Not Found'); }
+ var updated = _.merge(address, req.body);
+ updated.save(function (err) {
+ if (err) { return handleError(res, err); }
+ return res.status(200).json(address);
+ });
+ });
+ };
+
+ // Deletes a address from the DB.
+ exports.destroy = function(req, res) {
+ Address.findById(req.params.id, function (err, address) {
+ if(err) { return handleError(res, err); }
+ if(!address) { return res.status(404).send('Not Found'); }
+ address.remove(function(err) {
+ if(err) { return handleError(res, err); }
+ return res.status(204).send('No Content');
+ });
+ });
+ };*/
 
 function handleError(res, err) {
+  console.error(err);
   return res.status(500).send(err);
 }

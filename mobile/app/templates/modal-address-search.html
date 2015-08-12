@@ -7,7 +7,7 @@
     <label class="item-input-wrapper">
       <i class="icon ion-search placeholder-icon"></i>
       <input type="search" ng-model="searchQ.query" id="search-input"
-             ng-model-options="{debounce: 250}"
+             ng-model-options="{debounce: 250}" focus-me="focus"
              placeholder="{{searchText}}"/>
 
       <div ng-show="loading" style="transform: scale(1);">
@@ -19,29 +19,23 @@
     <div ng-if="!selected">
       <ion-list ng-if="!searching" style="margin-top: -2px">
         <div class="item item-divider">
-          Search
+          Search by
         </div>
         <div class="item item-text-wrap item-icon-left item-icon-left"
              ng-click="search('residential')">
           <i class="icon ion-ios-search-strong" style="font-size: x-large"></i>
 
-          Residential
-          <p>Search by address</p>
-        </div>
-        <div class="item item-text-wrap item-icon-left item-icon-left"
-             ng-click="search('hotel')">
-          <i class="icon ion-ios-search-strong" style="font-size: x-large"></i>
-
-          Hotel
-          <p>Search by hotel name and city</p>
+          Address
+          <!--<p>Search by address</p>-->
         </div>
         <div class="item item-text-wrap item-icon-left item-icon-left"
              ng-click="search('business')">
           <i class="icon ion-ios-search-strong" style="font-size: x-large"></i>
 
-          Business
-          <p>Search by business name and city</p>
+          Hotel or Business
+          <!--<p>Search by business name and city</p>-->
         </div>
+        <!--
         <div class="item item-divider">
 
         </div>
@@ -50,21 +44,22 @@
           <i class="icon ion-ios-home-outline" style="font-size: x-large"></i>
 
           Enter address
-        </div>
+        </div>-->
         <div ng-repeat="suggestion in suggestions">
           <div class="item item-divider" ng-show="suggestion.title">
             <br>{{suggestion.title}}
           </div>
           <div class="item item-text-wrap item-icon-left item-icon-left"
-               ng-click="selectLocation(item)"
+               ng-click="select(item)"
                ng-repeat="item in suggestion.items">
             <i class="icon {{item.icon}}" style="font-size: x-large"></i>
 
-            <h3>{{item.description}}</h3>
+            <h3 ng-if="item.description">{{item.description}}</h3>
 
             <p>{{item.subtitle}}</p>
           </div>
         </div>
+        <br><br>
       </ion-list>
 
       <ion-list ng-if="searching">
@@ -72,9 +67,16 @@
           <div class="item item-text-wrap item-icon-left item-icon-left"
                ng-click="selectLocation(item)"
                ng-repeat="item in results">
-            <i class="icon ion-location" style="font-size: x-large"></i>
+            <i class="icon"
+               ng-class="{'ion-ios-home-outline':item.types[0] === 'establishment', 'ion-location': item.types[0] !== 'establishment'}"
+               style="font-size: x-large"></i>
             {{item.description}}
           </div>
+        </div>
+        <div class="item item-text-wrap item-icon-left item-icon-left"
+             ng-click="selectLocation()" ng-if="searchQ.query">
+          <i class="icon ion-location" style="font-size: x-large"></i>
+          {{searchQ.query}}
         </div>
       </ion-list>
       <!--<div class="text-center" ng-if="results.length">
@@ -82,8 +84,8 @@
         <br>
       </div>-->
     </div>
-    <div ng-if="selected">
-      <ion-list>
+    <div ng-if="selected" class="grey-bg">
+      <ion-list class="grey-bg">
         <div class="item item-divider">
           <br>
           <span ng-if="addressType === 'manual'">Enter </span>
@@ -91,6 +93,13 @@
           Address
         </div>
 
+        <ion-item class="item item-input item-stacked-label"
+                  ng-if="addressType !== 'residential'"
+                  style="background-color: white">
+          <span class="input-label">Hotel or Business name</span>
+          <input type="text" ng-model="selected.name"
+                 placeholder="(Optional)">
+        </ion-item>
         <ion-item class="item item-input item-stacked-label" style="background-color: white">
           <span class="input-label">Address 1</span>
           <input type="text" ng-model="selected.address_1"
@@ -103,29 +112,24 @@
         </ion-item>
         <ion-item class="item item-input item-stacked-label" style="background-color: white">
           <span class="input-label">Postcode</span>
-          <input type="number" ng-model="selected.postcode"
+          <input type="text" ng-model="selected.postcode"
                  placeholder="Postcode">
         </ion-item>
 
-        <ion-item class="item item-input item-stacked-label" style="background-color: white">
-          <div class="row">
-            <div class="col">
+        <ion-item class="item item-input item-stacked-label" style="background-color: white;">
+          <div class="row" style="padding: 0">
+            <div class="col" style="padding: 0">
               <span class="input-label">City</span>
               <input type="text" ng-model="selected.city"
                      placeholder="City">
             </div>
-            <div class="col">
+            <div class="col" style="padding: 0">
               <span class="input-label">State</span>
               <input type="text" ng-model="selected.state"
                      placeholder="State">
             </div>
           </div>
-
         </ion-item>
-
-        <div class="item item-divider">
-          <br><br><br><br><br><br>
-        </div>
       </ion-list>
     </div>
     <div id="map" style="display: none">

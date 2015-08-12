@@ -201,8 +201,12 @@ angular.module('helix', [
     };
   })
 
-  .run(function ($ionicPlatform, $rootScope, $location, Auth) {
+  .run(function ($ionicPlatform, $rootScope, $location, Auth, $cordovaSplashscreen) {
     $ionicPlatform.ready(function () {
+      setTimeout(function() {
+        $cordovaSplashscreen.hide()
+      }, 2000);
+
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);

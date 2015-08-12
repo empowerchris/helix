@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('ModalAddressSearchCtrl', function ($scope, $timeout, $http, $ionicLoading, Api) {
+  .controller('ModalAddressSearchCtrl', function ($scope, $timeout, $http, $ionicLoading, Api, utils, $cordovaDialogs) {
     $scope.loading = false;
     $scope.searchQ = {
       query: ''
@@ -9,25 +9,36 @@ angular.module('helix.controllers')
 
     $scope.selected = false;
 
-    $scope.suggestions = [{
-      title: 'From your history',
-      items: [{
-        icon: 'ion-ios-clock-outline',
-        description: 'Trump International Hotel Las Vegas',
-        subtitle: '2000 Fashion Show Dr, Las Vegas, NV 89109, United States',
-        place_id: 'ChIJVTPokywQkFQRmtVEaUZlJRA'
-      }, {
-        icon: 'ion-ios-clock-outline',
-        description: '1 Infinite Loop, Cupertino, CA 95014, USA',
-        subtitle: '',
-        place_id: 'ChIJmQdYUK8L9ocRN63SN2-JktY'
-      }]
-    }];
+    $http.get(Api.endpoint + '/api/addresses')
+      .then(function (response) {
+        var addresses = response.data;
+
+        if (addresses.length) {
+          var items = [];
+
+          for (var i = 0; i < addresses.length; i++) {
+            items.push({
+              icon: 'ion-ios-clock-outline',
+              description: addresses[i].easypost.address.company,
+              subtitle: utils.formattedAddressFromEasypostObject(addresses[i].easypost.address),
+              easypost: addresses[i].easypost
+            });
+          }
+
+          $scope.suggestions = [{
+            title: 'From your history',
+            items: items,
+          }];
+        }
+      }, function (err) {
+        console.error(err);
+      });
 
     var googleAddressType = [''];
 
     $scope.search = function (addressType) {
       $scope.searching = true;
+      $scope.focus = true;
       $scope.addressType = addressType;
 
       if (addressType === 'residential') {
@@ -65,6 +76,11 @@ angular.module('helix.controllers')
               $scope.results = list;
               $scope.loading = false;
             });
+          } else {
+            $scope.$apply(function () {
+              $scope.results = [];
+              $scope.loading = false;
+            });
           }
         });
     }
@@ -83,9 +99,12 @@ angular.module('helix.controllers')
 
     $scope.selectLocation = function (item) {
       $scope.searching = false;
+
       if (!item) {
         $scope.addressType = 'manual';
-        return $scope.selected = {};
+        return $scope.selected = {
+          address_1: $scope.searchQ.query
+        };
       }
 
       placesService.getDetails({
@@ -93,10 +112,13 @@ angular.module('helix.controllers')
       }, function callback(place, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           $scope.$apply(function () {
-            console.log(place);
             $scope.selected = {
               place: place
             };
+
+            if ($scope.addressType !== 'residential') {
+              $scope.selected.name = place.name;
+            }
 
             var components = place.formatted_address.split(', ');
             $scope.selected.address_1 = components[0];
@@ -115,13 +137,18 @@ angular.module('helix.controllers')
 
       $http.post(Api.endpoint + '/api/addresses/verify', $scope.selected)
         .then(function (response) {
-          $ionicLoading.hide();
           console.log(response);
-        }, function (response) {
           $ionicLoading.hide();
-          console.error(response);
+          $scope.select({
+            description: response.data.easypost.address.company,
+            subtitle: utils.formattedAddressFromEasypostObject(response.data.easypost.address),
+            easypost: response.data.easypost
+          });
+        }, function (err) {
+          $ionicLoading.hide();
+          console.error(err);
+          return $cordovaDialogs.alert(err.data.message || 'Please verify the address provided.', 'Error validating address', 'OK');
         });
-      //$scope.select($scope.selected);
     }
   });
 

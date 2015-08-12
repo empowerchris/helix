@@ -29,7 +29,7 @@ var all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'helix-secret'
+    session: 'eL{wqNzT4QZDs]WJk,f3jKm8o'
   },
 
   // List of user roles

@@ -3,12 +3,17 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+var timestamps = require('mongoose-timestamp');
+
 var AddressSchema = new Schema({
-  easypost_id: String,
-  name: String,
-  company: String,
-  street1: String,
-  street2: String
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  easypost: {}
 });
+
+AddressSchema.plugin(timestamps);
 
 module.exports = mongoose.model('Address', AddressSchema);
