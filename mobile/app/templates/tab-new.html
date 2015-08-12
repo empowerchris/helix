@@ -32,6 +32,18 @@
               Select Location
             </p>
           </div>
+          <div class="item card-field two-lines" ng-click="openTravelDatesSelectModal()">
+            <p class="subtitle">
+              TRAVEL DATES
+            </p>
+
+            <p ng-if="storage.travel.arrival && storage.travel.departure">
+              {{storage.travel.arrival | date}} to {{storage.travel.departure | date}}
+            </p>
+            <p ng-if="!storage.travel.arrival || !storage.travel.departure">
+              Select pickup date
+            </p>
+          </div>
           <div class="item card-field two-lines" ng-click="openDateSelectModal()">
             <p class="subtitle">
               PICKUP DATE

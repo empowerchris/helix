@@ -1,19 +1,8 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('ModalDateSelectCtrl', function ($scope, $rootScope, $cordovaDialogs, $moment, $localStorage) {
-    $rootScope.$broadcast('defaultStatusBar');
-
+  .controller('ModalDateSelectCtrl', function ($scope, $cordovaDialogs, $moment, $localStorage) {
     $scope.storage = $localStorage;
-    $localStorage.mode = $localStorage.mode || 'pickup';
-
-    $scope.toDropoffMode = function() {
-      $localStorage.mode = 'dropoff';
-    };
-
-    $scope.toPickupMode = function() {
-      $localStorage.mode = 'pickup';
-    };
 
     $scope.cancel = function () {
       $scope.modal.hide();

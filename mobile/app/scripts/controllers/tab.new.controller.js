@@ -6,9 +6,9 @@ angular.module('helix.controllers')
 
     $scope.storage = $localStorage;
 
-    $localStorage.pickup = $localStorage.pickup || false;
-    $localStorage.dropoff = $localStorage.dropoff || false;
-    $scope.data = {};
+    $scope.storage.travel = $scope.storage.travel || {};
+    $scope.storage.pickup = $localStorage.pickup || false;
+    $scope.storage.dropoff = $localStorage.dropoff || false;
 
     $scope.cancel = function() {
       $scope.modal.hide();
@@ -38,6 +38,8 @@ angular.module('helix.controllers')
         $scope.modal.hide();
       };
 
+      $scope.title = 'Dropoff Address';
+
       $ionicModal.fromTemplateUrl('templates/modal-address-search.html', {
         scope: $scope,
         animation: 'slide-in-up',
@@ -50,6 +52,17 @@ angular.module('helix.controllers')
 
     $scope.openBagOptionsModal = function() {
       $ionicModal.fromTemplateUrl('templates/modal-bag-options.html', {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
+      }).then(function (modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
+    };
+
+    $scope.openTravelDatesSelectModal = function () {
+      $ionicModal.fromTemplateUrl('templates/modal-travel-dates-select.html', {
         scope: $scope,
         animation: 'slide-in-up',
         focusFirstInput: true
