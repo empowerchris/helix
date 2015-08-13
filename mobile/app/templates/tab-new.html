@@ -13,10 +13,11 @@
               PICKUP MY LUGGAGE IN...
             </p>
 
-            <p ng-if="storage.pickup">
-              {{storage.pickup.description || storage.pickup.subtitle}}
+            <p ng-if="storage.pickup.location.easypost">
+              {{storage.pickup.location.description || storage.pickup.location.subtitle}}
             </p>
-            <p ng-if="!storage.pickup">
+
+            <p ng-if="!storage.pickup.location.easypost">
               Select Location
             </p>
           </div>
@@ -25,10 +26,11 @@
               DELIVER MY LUGGAGE TO...
             </p>
 
-            <p ng-if="storage.dropoff">
-              {{storage.dropoff.description || storage.dropoff.subtitle}}
+            <p ng-if="storage.dropoff.location.easypost">
+              {{storage.dropoff.location.description || storage.dropoff.location.subtitle}}
             </p>
-            <p ng-if="!storage.dropoff">
+
+            <p ng-if="!storage.dropoff.location.easypost">
               Select Location
             </p>
           </div>
@@ -40,20 +42,35 @@
             <p ng-if="storage.travel.arrival && storage.travel.departure">
               {{storage.travel.arrival | date}} to {{storage.travel.departure | date}}
             </p>
+
             <p ng-if="!storage.travel.arrival || !storage.travel.departure">
-              Select pickup date
+              Select dates
             </p>
           </div>
           <div class="item card-field two-lines" ng-click="openDateSelectModal()">
             <p class="subtitle">
-              PICKUP DATE
+              LUGGAGE PICKUP DATE
             </p>
 
-            <p ng-if="storage.pickupDate">
-              <span ng-if="storage.pickupDate">Pickup on {{storage.pickupDate | date}}</span>
+            <p ng-if="storage.pickup.date">
+              <span ng-if="storage.pickup.date">Pickup on {{storage.pickup.date | date}}</span>
             </p>
-            <p ng-if="!storage.pickupDate">
+
+            <p ng-if="!storage.pickup.date">
               Select pickup date
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="openTimeSelectModal()">
+            <p class="subtitle">
+              LUGGAGE PICKUP TIME
+            </p>
+
+            <p ng-if="storage.pickup.time">
+              Between {{formatHour(storage.pickup.time.earliest)}} and {{formatHour(storage.pickup.time.latest)}}
+            </p>
+
+            <p ng-if="!storage.pickup.time">
+              Select pickup time
             </p>
           </div>
           <div class="item card-field two-lines" ng-click="openBagOptionsModal()">
@@ -66,6 +83,7 @@
                 {{size.amount}} x {{size.name}}<span ng-if="$index + 1 < (storage.bags | omit:'!amount').length">, </span>
               </span>
             </p>
+
             <p ng-if="!storage.bags">
               Select number of bags
             </p>

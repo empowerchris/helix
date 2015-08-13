@@ -16,8 +16,12 @@
     </div>
   </ion-header-bar>
 
-  <ion-content class="grey-bg" scroll="false">
-    <date-picker ng-model="date" on-date-selected="dateSelected(date)">
+  <ion-content class="grey-bg" scroll="false" style="margin-top: -2px">
+    <date-picker ng-if="storage.mode === 'arrival'"
+                 ng-model="travel.arrival" on-date-selected="dateSelected(travel.arrival)">
+    </date-picker>
+    <date-picker ng-if="storage.mode === 'departure'"
+                 ng-model="travel.departure" on-date-selected="dateSelected(travel.departure)">
     </date-picker>
   </ion-content>
 </ion-modal-view>

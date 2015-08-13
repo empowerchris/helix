@@ -4,6 +4,10 @@ angular.module('helix.controllers')
   .controller('ModalDateSelectCtrl', function ($scope, $cordovaDialogs, $moment, $localStorage) {
     $scope.storage = $localStorage;
 
+    if ($scope.storage.pickup.date) {
+      $scope.date = $moment($scope.storage.pickup.date).format('MM-DD-YYYY');
+    }
+
     $scope.cancel = function () {
       $scope.modal.hide();
     };
@@ -13,7 +17,7 @@ angular.module('helix.controllers')
 
       var a = $moment();
       var b = $moment(date);
-      var diff = a.diff(b, 'days') * - 1;
+      var diff = a.diff(b, 'days') * -1;
 
       if (diff < 0) {
         return $cordovaDialogs.alert('Please select a date in the future', 'Invalid Date', 'OK');
@@ -27,13 +31,7 @@ angular.module('helix.controllers')
         return $cordovaDialogs.alert('Please select a date less than 7 days in advance.', 'Sorry', 'OK');
       }
 
-      if ($localStorage.mode === 'dropoff') {
-        $localStorage.pickupDate = false;
-        $localStorage.dropoffDate = new Date(date);
-      } else if ($localStorage.mode === 'pickup') {
-        $localStorage.dropoffDate = false;
-        $localStorage.pickupDate = new Date(date);
-      }
+      $scope.storage.pickup.date= new Date(date);
 
       $scope.modal.hide();
     };
