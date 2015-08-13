@@ -2,7 +2,7 @@
 
 angular.module('helix.controllers')
   .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading,
-                                   $timeout, $cordovaDialogs, utils) {
+                                   $timeout, $cordovaDialogs, utils, $moment) {
 
     $scope.storage = $localStorage;
     $scope.storage.travel = $scope.storage.travel || {};
@@ -53,7 +53,7 @@ angular.module('helix.controllers')
         $scope.modal.hide();
       };
 
-      $scope.title = 'Drop-off Address';
+      $scope.title = 'Going To';
 
       $ionicModal.fromTemplateUrl('templates/modal-address-search.html', {
         scope: $scope,
@@ -110,26 +110,41 @@ angular.module('helix.controllers')
     };
 
     $scope.next = function () {
-      if (!$localStorage.pickup.location.easypost) {
+      if (!$scope.storage.pickup.location.easypost) {
         return $cordovaDialogs.alert('Please select pickup address.', 'Missing Information', 'OK');
       }
 
-      if (!$localStorage.dropoff.location.easypost) {
+      if (!$scope.storage.dropoff.location.easypost) {
         return $cordovaDialogs.alert('Please select drop-off address.', 'Missing Information', 'OK');
       }
 
-      if (!$localStorage.dropoffDate && !$localStorage.pickupDate) {
-        return $cordovaDialogs.alert('Please select a delivery date.', 'Missing Information', 'OK');
+      if (!$scope.storage.pickup.date) {
+        return $cordovaDialogs.alert('Please select a pickup date.', 'Missing Information', 'OK');
       }
 
+      if (!$scope.storage.pickup.time) {
+        return $cordovaDialogs.alert('Please select a pickup time.', 'Missing Information', 'OK');
+      }
 
+      if (!$scope.storage.bags) {
+        return $cordovaDialogs.alert('Please include luggage information.', 'Missing Information', 'OK');
+      }
 
       $ionicLoading.show({
-        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Loading..."
+        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Validating trip..."
       });
+
       $timeout(function () {
         $ionicLoading.hide();
         $state.go('tab.new-shipping');
       }, 1000);
-    }
+    };
+
+    $scope.differenceInDays = function (date1, date2) {
+      var a = $moment(date1);
+      var b = $moment(date2);
+      var diff = a.diff(b, 'days') * -1;
+
+      return diff;
+    };
   });

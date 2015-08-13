@@ -10,7 +10,7 @@
         <div class="card text-center">
           <div class="item card-field two-lines" ng-click="openPickupCityModal()">
             <p class="subtitle">
-              PICKUP MY LUGGAGE IN...
+              PICKUP MY LUGGAGE IN
             </p>
 
             <p ng-if="storage.pickup.location.easypost">
@@ -23,7 +23,7 @@
           </div>
           <div class="item card-field two-lines" ng-click="openDropoffCityModal()">
             <p class="subtitle">
-              DELIVER MY LUGGAGE TO...
+              GOING TO
             </p>
 
             <p ng-if="storage.dropoff.location.easypost">
@@ -40,7 +40,7 @@
             </p>
 
             <p ng-if="storage.travel.arrival && storage.travel.departure">
-              {{storage.travel.arrival | date}} to {{storage.travel.departure | date}}
+              {{storage.travel.arrival | date:'EEEE, MMMM d'}} to {{storage.travel.departure | date:'EEEE, MMMM d'}}
             </p>
 
             <p ng-if="!storage.travel.arrival || !storage.travel.departure">
@@ -49,12 +49,22 @@
           </div>
           <div class="item card-field two-lines" ng-click="openDateSelectModal()">
             <p class="subtitle">
-              LUGGAGE PICKUP DATE
+              PICKUP LUGGAGE ON
             </p>
 
-            <p ng-if="storage.pickup.date">
-              <span ng-if="storage.pickup.date">Pickup on {{storage.pickup.date | date}}</span>
-            </p>
+            <div ng-if="storage.pickup.date">
+              <p>Pickup on {{storage.pickup.date | date:'fullDate'}}</p>
+
+              <div ng-if="storage.travel.arrival && storage.travel.departure" style="font-size: small; opacity: 0.85">
+                <p ng-if="differenceInDays(storage.pickup.date, storage.travel.arrival) > 0">
+                  ({{differenceInDays(storage.pickup.date, storage.travel.arrival)}} days before arrival)
+                </p>
+
+                <p ng-if="differenceInDays(storage.pickup.date, storage.travel.arrival) <= 0 && differenceInDays(storage.pickup.date, storage.travel.departure) >= 0">
+                  ({{differenceInDays(storage.pickup.date, storage.travel.departure)}} days before departure)
+                </p>
+              </div>
+            </div>
 
             <p ng-if="!storage.pickup.date">
               Select pickup date

@@ -18,9 +18,9 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
-  require('../api/address/address.socket').register(socket);
-  require('../api/request/request.socket').register(socket);
-  require('../api/thing/thing.socket').register(socket);
+  //require('../api/address/address.socket').register(socket);
+  //require('../api/request/request.socket').register(socket);
+  //require('../api/thing/thing.socket').register(socket);
 }
 
 module.exports = function (socketio) {
