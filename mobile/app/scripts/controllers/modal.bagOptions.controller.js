@@ -2,27 +2,41 @@
 
 angular.module('helix.controllers')
   .controller('ModalBagOptionsCtrl', function ($scope, $rootScope, $cordovaDialogs, $localStorage) {
-    console.log('ModalBagOptionsCtrl');
-
     $scope.bags = $localStorage.bags || [{
         name: 'Small',
-        dimensions: '21.5 x 14 x 7.5',
-        weight: 'up to 20 lbs.',
+        dimensions: {
+          length: 21.5,
+          width: 14,
+          height: 7.5,
+          weight: 20
+        },
         amount: 0
       }, {
         name: 'Medium',
-        dimensions: '25 x 17.5 x 7.5',
-        weight: 'up to 30 lbs.',
+        dimensions: {
+          length: 25,
+          width: 17.5,
+          height: 7.5,
+          weight: 30
+        },
         amount: 0
       }, {
         name: 'Large',
-        dimensions: '29.5 x 19.5 x 8.5',
-        weight: 'up to 40 lbs.',
+        dimensions: {
+          length: 29.5,
+          width: 19.5,
+          height: 8.5,
+          weight: 40
+        },
         amount: 0
       }, {
         name: 'Extra Large',
-        dimensions: '30 x 20 x 11',
-        weight: 'up to 50 lbs.',
+        dimensions: {
+          length: 30,
+          width: 20,
+          height: 11,
+          weight: 50
+        },
         amount: 0
       }];
 
@@ -32,8 +46,6 @@ angular.module('helix.controllers')
       for (var i = 0; i < $scope.bags.length; i++) {
         numberOfBags = numberOfBags + $scope.bags[i].amount;
       }
-
-      console.log(numberOfBags);
 
       if (numberOfBags < 1) {
         return $cordovaDialogs.alert('You must select at least one bag size.', 'No bags', 'OK');

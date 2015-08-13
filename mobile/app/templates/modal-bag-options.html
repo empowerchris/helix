@@ -12,11 +12,11 @@
       </div>
       <div class="item row" ng-repeat="bag in bags">
         <div class="col">
-          <!--<ion-checkbox ng-model="size.selected" ng-change="changedSize(size)">-->
-          {{bag.name}}
-          <p>{{bag.dimensions}}<br>
-             {{bag.weight}}</p>
-          <!--</ion-checkbox>-->
+          <p>{{bag.name}}</p>
+
+          <p>{{bag.dimensions.length}} x {{bag.dimensions.width}} x {{bag.dimensions.height}}</p>
+
+          <p>Up to {{bag.dimensions.weight}} lbs</p>
         </div>
         <div class="col">
           <div class="button-bar">
@@ -28,6 +28,7 @@
           </div>
         </div>
       </div>
+      <br><br>
     </ion-list>
   </ion-content>
 </ion-modal-view>

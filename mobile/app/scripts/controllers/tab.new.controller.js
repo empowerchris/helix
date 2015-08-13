@@ -2,7 +2,7 @@
 
 angular.module('helix.controllers')
   .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading,
-                                   $timeout, $cordovaDialogs, utils, $moment) {
+                                   $timeout, $cordovaDialogs, utils, $moment, Api, $http) {
 
     $scope.storage = $localStorage;
     $scope.storage.travel = $scope.storage.travel || {};
@@ -131,13 +131,23 @@ angular.module('helix.controllers')
       }
 
       $ionicLoading.show({
-        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Validating trip..."
+        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Processing..."
       });
 
-      $timeout(function () {
+      $http.post(Api.endpoint + '/api/trips', {
+        pickup: $scope.storage.pickup,
+        dropoff: $scope.storage.dropoff,
+        bags: $scope.storage.bags
+      }).then(function (response) {
+        console.log(response);
         $ionicLoading.hide();
-        $state.go('tab.new-shipping');
-      }, 1000);
+      }, function (err) {
+        $ionicLoading.hide();
+        console.error(err);
+        return $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
+      });
+
+      //$state.go('tab.new-shipping');
     };
 
     $scope.differenceInDays = function (date1, date2) {
