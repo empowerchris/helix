@@ -29,22 +29,42 @@ angular.module('helix.controllers')
         return $cordovaDialogs.alert(err.data.message || err.data || 'Something went wrong. Please try again.', 'Error', 'OK');
       });
 
-    $scope.changedSelection = function (date, a) {
+    $scope.changedSelection = function (index, a) {
       for (var i = 0; i < $scope.dates.length; i++) {
         $scope.dates[i].selected = false;
       }
 
-      date.selected = true;
+      $scope.dates[index].selected = true;
     };
 
     $scope.next = function () {
+      var selectedDate;
+
+      for (var i = 0; i < $scope.dates.length; i++) {
+        if ($scope.dates[i].selected) {
+          selectedDate = $scope.dates[i];
+        }
+      }
+
+      if (!selectedDate) {
+        return $cordovaDialogs.alert('Please select a date.', 'Missing Information', 'OK');
+      }
+
       $ionicLoading.show({
         template: '<ion-spinner class=\'spinner-energized\'></ion-spinner><br>Calculating estimate...'
       });
-      $timeout(function () {
-        $ionicLoading.hide();
-        $state.go('tab.new-estimate');
-      }, 2000);
+
+      delete $scope.storage.estimate;
+      $http.post(Api.endpoint + '/api/trips/' + $scope.storage.trip._id + '/selectDate', selectedDate)
+        .then(function (response) {
+          $scope.storage.estimate = response.data;
+          $state.go('tab.new-estimate');
+          $ionicLoading.hide();
+        }, function (err) {
+          $ionicLoading.hide();
+          console.error(err);
+          return $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
+        });
     };
 
     $scope.addDays = function (date, days) {

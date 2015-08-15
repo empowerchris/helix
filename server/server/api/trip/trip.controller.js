@@ -26,11 +26,11 @@ var moment = require('moment');
  };
  */
 
-exports.deliveryDates = function(req, res) {
+exports.deliveryDates = function (req, res) {
   Trip.findById(req.params.id, function (err, trip) {
-    if(err) return handleError(res, err);
-    if(!trip) return res.status(404).send('Not Found');
-    if(!trip.owner.equals(req.user._id)) return res.send(401);
+    if (err) return handleError(res, err);
+    if (!trip) return res.status(404).send('Not Found');
+    if (!trip.owner.equals(req.user._id)) return res.send(401);
 
     var shipments = [];
 
@@ -58,7 +58,7 @@ exports.deliveryDates = function(req, res) {
             rate: rate
           };
 
-          if(dates[rate.delivery_date] && dates[rate.delivery_date].length > 0) {
+          if (dates[rate.delivery_date] && dates[rate.delivery_date].length > 0) {
             dates[rate.delivery_date].push(foo);
           } else {
             dates[rate.delivery_date] = [foo];
@@ -80,6 +80,42 @@ exports.deliveryDates = function(req, res) {
       }
 
       return res.json(possibleDates);
+    });
+  });
+};
+
+exports.selectDate = function (req, res) {
+  Trip.findById(req.params.id, function (err, trip) {
+    if (err) return handleError(res, err);
+    if (!trip) return res.status(404).send('Not Found');
+    if (!trip.owner.equals(req.user._id)) return res.send(401);
+
+    var shipmentCosts = 0;
+
+    for (var i = 0; i < req.body.shipments.length; i++) {
+      console.log(req.body.shipments[i].rate.rate);
+      shipmentCosts = shipmentCosts + parseInt(req.body.shipments[i].rate.rate);
+    }
+
+    var estimatedPickupCost = 20;
+
+    var helixFee = (shipmentCosts + estimatedPickupCost) * 0.1;
+
+    trip.rates = req.body.shipments;
+    trip.status = 'date-selected';
+
+    trip.save(function (err) {
+      if (err) return handleError(res, err);
+
+      console.log({
+        estimate: shipmentCosts + estimatedPickupCost + helixFee,
+        variability: 10
+      });
+
+      return res.json({
+        estimate: shipmentCosts + estimatedPickupCost + helixFee,
+        variability: 10
+      });
     });
   });
 };
@@ -123,8 +159,8 @@ exports.create = function (req, res) {
       }
 
       /*if (bags.length > 1) {
-        return callback(new Error('We currently only support one piece of luggage at a time.'));
-      }*/
+       return callback(new Error('We currently only support one piece of luggage at a time.'));
+       }*/
 
       callback(null, tripData, bags);
     }, function (tripData, bags, callback) {
@@ -162,7 +198,7 @@ exports.create = function (req, res) {
           parcel: bag.parcel,
           date_advance: '20',
           delivery_confirmation: 'SIGNATURE'
-        }, function(err, shipment) {
+        }, function (err, shipment) {
           if (err) return callback(err);
 
           bagsWithParcels[index].shipment = shipment;
@@ -181,9 +217,9 @@ exports.create = function (req, res) {
       //console.log('-----------------------BATCH--------------------------');
       /*var shipments = [];
 
-      for (var i = 0; i < bagsWithShipments.length; i++){
-        shipments.push(bagsWithShipments[i].shipment);
-      }*/
+       for (var i = 0; i < bagsWithShipments.length; i++){
+       shipments.push(bagsWithShipments[i].shipment);
+       }*/
 
       batch.addShipments({
         shipments: shipments
@@ -208,11 +244,6 @@ exports.create = function (req, res) {
 
     return res.status(201).json(trip);
   });
-
-  /*Trip.create(req.body, function(err, trip) {
-   if(err) { return handleError(res, err); }
-   return res.status(201).json(trip);
-   });*/
 };
 
 /*

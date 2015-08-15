@@ -12,10 +12,15 @@
     <br><br>
 
     <div ng-repeat="date in dates">
-      <ion-checkbox ng-model="date.selected" ng-change="changedSelection(date)">
+      <ion-checkbox ng-model="date.selected" ng-change="changedSelection($index)">
         {{addDays(storage.pickup.date, date.shipments[0].rate.delivery_days) | date:'EEEE, MMMM d'}}<br>
         <span ng-if="(date.date | utc | date:'h') !== 'NaN'">{{date.date | utc | date:'h:mm a'}}<br></span>
         <!--<p>{{date.shipments[0].rate.delivery_days}} days after pickup</p>-->
+
+        <p ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) > 0">
+          {{differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival)}} days before arrival
+        </p>
+
         <p style="color: green;font-size: medium;"
           ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) === 0">
           On the day of arrival

@@ -16,7 +16,8 @@ var TripSchema = new Schema({
   tripStatus: {
     type: String,
     default: 'created'
-  }
+  },
+  rates: {}
 });
 
 TripSchema.plugin(timestamps);

@@ -1,15 +1,12 @@
-<ion-view>
-  <ion-nav-bar class="bar-positive">
-    <ion-nav-title>
-      {{title}}
-    </ion-nav-title>
-  </ion-nav-bar>
+<ion-view view-title="Your Order">
   <ion-content class="grey-bg">
     <div id="tab-new-estimate">
       <div class="estimate text-center" style="padding: 2em">
-        <h1>$45 - $56</h1>
+        <h1>{{storage.estimate.estimate * ((100 - storage.estimate.variability)/100) | currency}}
+             —
+            {{storage.estimate.estimate * ((100 + storage.estimate.variability)/100) | currency}}</h1>
         <p style="opacity: 0.5; margin-top: 1em">
-          Your card charged will be charged 24 to 48 hours after the pickup date.
+          Estimated price
         </p>
       </div>
       <div class="item item-divider">
@@ -38,9 +35,11 @@
           <img src="images/credit-card-icons/{{card.type}}-curved-128px.png" class="icon"
                style="height: 35px;padding-top: 15px;"/>
           <span style="display: inline">{{card.name}}</span>
+
           <p style="display: inline">···· ···· ···· {{card.last4}}</p>
         </div>
       </ion-radio>
+      <!--<div>
       <div class="item item-divider">
         <br>Concur Expense
       </div>
@@ -55,6 +54,7 @@
           <option>Name C</option>
         </select>
       </ion-item>
+      </div>-->
       <br>
       <br>
       <br>
