@@ -4,6 +4,7 @@ var _ = require('lodash');
 var Trip = require('./trip.model');
 var config = require('../../config/environment');
 var easypost = require('node-easypost')(config.easypost.apiKey);
+var stripe = require('stripe')(config.stripe.apiKey);
 var async = require('async');
 var moment = require('moment');
 
@@ -93,34 +94,171 @@ exports.selectDate = function (req, res) {
     var shipmentCosts = 0;
 
     for (var i = 0; i < req.body.shipments.length; i++) {
-      console.log(req.body.shipments[i].rate.rate);
       shipmentCosts = shipmentCosts + parseInt(req.body.shipments[i].rate.rate);
     }
 
-    var estimatedPickupCost = 20;
+    var estimatedPickupCost = 5;
 
-    var helixFee = (shipmentCosts + estimatedPickupCost) * 0.1;
+    var helixFee = ((shipmentCosts * 0.8) + estimatedPickupCost) * 0.03;
+
+    var callTag = 7.5;
+
+    var subtotal = shipmentCosts + estimatedPickupCost + helixFee + callTag;
+
+    var stripeFee = (subtotal * 0.029) + 0.29;
+
+    var estimate = subtotal + stripeFee;
 
     trip.rates = req.body.shipments;
-    trip.status = 'date-selected';
+    trip.tripStatus = 'date-selected';
 
     trip.save(function (err) {
       if (err) return handleError(res, err);
 
-      console.log({
-        estimate: shipmentCosts + estimatedPickupCost + helixFee,
-        variability: 10
-      });
-
       return res.json({
-        estimate: shipmentCosts + estimatedPickupCost + helixFee,
-        variability: 10
+        estimate: estimate,
+        variability: 2
       });
     });
   });
 };
 
 // Creates a new trip in the DB.
+exports.pay = function (req, res) {
+  var cardId = req.body.cardId;
+
+  async.waterfall([
+    function (callback) {
+      // Verify ownership and calculate shipment costs
+      Trip.findById(req.params.id, function (err, trip) {
+        if (err) return callback(err);
+        if (!trip) return res.status(404).send('Not Found');
+        if (!trip.owner.equals(req.user._id)) return res.send(401);
+
+        var rates = [];
+        for (var i = 0; i < trip.rates.length; i++) {
+          rates.push(trip.rates[i].rate);
+        }
+
+        callback(null, trip, rates);
+      });
+    }, function (trip, rates, callback) {
+      var spent = 0;
+      async.forEachOf(rates, function iterator(rate, index, callback) {
+        var rateId = rate.id;
+        var shipmentId = rate.shipment_id;
+
+        console.log('Buying Rate ' + rateId + ' for shipment ' + shipmentId + ' for trip ' + trip._id);
+
+        easypost.Shipment.retrieve(shipmentId, function (err, shipment) {
+          if (err) return callback(err);
+
+          var rateToBuy = null;
+
+          for (var i = 0; i < shipment.rates.length; i++) {
+            if (shipment.rates[i].id === rateId) {
+              rateToBuy = shipment.rates[i];
+            }
+          }
+
+          if (!rateToBuy) return callback(new Error('Shipment rate not found.'));
+
+          shipment.buy({rate: rateToBuy}, function (err, shipment) {
+            if (err) return callback(err);
+
+            console.log(shipment);
+            spent = spent + rate.rate;
+            console.log('Spent', spent);
+            console.log(shipment.tracking_code);
+            console.log(shipment.postage_label.label_url);
+
+            callback(null);
+          });
+        });
+      }, function done(err) {
+        if (err) return callback(err);
+
+        //callback(null, tripData, bags);
+      });
+    }, function (trip, shipmentCosts, callback) {
+      stripe.charges.create({
+        amount: shipmentCosts * 100,
+        currency: "usd",
+        customer: req.user.stripe.customerId,
+        source: cardToken,
+        description: "Helix Trip " + trip._id,
+        receipt_email: req.user.email,
+        statement_descriptor: "Helix Trip #" + trip._id
+      }, function (err, charge) {
+        if (err) return callback(err);
+
+        console.log(charge);
+      });
+    }, function (tripData, bagsWithParcels, callback) {
+      easypost.Batch.create({}, function (err, response) {
+        if (err) return callback(err);
+
+        callback(null, tripData, bagsWithParcels, response);
+      });
+    }, function (tripData, bagsWithParcels, batch, callback) {
+      //console.log('-----------------------SHIPMENTS--------------------------');
+      var shipments = [];
+
+      async.forEachOf(bagsWithParcels, function iterator(bag, index, callback) {
+        easypost.Shipment.create({
+          to_address: tripData.dropoff.location.easypost.address,
+          from_address: tripData.pickup.location.easypost.address,
+          parcel: bag.parcel,
+          date_advance: '20',
+          delivery_confirmation: 'SIGNATURE'
+        }, function (err, shipment) {
+          if (err) return callback(err);
+
+          bagsWithParcels[index].shipment = shipment;
+
+          shipments.push(shipment);
+          console.log(shipment);
+
+          callback(null);
+        });
+      }, function done(err) {
+        if (err) return handleError(res, err);
+
+        callback(null, tripData, shipments, batch);
+      });
+    }, function (tripData, shipments, batch, callback) {
+      //console.log('-----------------------BATCH--------------------------');
+      /*var shipments = [];
+
+       for (var i = 0; i < bagsWithShipments.length; i++){
+       shipments.push(bagsWithShipments[i].shipment);
+       }*/
+
+      batch.addShipments({
+        shipments: shipments
+      }, function (err, newBatch) {
+        if (err) return callback(err);
+
+        callback(null, tripData, shipments, newBatch);
+      });
+    }, function (tripData, shipments, batch, callback) {
+      Trip.create({
+        owner: req.user,
+        batch: batch,
+        tripData: tripData
+      }, function (err, trip) {
+        if (err) return callback(err);
+
+        callback(null, trip);
+      });
+    }
+  ], function (err, trip) {
+    if (err) return handleError(res, err);
+
+    return res.status(201).json(trip);
+  });
+};
+
 exports.create = function (req, res) {
   var tripData = req.body;
 

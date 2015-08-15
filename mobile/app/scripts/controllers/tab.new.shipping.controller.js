@@ -11,23 +11,25 @@ angular.module('helix.controllers')
       template: '<ion-spinner class=\'spinner-energized\'></ion-spinner><br>Loading...'
     });
 
-    $scope.selectedDate = {};
-
-    $http
-      .get(Api.endpoint + '/api/trips/' + $scope.storage.trip._id + '/deliveryDates')
-      .then(function (response) {
-        $ionicLoading.hide();
-        $scope.loading = false;
-        $scope.dates = response.data;
-        if ($scope.dates.length) {
-          $scope.dates[0].selected = true;
-        }
-      }, function (err) {
-        $ionicLoading.hide();
-        console.error(err);
-        $scope.loading = false;
-        return $cordovaDialogs.alert(err.data.message || err.data || 'Something went wrong. Please try again.', 'Error', 'OK');
-      });
+    $scope.$on('$ionicView.enter', function () {
+      $scope.selectedDate = {};
+      $scope.loading = true;
+      $http
+        .get(Api.endpoint + '/api/trips/' + $scope.storage.trip._id + '/deliveryDates')
+        .then(function (response) {
+          $ionicLoading.hide();
+          $scope.loading = false;
+          $scope.dates = response.data;
+          if ($scope.dates.length) {
+            $scope.dates[0].selected = true;
+          }
+        }, function (err) {
+          $ionicLoading.hide();
+          console.error(err);
+          $scope.loading = false;
+          return $cordovaDialogs.alert(err.data.message || err.data || 'Something went wrong. Please try again.', 'Error', 'OK');
+        });
+    });
 
     $scope.changedSelection = function (index, a) {
       for (var i = 0; i < $scope.dates.length; i++) {

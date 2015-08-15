@@ -9,12 +9,12 @@
     <div class="item item-divider"><br>Payment Methods</div>
     <ion-list show-delete="shouldShowDelete" can-swipe="true">
       <ion-item ng-repeat="card in cards" class="item" ng-if="!loading">
-        <div> <!--class="item-icon-left" style="padding-left: 42px"-->
-          <!--<img src="images/credit-card-icons/{{card.type}}-curved-128px.png" class="icon"
-               style="height: 35px;padding-top: 15px;"/>-->
-          <span style="display: inline">{{card.name}}</span>
+        <div class="item-icon-left" style="padding-left: 42px">
+          <img src="images/credit-card-icons/{{card.stripe.brand}}-curved-128px.png" class="icon"
+               style="height: 35px;padding-top: 15px;"/>
+          <span style="display: inline">{{card.name || card.stripe.brand}}</span>
 
-          <p style="display: inline; float: right">···· ···· ···· {{card.last4}}</p>
+          <p style="display: inline; float: right">···· ···· ···· {{card.stripe.last4}}</p>
         </div>
         <ion-delete-button class="ion-minus-circled" ng-click="remove(card, $index)">
         </ion-delete-button>

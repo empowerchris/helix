@@ -26,14 +26,7 @@ var UserSchema = new Schema({
   concur: {},
   stripe: {
     customerId: String,
-    cards: [{
-      name: String,
-      tokenId: {
-        type: String,
-        required: 'true'
-      },
-      last4: String
-    }]
+    cards: [{}]
   }
 });
 

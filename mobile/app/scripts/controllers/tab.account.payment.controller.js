@@ -17,7 +17,7 @@ angular.module('helix.controllers')
 
     $scope.remove = function (card, index) {
       $http.post(Api.endpoint + '/api/users/cards/delete', {
-        tokenId: card.tokenId
+        cardId: card.stripe.id
       }).then(function () {
         $scope.cards.splice(index, 1);
       }, function (error) {
@@ -61,7 +61,6 @@ angular.module('helix.controllers')
             tokenId: token.id,
             last4: $scope.card.number.substr($scope.card.number.length - 4),
             name: $scope.card.name,
-            type: cardType
           }).then(function (response) {
             $scope.card = {};
 

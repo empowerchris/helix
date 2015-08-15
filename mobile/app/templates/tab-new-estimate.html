@@ -3,10 +3,11 @@
     <div id="tab-new-estimate">
       <div class="estimate text-center" style="padding: 2em">
         <h1>{{storage.estimate.estimate * ((100 - storage.estimate.variability)/100) | currency}}
-             —
+            —
             {{storage.estimate.estimate * ((100 + storage.estimate.variability)/100) | currency}}</h1>
+
         <p style="opacity: 0.5; margin-top: 1em">
-          Estimated price
+          Estimated price. Your card will be charged 24 to 48 hours after pickup.
         </p>
       </div>
       <div class="item item-divider">
@@ -29,16 +30,32 @@
                  placeholder="1234"/>
         </label></div>-->
 
-      <ion-radio ng-repeat="card in cards" class="item"
-                 ng-model="selectedCard" ng-value="card">
-        <div class="item-icon-left" style="padding-left: 42px">
-          <img src="images/credit-card-icons/{{card.type}}-curved-128px.png" class="icon"
-               style="height: 35px;padding-top: 15px;"/>
-          <span style="display: inline">{{card.name}}</span>
 
-          <p style="display: inline">···· ···· ···· {{card.last4}}</p>
+      <ion-list>
+        <ion-radio ng-repeat="card in cards" class="item"
+                   ng-model="cardId" ng-value="card.stripe.id">
+          <div class="item-icon-left" style="padding-left: 42px">
+            <img src="images/credit-card-icons/{{card.stripe.brand}}-curved-128px.png" class="icon"
+                 style="height: 35px;padding-top: 15px;"/>
+            <span style="display: inline">{{card.name || card.stripe.brand}}</span>
+
+            <p style="display: inline; float: right">···· ···· ···· {{card.stripe.last4}}</p>
+          </div>
+        </ion-radio>
+        <ion-item class="item text-center" ng-if="loading">
+          <ion-spinner class="spinner-energized"></ion-spinner>
+          <br>
+          Loading payment methods...
+        </ion-item>
+        <div ng-if="!cards.length && !loading">
+          <ion-item class="item text-center">
+            You have not added any payment methods yet
+          </ion-item>
+          <ion-item class="item text-center positive" ng-click="goToAddNewCard()">
+            Go to Payment Settings
+          </ion-item>
         </div>
-      </ion-radio>
+      </ion-list>
       <!--<div>
       <div class="item item-divider">
         <br>Concur Expense
@@ -63,8 +80,9 @@
   <ion-footer-bar align-title="left" class="bar-positive">
     <button class="button button-block button-clear"
             ng-click="pay()"
+            ng-disabled="!cardId"
             style="color: white;margin: 0;">
-      Pay <span class="icon ion-ios-arrow-forward" style="font-size: small"></span>
+      Pay <span class="icon ion-ios-arrow-forward" style="transform: scale(0.5)"></span>
     </button>
   </ion-footer-bar>
 </ion-view>

@@ -1,39 +1,53 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('NewEstimateCtrl', function ($scope, $state, $localStorage, $ionicLoading, $timeout) {
+  .controller('NewEstimateCtrl', function ($scope, $state, $localStorage, $ionicLoading, $timeout, Auth, $location,
+                                           $http, Api, $cordovaDialogs) {
     $scope.title = 'Your Order';
     $scope.storage = $localStorage;
 
-    $scope.cards = [{
-      id: 1,
-      type: 'visa',
-      last4: '3325',
-      name: 'Personal'
-    }, {
-      id: 2,
-      type: 'mastercard',
-      last4: '4457',
-      name: 'Work'
-    }];
+    $scope.$on('$ionicView.enter', function () {
+      $scope.loading = true;
+      Auth.getCurrentUser().$promise.then(function (user) {
+        $scope.cards = user.stripe.cards;
+        $scope.loading = false;
+        if ($scope.cards.length) {
+          $scope.cardId = $scope.cards[0].stripe.id;
+        }
+      });
+    });
 
-    $scope.selectedCard = $scope.cards[0];
+    $scope.pay = function () {
+      if (!$scope.cardId) {
+        return $cordovaDialogs.alert('Please select a payment method.', 'Missing Information', 'OK');
+      }
 
-    $scope.pay = function() {
       $ionicLoading.show({
         template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Processing payment..."
       });
-      $timeout(function() {
+
+      $http.post(Api.endpoint + '/api/trips/' + $scope.storage.trip._id + '/pay', {
+        cardId: $scope.cardId
+      }).then(function (response) {
+        console.log(response);
         $ionicLoading.hide();
         $state.go('tab.new-done');
-      }, 3500);
+      }, function (err) {
+        $ionicLoading.hide();
+        console.error(err);
+        return $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
+      });
     };
 
-    $scope.next = function() {
+    $scope.next = function () {
       $state.go('tab.new-review');
     };
 
-    $scope.remove = function(card) {
+    $scope.remove = function (card) {
       console.log($scope.cards.indexOf(card));
     };
+
+    $scope.goToAddNewCard = function () {
+      $location.path('tab/account/payment');
+    }
   });
