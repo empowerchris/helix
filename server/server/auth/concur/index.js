@@ -8,7 +8,7 @@ var router = express.Router();
 
 router
   .get('/', passport.authenticate('concur', {
-    scope: ['email', 'user_about_me'],
+    scope: ['USER'],
     failureRedirect: '/signup',
     session: false
   }))

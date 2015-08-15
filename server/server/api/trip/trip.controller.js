@@ -68,6 +68,10 @@ exports.create = function (req, res) {
         return callback(new Error('No bags selected.'));
       }
 
+      if (bags.length > 1) {
+        return callback(new Error('We currently only support one piece of luggage at a time.'));
+      }
+
       callback(null, tripData, bags);
     }, function (tripData, bags, callback) {
       // Parcels
@@ -108,17 +112,48 @@ exports.create = function (req, res) {
         }, function(err, shipment) {
           if (err) return callback(err);
 
-          console.log(shipment);
           bagsWithParcels[index].shipment = shipment;
+
+          console.log(shipment);
 
           callback(null);
         });
       }, function done(err) {
         if (err) return handleError(res, err);
 
-        //callback();
+        callback(null, tripData, bagsWithParcels, batch);
       });
+    }, function (tripData, bagsWithShipments, batch, callback) {
+      // Add shipments to Batch
 
+      var shipments = [];
+
+      for (var i = 0; i < bagsWithShipments.length; i++){
+        shipments.push(bagsWithShipments[i].shipment);
+      }
+
+      batch.addShipments({
+        shipments: shipments
+      }, function (err, response) {
+        if (err) return callback(err);
+
+        callback(null, tripData, bagsWithShipments, batch);
+      });
+    }, function (tripData, bagsWithShipments, batch, callback) {
+      // Pickup
+      // TODO: check if earliest and latest work
+      console.log('-----------------------PICKUP--------------------------');
+
+      easypost.Pickup.create({
+        address: tripData.pickup.location.easypost.address,
+        batch: batch,
+        min_datetime: tripData.pickup.date.hours(tripData.pickup.time.earliest).utc().format(),
+        max_datetime: tripData.pickup.date.hours(tripData.pickup.time.latest).utc().format()
+      }, function(err, pickup) {
+        if (err) return callback(err);
+
+        console.log(pickup);
+      });
     }
   ], function (err) {
     if (err) return handleError(res, err);

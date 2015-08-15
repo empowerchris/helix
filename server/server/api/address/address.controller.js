@@ -15,7 +15,7 @@ exports.verify = function (req, res) {
     city: req.body.city,
     state: req.body.state,
     zip: req.body.postcode,
-    phone: req.body.phone,
+    phone: req.user.phone,
     email: req.user.email,
     residential: true
   };

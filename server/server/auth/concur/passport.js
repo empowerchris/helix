@@ -1,5 +1,6 @@
 var passport = require('passport');
 var ConcurStrategy = require('passport-concur').Strategy;
+var concur = require('concur-platform');
 
 exports.setup = function (User, config) {
   passport.use(new ConcurStrategy({
@@ -7,9 +8,24 @@ exports.setup = function (User, config) {
       clientSecret: config.concur.clientSecret,
       callbackURL: config.concur.callbackURL
     },
-    function(accessToken, refreshToken, profile, done) {
+    function(accessToken, refreshToken, instanceUrl, expirationDate, done) {
+      console.log(accessToken, refreshToken, instanceUrl, expirationDate);
+
+      var options = {
+        oauthToken: accessToken,
+        loginId:'luckybeitia@gmail.com'
+      };
+
+      concur.user.get(options)
+        .then(function(user) {
+          console.log(user);
+        })
+        .fail(function(error) {
+          console.log(error);
+        });
+
       User.findOne({
-        'concur.id': profile.id
+        'concur.accessToken': accessToken
       },
       function(err, user) {
         if (err) {
@@ -22,7 +38,7 @@ exports.setup = function (User, config) {
             role: 'user',
             username: profile.username,
             provider: 'concur',
-            facebook: profile._json
+            concur: profile._json
           });
           user.save(function(err) {
             if (err) return done(err);
@@ -31,7 +47,7 @@ exports.setup = function (User, config) {
         } else {
           return done(err, user);
         }
-      })
+      });
     }
   ));
 };
