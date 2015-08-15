@@ -11,7 +11,12 @@ var TripSchema = new Schema({
     ref: 'User',
     required: true
   },
-  easypost: {}
+  batch: {},
+  tripData: {},
+  tripStatus: {
+    type: String,
+    default: 'created'
+  }
 });
 
 TripSchema.plugin(timestamps);

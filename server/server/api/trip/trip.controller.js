@@ -26,10 +26,64 @@ var moment = require('moment');
  };
  */
 
-/*
+exports.deliveryDates = function(req, res) {
+  Trip.findById(req.params.id, function (err, trip) {
+    if(err) return handleError(res, err);
+    if(!trip) return res.status(404).send('Not Found');
+    if(!trip.owner.equals(req.user._id)) return res.send(401);
 
+    var shipments = [];
 
- */
+    async.forEachOf(trip.batch.shipments, function iterator(shipment, index, callback) {
+      var shipmentId = shipment.id;
+
+      easypost.Shipment.retrieve(shipmentId, function (err, shipment) {
+        if (err) return handleError(res, err);
+
+        shipments[index] = shipment;
+
+        callback(null);
+      });
+    }, function done(err) {
+      if (err) return handleError(res, err);
+
+      var dates = {};
+
+      for (var i = 0; i < shipments.length; i++) {
+        for (var j = 0; j < shipments[i].rates.length; j++) {
+          var rate = shipments[i].rates[j];
+
+          var foo = {
+            shipmentId: shipments[i].id,
+            rate: rate
+          };
+
+          if(dates[rate.delivery_date] && dates[rate.delivery_date].length > 0) {
+            dates[rate.delivery_date].push(foo);
+          } else {
+            dates[rate.delivery_date] = [foo];
+          }
+        }
+      }
+
+      var possibleDates = [];
+
+      for (var date in dates) {
+        if (dates.hasOwnProperty(date)) {
+          if (dates[date].length === shipments.length) {
+            possibleDates.push({
+              date: date,
+              shipments: dates[date]
+            })
+          }
+        }
+      }
+
+      return res.json(possibleDates);
+    });
+  });
+};
+
 // Creates a new trip in the DB.
 exports.create = function (req, res) {
   var tripData = req.body;
@@ -68,14 +122,12 @@ exports.create = function (req, res) {
         return callback(new Error('No bags selected.'));
       }
 
-      if (bags.length > 1) {
+      /*if (bags.length > 1) {
         return callback(new Error('We currently only support one piece of luggage at a time.'));
-      }
+      }*/
 
       callback(null, tripData, bags);
     }, function (tripData, bags, callback) {
-      // Parcels
-
       async.forEachOf(bags, function iterator(bag, index, callback) {
         var parcelData = bag.dimensions;
 
@@ -94,26 +146,28 @@ exports.create = function (req, res) {
         callback(null, tripData, bags);
       });
     }, function (tripData, bagsWithParcels, callback) {
-      // Create Batch
-
       easypost.Batch.create({}, function (err, response) {
         if (err) return callback(err);
 
         callback(null, tripData, bagsWithParcels, response);
       });
     }, function (tripData, bagsWithParcels, batch, callback) {
-      // Create Shipments
+      //console.log('-----------------------SHIPMENTS--------------------------');
+      var shipments = [];
 
       async.forEachOf(bagsWithParcels, function iterator(bag, index, callback) {
         easypost.Shipment.create({
           to_address: tripData.dropoff.location.easypost.address,
           from_address: tripData.pickup.location.easypost.address,
-          parcel: bag.parcel
+          parcel: bag.parcel,
+          date_advance: '20',
+          delivery_confirmation: 'SIGNATURE'
         }, function(err, shipment) {
           if (err) return callback(err);
 
           bagsWithParcels[index].shipment = shipment;
 
+          shipments.push(shipment);
           console.log(shipment);
 
           callback(null);
@@ -121,46 +175,38 @@ exports.create = function (req, res) {
       }, function done(err) {
         if (err) return handleError(res, err);
 
-        callback(null, tripData, bagsWithParcels, batch);
+        callback(null, tripData, shipments, batch);
       });
-    }, function (tripData, bagsWithShipments, batch, callback) {
-      // Add shipments to Batch
-
-      var shipments = [];
+    }, function (tripData, shipments, batch, callback) {
+      //console.log('-----------------------BATCH--------------------------');
+      /*var shipments = [];
 
       for (var i = 0; i < bagsWithShipments.length; i++){
         shipments.push(bagsWithShipments[i].shipment);
-      }
+      }*/
 
       batch.addShipments({
         shipments: shipments
-      }, function (err, response) {
+      }, function (err, newBatch) {
         if (err) return callback(err);
 
-        callback(null, tripData, bagsWithShipments, batch);
+        callback(null, tripData, shipments, newBatch);
       });
-    }, function (tripData, bagsWithShipments, batch, callback) {
-      // Pickup
-      // TODO: check if earliest and latest work
-      console.log('-----------------------PICKUP--------------------------');
-
-      easypost.Pickup.create({
-        address: tripData.pickup.location.easypost.address,
+    }, function (tripData, shipments, batch, callback) {
+      Trip.create({
+        owner: req.user,
         batch: batch,
-        min_datetime: tripData.pickup.date.hours(tripData.pickup.time.earliest).utc().format(),
-        max_datetime: tripData.pickup.date.hours(tripData.pickup.time.latest).utc().format()
-      }, function(err, pickup) {
+        tripData: tripData
+      }, function (err, trip) {
         if (err) return callback(err);
 
-        console.log(pickup);
+        callback(null, trip);
       });
     }
-  ], function (err) {
+  ], function (err, trip) {
     if (err) return handleError(res, err);
 
-    console.log('all good');
-
-    return res.status(200).send();
+    return res.status(201).json(trip);
   });
 
   /*Trip.create(req.body, function(err, trip) {
@@ -168,6 +214,24 @@ exports.create = function (req, res) {
    return res.status(201).json(trip);
    });*/
 };
+
+/*
+ // Pickup
+ // TODO: check if earliest and latest work
+ console.log('-----------------------PICKUP--------------------------');
+
+ easypost.Pickup.create({
+ address: tripData.pickup.location.easypost.address,
+ batch: batch,
+ min_datetime: tripData.pickup.date.hours(tripData.pickup.time.earliest).utc().format(),
+ max_datetime: tripData.pickup.date.hours(tripData.pickup.time.latest).utc().format()
+ }, function(err, pickup) {
+ if (err) return callback(err);
+
+ console.log(pickup);
+ });
+ */
+
 /*
  // Updates an existing trip in the DB.
  exports.update = function(req, res) {

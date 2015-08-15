@@ -9,32 +9,33 @@
     </button>
   </ion-nav-buttons>
   <ion-content class="grey-bg">
-    <div class="item item-divider">
-      <br>{{title}}
-    </div>
-    <div class="">
-      <div ng-repeat="method in shippingMethods" ng-if="storage.dropoffDate">
-        <ion-checkbox ng-model="method.selected" ng-change="changedShipping(method)">
-          Pickup on {{method.pickupDate | date}}
+    <br><br>
 
-          <p>{{method.days}} days before delivery</p>
-      </div>
-      <div ng-repeat="method in shippingMethods" ng-if="storage.pickupDate">
-        <ion-checkbox ng-model="method.selected" ng-change="changedShipping(method)">
-          Deliver on {{method.pickupDate | date}}
+    <div ng-repeat="date in dates">
+      <ion-checkbox ng-model="date.selected" ng-change="changedSelection(date)">
+        {{addDays(storage.pickup.date, date.shipments[0].rate.delivery_days) | date:'EEEE, MMMM d'}}<br>
+        <span ng-if="(date.date | utc | date:'h') !== 'NaN'">{{date.date | utc | date:'h:mm a'}}<br></span>
+        <!--<p>{{date.shipments[0].rate.delivery_days}} days after pickup</p>-->
+        <p style="color: green;font-size: medium;"
+          ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) === 0">
+          On the day of arrival
+        </p>
 
-          <p>{{method.days}} days after pickup</p>
-      </div>
+        <p ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) < 0 && differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.departure) > 0">
+          {{differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) * -1}} days after arrival
+        </p>
+
+        <p style="font-size: medium;"
+           ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.departure) === 0">
+          On the day of departure
+        </p>
       </ion-checkbox>
     </div>
-    <div class="item item-divider">
-      <br>Pickup Time
+
+    <div ng-if="!loading && dates.length < 1">
+      We couldn't find any dates to deliver your luggage.
+      Please go back and change the amount of bags and try again.
     </div>
-    <div class="item text-center" ng-click="openTimeSelectModal()">
-      <br>
-      Between {{formatHour(pickupTime.earliest)}} and {{formatHour(pickupTime.latest)}}
-      <br><span style="opacity: 0">i</span>
-    </div>
-    <br>
+    <br><br>
   </ion-content>
 </ion-view>

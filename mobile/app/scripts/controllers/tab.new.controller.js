@@ -134,20 +134,21 @@ angular.module('helix.controllers')
         template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Processing..."
       });
 
+      delete $scope.storage.trip;
+
       $http.post(Api.endpoint + '/api/trips', {
         pickup: $scope.storage.pickup,
         dropoff: $scope.storage.dropoff,
         bags: $scope.storage.bags
       }).then(function (response) {
-        console.log(response);
+        $scope.storage.trip = response.data;
+        $state.go('tab.new-shipping');
         $ionicLoading.hide();
       }, function (err) {
         $ionicLoading.hide();
         console.error(err);
         return $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
       });
-
-      //$state.go('tab.new-shipping');
     };
 
     $scope.differenceInDays = function (date1, date2) {
