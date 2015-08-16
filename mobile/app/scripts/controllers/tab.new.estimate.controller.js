@@ -6,12 +6,15 @@ angular.module('helix.controllers')
     $scope.title = 'Your Order';
     $scope.storage = $localStorage;
 
+    $scope.loading = true;
+
     $scope.$on('$ionicView.enter', function () {
       $scope.loading = true;
       Auth.getCurrentUser().$promise.then(function (user) {
         $scope.cards = user.stripe.cards;
         $scope.loading = false;
         if ($scope.cards.length) {
+          console.log($scope.cards);
           $scope.cardId = $scope.cards[0].stripe.id;
         }
       });
@@ -35,7 +38,8 @@ angular.module('helix.controllers')
       }, function (err) {
         $ionicLoading.hide();
         console.error(err);
-        return $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
+        $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
+        $location.path('tab/new');
       });
     };
 

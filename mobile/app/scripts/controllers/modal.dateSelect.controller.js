@@ -23,13 +23,13 @@ angular.module('helix.controllers')
         return $cordovaDialogs.alert('Please select a date in the future', 'Invalid Date', 'OK');
       }
 
-      if (diff < 1) {
+      /*if (diff < 1) {
         return $cordovaDialogs.alert('Pickups need to be scheduled at least 1 day in advance.', 'Sorry', 'OK');
-      }
+      }*/
 
-      if (diff > 7) {
+      /*if (diff > 7) {
         return $cordovaDialogs.alert('Please select a date less than 7 days in advance.', 'Sorry', 'OK');
-      }
+      }*/
 
       $scope.storage.pickup.date= new Date(date);
 

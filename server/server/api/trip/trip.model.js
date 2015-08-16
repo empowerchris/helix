@@ -13,6 +13,7 @@ var TripSchema = new Schema({
   },
   batch: {},
   tripData: {},
+  spent: Number,
   tripStatus: {
     type: String,
     default: 'created'

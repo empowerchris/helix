@@ -131,7 +131,7 @@ angular.module('helix.controllers')
       }
 
       $ionicLoading.show({
-        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Processing..."
+        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Verifying trip..."
       });
 
       delete $scope.storage.trip;

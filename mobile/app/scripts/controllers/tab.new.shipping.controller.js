@@ -7,27 +7,22 @@ angular.module('helix.controllers')
     $scope.storage = $localStorage;
 
     $scope.loading = true;
-    $ionicLoading.show({
-      template: '<ion-spinner class=\'spinner-energized\'></ion-spinner><br>Loading...'
-    });
 
     $scope.$on('$ionicView.enter', function () {
-      $scope.selectedDate = {};
       $scope.loading = true;
       $http
         .get(Api.endpoint + '/api/trips/' + $scope.storage.trip._id + '/deliveryDates')
         .then(function (response) {
-          $ionicLoading.hide();
           $scope.loading = false;
           $scope.dates = response.data;
           if ($scope.dates.length) {
             $scope.dates[0].selected = true;
           }
         }, function (err) {
-          $ionicLoading.hide();
           console.error(err);
           $scope.loading = false;
-          return $cordovaDialogs.alert(err.data.message || err.data || 'Something went wrong. Please try again.', 'Error', 'OK');
+          $cordovaDialogs.alert(err.data.message || err.data || 'Something went wrong. Please try again.', 'Error', 'OK');
+          $location.path('tab/new');
         });
     });
 

@@ -33,10 +33,10 @@
 
       <ion-list>
         <ion-radio ng-repeat="card in cards" class="item"
-                   ng-model="cardId" ng-value="card.stripe.id">
+                   ng-model="cardId" ng-value="card.stripe.id" ng-if="!loading">
           <div class="item-icon-left" style="padding-left: 42px">
             <img src="images/credit-card-icons/{{card.stripe.brand}}-curved-128px.png" class="icon"
-                 style="height: 35px;padding-top: 15px;"/>
+                 style="height: 35px;padding-top: 15px;" ng-if="card.stripe.brand"/>
             <span style="display: inline">{{card.name || card.stripe.brand}}</span>
 
             <p style="display: inline; float: right">···· ···· ···· {{card.stripe.last4}}</p>

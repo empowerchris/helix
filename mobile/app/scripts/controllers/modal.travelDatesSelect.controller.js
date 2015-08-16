@@ -26,6 +26,15 @@ angular.module('helix.controllers')
 
     $scope.dateSelected = function (date) {
       if (!date) return;
+
+      var a = $moment();
+      var b = $moment(date);
+      var diff = a.diff(b, 'days') * -1;
+
+      if (diff < 0) {
+        return $cordovaDialogs.alert('Please select a date in the future', 'Invalid Date', 'OK');
+      }
+
       if ($scope.storage.mode === 'arrival') {
         $scope.storage.travel.arrival = new Date(date);
       } else if ($scope.storage.mode === 'departure') {

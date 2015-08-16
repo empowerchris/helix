@@ -33,6 +33,8 @@ exports.deliveryDates = function (req, res) {
     if (!trip) return res.status(404).send('Not Found');
     if (!trip.owner.equals(req.user._id)) return res.send(401);
 
+    console.log('Obtaining dates for trip ' + trip._id + ' for user ' + req.user.email);
+
     var shipments = [];
 
     async.forEachOf(trip.batch.shipments, function iterator(shipment, index, callback) {
@@ -91,6 +93,8 @@ exports.selectDate = function (req, res) {
     if (!trip) return res.status(404).send('Not Found');
     if (!trip.owner.equals(req.user._id)) return res.send(401);
 
+    console.log('Calculating estimate for trip ' + trip._id + ' for user ' + req.user.email);
+
     var shipmentCosts = 0;
 
     for (var i = 0; i < req.body.shipments.length; i++) {
@@ -117,7 +121,7 @@ exports.selectDate = function (req, res) {
 
       return res.json({
         estimate: estimate,
-        variability: 2
+        variability: 5
       });
     });
   });
@@ -134,6 +138,8 @@ exports.pay = function (req, res) {
         if (err) return callback(err);
         if (!trip) return res.status(404).send('Not Found');
         if (!trip.owner.equals(req.user._id)) return res.send(401);
+
+        console.log('Processing payment for trip ' + trip._id + ' for user ' + req.user.email);
 
         var rates = [];
         for (var i = 0; i < trip.rates.length; i++) {
@@ -167,10 +173,8 @@ exports.pay = function (req, res) {
             if (err) return callback(err);
 
             console.log(shipment);
-            spent = spent + rate.rate;
-            console.log('Spent', spent);
-            console.log(shipment.tracking_code);
-            console.log(shipment.postage_label.label_url);
+            spent = spent + parseFloat(rate.rate);
+            console.log('Spent so far ', spent);
 
             callback(null);
           });
@@ -178,78 +182,106 @@ exports.pay = function (req, res) {
       }, function done(err) {
         if (err) return callback(err);
 
-        //callback(null, tripData, bags);
-      });
-    }, function (trip, shipmentCosts, callback) {
-      stripe.charges.create({
-        amount: shipmentCosts * 100,
-        currency: "usd",
-        customer: req.user.stripe.customerId,
-        source: cardToken,
-        description: "Helix Trip " + trip._id,
-        receipt_email: req.user.email,
-        statement_descriptor: "Helix Trip #" + trip._id
-      }, function (err, charge) {
-        if (err) return callback(err);
-
-        console.log(charge);
-      });
-    }, function (tripData, bagsWithParcels, callback) {
-      easypost.Batch.create({}, function (err, response) {
-        if (err) return callback(err);
-
-        callback(null, tripData, bagsWithParcels, response);
-      });
-    }, function (tripData, bagsWithParcels, batch, callback) {
-      //console.log('-----------------------SHIPMENTS--------------------------');
-      var shipments = [];
-
-      async.forEachOf(bagsWithParcels, function iterator(bag, index, callback) {
-        easypost.Shipment.create({
-          to_address: tripData.dropoff.location.easypost.address,
-          from_address: tripData.pickup.location.easypost.address,
-          parcel: bag.parcel,
-          date_advance: '20',
-          delivery_confirmation: 'SIGNATURE'
-        }, function (err, shipment) {
+        trip.tripStatus = 'shipments-bought';
+        trip.save(function (err) {
           if (err) return callback(err);
-
-          bagsWithParcels[index].shipment = shipment;
-
-          shipments.push(shipment);
-          console.log(shipment);
-
-          callback(null);
+          callback(null, trip, spent);
         });
-      }, function done(err) {
-        if (err) return handleError(res, err);
-
-        callback(null, tripData, shipments, batch);
       });
-    }, function (tripData, shipments, batch, callback) {
-      //console.log('-----------------------BATCH--------------------------');
-      /*var shipments = [];
+    }, function (trip, spent, callback) {
+      console.log('Updating batch for trip ' + trip._id);
 
-       for (var i = 0; i < bagsWithShipments.length; i++){
-       shipments.push(bagsWithShipments[i].shipment);
-       }*/
-
-      batch.addShipments({
-        shipments: shipments
-      }, function (err, newBatch) {
+      easypost.Batch.retrieve(trip.batch.id, function (err, batch) {
         if (err) return callback(err);
 
-        callback(null, tripData, shipments, newBatch);
+        console.log(batch);
+
+        trip.spent = spent;
+        trip.batch = batch;
+        trip.tripStatus = 'batch-updated';
+
+        trip.save(function (err) {
+          if (err) return callback(err);
+          callback(null, trip, batch, spent);
+        });
       });
-    }, function (tripData, shipments, batch, callback) {
-      Trip.create({
-        owner: req.user,
-        batch: batch,
-        tripData: tripData
-      }, function (err, trip) {
+    }, function (trip, batch, spent, callback) {
+      console.log('Requesting scan form for batch ' + batch.id + ' for trip ' + trip._id);
+
+      batch.createScanForm(function (err, upatedBatch) {
         if (err) return callback(err);
 
-        callback(null, trip);
+        trip.batch = upatedBatch;
+        trip.tripStatus = 'scanform-requested';
+
+        trip.save(function (err) {
+          if (err) return callback(err);
+          callback(null, trip, batch, spent);
+        });
+      });
+    }, function (trip, batch, spent, callback) {
+      console.log('Creating pickup for batch ' + batch.id + ' for trip ' + trip._id);
+
+      var address = trip.tripData.pickup.location.easypost.address;
+      if (!address) return callback('No pickup address specified');
+
+      var options = {
+        address: address,
+        batch: {
+          id: batch.id
+        },
+        reference: 'Trip id ' + trip._id,
+        instructions: 'Pickup scheduled through Helix. Expected ' + batch.num_shipments + ' pieces of luggage.',
+        min_datetime: moment(trip.tripData.pickup.date).hours(trip.tripData.pickup.time.earliest).format('YYYY-MM-DD HH:mm:ss'),
+        max_datetime: moment(trip.tripData.pickup.date).hours(trip.tripData.pickup.time.latest).format('YYYY-MM-DD HH:mm:ss')
+      };
+
+      easypost.Pickup.create(options, function (err, pickup) {
+        if (err) return callback(err);
+
+        console.log(pickup);
+
+        trip.pickup = pickup;
+        trip.tripStatus = 'pickup-created';
+
+        trip.save(function (err) {
+          if (err) return callback(err);
+          callback(null, trip, batch, pickup, spent);
+        });
+      });
+    }, function (trip, batch, pickup, spent, callback) {
+      console.log('Buying cheapest rate for pickup ' + pickup.id + ' for trip ' + trip._id);
+
+      var lowestRate = 99999.99;
+      var lowestIndex = -1;
+
+      for (var i = 0; i < pickup.pickup_rates.length; i++) {
+        var rate = parseFloat(pickup.pickup_rates[i].rate);
+        if (rate < lowestRate) {
+          lowestRate = rate;
+          lowestIndex = i;
+        }
+      }
+
+      if (lowestIndex === -1) callback(new Error('No available pickups.'));
+
+      console.log(pickup.pickup_rates[lowestIndex]);
+
+      pickup.buy({rate: pickup.pickup_rates[lowestIndex]}, function (err, pickup) {
+        if (err) return callback(err);
+
+        console.log(pickup);
+
+        spent += pickup.pickup_rates[lowestIndex].rate
+
+        trip.spent = spent;
+        trip.pickup = pickup;
+        trip.tripStatus = 'pickup-bought';
+
+        trip.save(function (err) {
+          if (err) return callback(err);
+          callback(null, trip, batch, pickup, spent);
+        });
       });
     }
   ], function (err, trip) {
@@ -264,7 +296,8 @@ exports.create = function (req, res) {
 
   async.waterfall([
     function (callback) {
-      // Validation
+      console.log('Validating trip data for user ' + req.user.email);
+
       tripData.pickup.date = moment(tripData.pickup.date);
 
       if (!tripData.pickup.date.isValid()) {
@@ -302,6 +335,8 @@ exports.create = function (req, res) {
 
       callback(null, tripData, bags);
     }, function (tripData, bags, callback) {
+      console.log('Creating parcels for trip for user ' + req.user.email);
+
       async.forEachOf(bags, function iterator(bag, index, callback) {
         var parcelData = bag.dimensions;
 
@@ -320,23 +355,31 @@ exports.create = function (req, res) {
         callback(null, tripData, bags);
       });
     }, function (tripData, bagsWithParcels, callback) {
+      console.log('Creating batch for trip for user ' + req.user.email);
+
       easypost.Batch.create({}, function (err, response) {
         if (err) return callback(err);
 
         callback(null, tripData, bagsWithParcels, response);
       });
     }, function (tripData, bagsWithParcels, batch, callback) {
-      //console.log('-----------------------SHIPMENTS--------------------------');
+      console.log('Creating shipments for batch ' + batch.id + ' for trip for user ' + req.user.email);
+
       var shipments = [];
 
       async.forEachOf(bagsWithParcels, function iterator(bag, index, callback) {
-        easypost.Shipment.create({
+        var options = {
           to_address: tripData.dropoff.location.easypost.address,
           from_address: tripData.pickup.location.easypost.address,
           parcel: bag.parcel,
-          date_advance: '20',
-          delivery_confirmation: 'SIGNATURE'
-        }, function (err, shipment) {
+          options: {
+            delivery_confirmation: 'SIGNATURE',
+            print_custom_1: 'Helix. Effortless Travel',
+            date_advance: moment(tripData.pickup.date).diff(moment(), 'days') + 1
+          }
+        };
+
+        easypost.Shipment.create(options, function (err, shipment) {
           if (err) return callback(err);
 
           bagsWithParcels[index].shipment = shipment;
@@ -352,12 +395,7 @@ exports.create = function (req, res) {
         callback(null, tripData, shipments, batch);
       });
     }, function (tripData, shipments, batch, callback) {
-      //console.log('-----------------------BATCH--------------------------');
-      /*var shipments = [];
-
-       for (var i = 0; i < bagsWithShipments.length; i++){
-       shipments.push(bagsWithShipments[i].shipment);
-       }*/
+      console.log('Adding shipments to batch ' + batch.id + ' for trip for user ' + req.user.email);
 
       batch.addShipments({
         shipments: shipments
@@ -367,6 +405,8 @@ exports.create = function (req, res) {
         callback(null, tripData, shipments, newBatch);
       });
     }, function (tripData, shipments, batch, callback) {
+      console.log('Saving Trip object to DB for trip for user ' + req.user.email);
+
       Trip.create({
         owner: req.user,
         batch: batch,
@@ -384,22 +424,6 @@ exports.create = function (req, res) {
   });
 };
 
-/*
- // Pickup
- // TODO: check if earliest and latest work
- console.log('-----------------------PICKUP--------------------------');
-
- easypost.Pickup.create({
- address: tripData.pickup.location.easypost.address,
- batch: batch,
- min_datetime: tripData.pickup.date.hours(tripData.pickup.time.earliest).utc().format(),
- max_datetime: tripData.pickup.date.hours(tripData.pickup.time.latest).utc().format()
- }, function(err, pickup) {
- if (err) return callback(err);
-
- console.log(pickup);
- });
- */
 
 /*
  // Updates an existing trip in the DB.
