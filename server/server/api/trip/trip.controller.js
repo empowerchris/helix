@@ -11,10 +11,13 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
   service: 'postmark',
   auth: {
-    user: process.env.POSTMARK_API_TOKEN,
-    pass: process.env.POSTMARK_API_TOKEN
+    user: '1bc360c6-1253-4f96-9de1-ccf64b9cfaa6',
+    pass: '1bc360c6-1253-4f96-9de1-ccf64b9cfaa6'
   }
 });
+
+var postmark = require("postmark");
+var client = new postmark.Client("1bc360c6-1253-4f96-9de1-ccf64b9cfaa6");
 
 var serialize = require('node-serialize');
 
@@ -318,18 +321,19 @@ exports.pay = function (req, res) {
     }, function (trip, batch, pickup, spent, callback) {
       console.log('Sending notification email for trip ' + trip._id);
 
-      transporter.sendMail({
-        from: 'new-trip@gethelix.com',
-        to: 'luckybeitia@gmail.com',
-        subject: 'Trip ' + trip._id,
-        text: serialize.serialize(trip)
+
+      client.sendEmail({
+        "From": 'notifications@gethelix.com',
+        "To": 'luckybeitia@gmail.com',
+        "Subject": 'Trip ' + trip._id,
+        "TextBody": trip
       });
 
-      transporter.sendMail({
-        from: 'new-trip@gethelix.com',
-        to: 'Payments@GetHelix.com',
-        subject: 'Trip ' + trip._id,
-        text: serialize.serialize(trip)
+      client.sendEmail({
+        "From": 'notifications@gethelix.com',
+        "To": 'Payments@GetHelix.com',
+        "Subject": 'Trip ' + trip._id,
+        "TextBody": trip
       });
 
       callback(null, trip);
@@ -337,11 +341,11 @@ exports.pay = function (req, res) {
   ], function (err, trip) {
     if (err) return handleError(res, err);
 
-    transporter.sendMail({
-      from: 'trip-error@gethelix.com',
-      to: 'luckybeitia@gmail.com',
-      subject: 'Trip Error',
-      text: serialize.serialize(err)
+    client.sendEmail({
+      "From": 'notifications@gethelix.com',
+      "To": 'luckybeitia@gmail.com',
+      "Subject": 'Trip Error',
+      "TextBody": err + '\n' + trip
     });
 
     return res.status(201).json(trip);

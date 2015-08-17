@@ -2,8 +2,7 @@
 
 angular.module('helix.controllers')
   .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading,
-                                   $timeout, $cordovaDialogs, utils, $moment, Api, $http) {
-
+                                   $timeout, $cordovaDialogs, utils, $moment, Api, $http, Auth, $location) {
     $scope.storage = $localStorage;
     $scope.storage.travel = $scope.storage.travel || {};
     $scope.storage.pickup = $scope.storage.pickup || {

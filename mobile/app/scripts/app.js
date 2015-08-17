@@ -170,7 +170,20 @@ angular.module('helix', [
         }
       });
 
-    $urlRouterProvider.otherwise('/tab/new');
+    //$urlRouterProvider.otherwise('/tab/new');
+    $urlRouterProvider.otherwise( function($injector, $location) {
+      var $state = $injector.get('$state');
+      var Auth = $injector.get('Auth');
+
+      Auth.isLoggedInAsync(function (isLoggedIn) {
+        if (!isLoggedIn) {
+          $state.go('login');
+        } else {
+          $state.go('tab.new');
+        }
+      });
+    });
+
     stripeProvider.setPublishableKey(STRIPE_KEY);
     $httpProvider.interceptors.push('authInterceptor');
   })
@@ -203,9 +216,9 @@ angular.module('helix', [
 
   .run(function ($ionicPlatform, $rootScope, $location, Auth, $cordovaSplashscreen) {
     $ionicPlatform.ready(function () {
-      setTimeout(function() {
+      /*setTimeout(function() {
         $cordovaSplashscreen.hide()
-      }, 2000);
+      }, 2000);*/
 
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);

@@ -10,8 +10,8 @@
     <ion-list show-delete="shouldShowDelete" can-swipe="true">
       <ion-item ng-repeat="card in cards" class="item" ng-if="!loading">
         <div class="item-icon-left" style="padding-left: 42px">
-          <img src="images/credit-card-icons/{{card.stripe.brand}}-curved-128px.png" class="icon"
-               style="height: 35px;padding-top: 15px;"/>
+          <img src="images/credit-card-icons/{{card.stripe.brand | lowercase}}-curved-128px.png"
+               ng-if="card.stripe.brand" class="icon" style="height: 35px;padding-top: 15px;"/>
           <span style="display: inline">{{card.name || card.stripe.brand}}</span>
 
           <p style="display: inline; float: right">···· ···· ···· {{card.stripe.last4}}</p>
