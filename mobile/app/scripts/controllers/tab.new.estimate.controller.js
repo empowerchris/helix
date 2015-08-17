@@ -14,7 +14,6 @@ angular.module('helix.controllers')
         $scope.cards = user.stripe.cards;
         $scope.loading = false;
         if ($scope.cards.length) {
-          console.log($scope.cards);
           $scope.cardId = $scope.cards[0].stripe.id;
         }
       });
@@ -32,7 +31,6 @@ angular.module('helix.controllers')
       $http.post(Api.endpoint + '/api/trips/' + $scope.storage.trip._id + '/pay', {
         cardId: $scope.cardId
       }).then(function (response) {
-        console.log(response);
         $ionicLoading.hide();
         $state.go('tab.new-done');
       }, function (err) {

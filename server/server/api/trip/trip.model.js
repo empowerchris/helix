@@ -14,11 +14,14 @@ var TripSchema = new Schema({
   batch: {},
   tripData: {},
   spent: Number,
+  pickup: {},
+  estimate: {},
+  shipments: [{}],
+  rates: {},
   tripStatus: {
     type: String,
     default: 'created'
-  },
-  rates: {}
+  }
 });
 
 TripSchema.plugin(timestamps);

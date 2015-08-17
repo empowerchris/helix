@@ -1,36 +1,44 @@
 <ion-view view-title="Trip Details">
   <ion-content class="grey-bg">
-    <ion-item class="text-center">
-      <h2>Boston to New York</h2>
+    <ion-item class="item text-center" ng-if="loading">
+      <ion-spinner class="spinner-energized"></ion-spinner>
+      <br>
+      Loading trips...
+    </ion-item>
+    <div ng-if="!loading && trip">
+      <ion-item class="text-center">
+        <h2>{{trip.tripData.pickup.location.easypost.address.city | capitalize}} to {{trip.tripData.dropoff.location.easypost.address.city | capitalize}}</h2>
 
-      <p style="opacity:0.5">Trip #1243434</p>
-    </ion-item>
-    <div class="item item-divider">
-      <br>Pickup
+        <p style="opacity:0.5">Trip #{{trip._id}}</p>
+      </ion-item>
+      <div class="item item-divider">
+        <br>Pickup
+      </div>
+      <ion-item ng-if="trip.pickup.address">
+        {{formatAddress(trip.pickup.address)}}
+      </ion-item>
+      <ion-item>
+        {{trip.pickup.min_datetime | date:'fullDate'}}
+      </ion-item>
+      <ion-item>
+        Between {{trip.pickup.min_datetime | date:'hh:mm a'}} and {{trip.pickup.max_datetime | date:'hh:mm a'}}
+      </ion-item>
+      <div class="item item-divider">
+        <br>Dropoff
+      </div>
+      <ion-item>
+        {{formatAddress(trip.tripData.dropoff.location.easypost.address)}}
+      </ion-item>
+      <ion-item>
+        {{trip.shipments[0].selected_rate.delivery_date | date:'fullDate'}} {{trip.shipments[0].selected_rate.delivery_date | date:'at hh:mm a'}}
+      </ion-item>
+      <div class="item item-divider">
+        <br>Tracking #
+      </div>
+      <ion-item ng-repeat="shipment in trip.shipments">
+        {{shipment.tracking_code}}
+      </ion-item>
+      <br><br><br>
     </div>
-    <ion-item>
-      Address
-    </ion-item>
-    <ion-item>
-      9 AM to 3PM
-    </ion-item>
-    <ion-item>
-      <p>Pickup scheduled in 2 days</p>
-    </ion-item>
-    <div class="item item-divider">
-      <br>Dropoff
-    </div>
-    <ion-item>
-      Address
-    </ion-item>
-    <ion-item>
-      <p>Dropoff scheduled in 1 week</p>
-    </ion-item>
-    <div class="item item-divider">
-      <br>Tracking #
-    </div>
-    <ion-item>
-      9999 9999 9999
-    </ion-item>
   </ion-content>
 </ion-view>

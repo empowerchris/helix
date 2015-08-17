@@ -16,7 +16,7 @@ angular.module('helix', [
   'angular-stripe'
 ])
   .constant('Api', {
-    endpoint: 'http://localhost:9000'
+    endpoint: 'https://gethelix.herokuapp.com' //'http://localhost:9000'
   })
 
   .constant('STRIPE_KEY', 'pk_test_tBLnCyjvGT1AcTBr7seToAAi')

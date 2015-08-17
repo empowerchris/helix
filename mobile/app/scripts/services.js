@@ -38,10 +38,10 @@ angular.module('helix.services', [])
         if (n < 12) {
           return n + ' AM';
         }
-        if (n === 12) {
+        if (n == 12) {
           return '12 PM';
         }
-        if (n === 24) {
+        if (n == 24) {
           return '12 AM';
         } else {
           return n - 12 + ' PM';

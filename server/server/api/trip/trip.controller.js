@@ -7,25 +7,47 @@ var easypost = require('node-easypost')(config.easypost.apiKey);
 var stripe = require('stripe')(config.stripe.apiKey);
 var async = require('async');
 var moment = require('moment');
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+  service: 'postmark',
+  auth: {
+    user: process.env.POSTMARK_API_TOKEN,
+    pass: process.env.POSTMARK_API_TOKEN
+  }
+});
 
-/*
- // Get list of trips
- exports.index = function(req, res) {
- Trip.find(function (err, trips) {
- if(err) { return handleError(res, err); }
- return res.status(200).json(trips);
- });
- };
+var serialize = require('node-serialize');
 
- // Get a single trip
- exports.show = function(req, res) {
- Trip.findById(req.params.id, function (err, trip) {
- if(err) { return handleError(res, err); }
- if(!trip) { return res.status(404).send('Not Found'); }
- return res.json(trip);
- });
- };
- */
+// Get list of trips
+exports.index = function (req, res) {
+  Trip.find({
+      owner: req.user,
+      tripStatus: 'pickup-bought'
+    },
+    function (err, trips) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.status(200).json(trips);
+    });
+};
+
+// Get a single trip
+exports.show = function (req, res) {
+  Trip.findOne({
+    owner: req.user,
+    _id: req.params.id
+  }, function (err, trip) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!trip) {
+      return res.status(404).send('Not Found');
+    }
+    return res.json(trip);
+  });
+};
+
 
 exports.deliveryDates = function (req, res) {
   Trip.findById(req.params.id, function (err, trip) {
@@ -103,26 +125,30 @@ exports.selectDate = function (req, res) {
 
     var estimatedPickupCost = 5;
 
-    var helixFee = ((shipmentCosts * 0.8) + estimatedPickupCost) * 0.03;
-
     var callTag = 7.5;
 
-    var subtotal = shipmentCosts + estimatedPickupCost + helixFee + callTag;
+    var subtotal = shipmentCosts + estimatedPickupCost + callTag;
 
-    var stripeFee = (subtotal * 0.029) + 0.29;
+    var helixFee = subtotal * 0.03;
 
-    var estimate = subtotal + stripeFee;
+    var taxes = (subtotal + helixFee) * 0.07;
+
+    var stripeFee = ((subtotal + helixFee + taxes) * 0.029) + 0.29;
+
+    var estimate = subtotal + helixFee + taxes + stripeFee;
+
+    trip.estimate = {
+      estimate: estimate,
+      variability: 5
+    };
 
     trip.rates = req.body.shipments;
     trip.tripStatus = 'date-selected';
 
-    trip.save(function (err) {
+    trip.save(function (err, trip) {
       if (err) return handleError(res, err);
 
-      return res.json({
-        estimate: estimate,
-        variability: 5
-      });
+      return res.json(trip.estimate);
     });
   });
 };
@@ -150,6 +176,8 @@ exports.pay = function (req, res) {
       });
     }, function (trip, rates, callback) {
       var spent = 0;
+      var shipments = [];
+
       async.forEachOf(rates, function iterator(rate, index, callback) {
         var rateId = rate.id;
         var shipmentId = rate.shipment_id;
@@ -173,6 +201,7 @@ exports.pay = function (req, res) {
             if (err) return callback(err);
 
             console.log(shipment);
+            shipments.push(shipment);
             spent = spent + parseFloat(rate.rate);
             console.log('Spent so far ', spent);
 
@@ -182,6 +211,7 @@ exports.pay = function (req, res) {
       }, function done(err) {
         if (err) return callback(err);
 
+        trip.shipments = shipments;
         trip.tripStatus = 'shipments-bought';
         trip.save(function (err) {
           if (err) return callback(err);
@@ -270,9 +300,11 @@ exports.pay = function (req, res) {
       pickup.buy({rate: pickup.pickup_rates[lowestIndex]}, function (err, pickup) {
         if (err) return callback(err);
 
+        console.log('Pickup ' + pickup.id + ' bought for trip ' + trip._id);
+
         console.log(pickup);
 
-        spent += pickup.pickup_rates[lowestIndex].rate
+        spent += parseFloat(pickup.pickup_rates[lowestIndex].rate);
 
         trip.spent = spent;
         trip.pickup = pickup;
@@ -283,9 +315,34 @@ exports.pay = function (req, res) {
           callback(null, trip, batch, pickup, spent);
         });
       });
+    }, function (trip, batch, pickup, spent, callback) {
+      console.log('Sending notification email for trip ' + trip._id);
+
+      transporter.sendMail({
+        from: 'new-trip@gethelix.com',
+        to: 'luckybeitia@gmail.com',
+        subject: 'Trip ' + trip._id,
+        text: serialize.serialize(trip)
+      });
+
+      transporter.sendMail({
+        from: 'new-trip@gethelix.com',
+        to: 'Payments@GetHelix.com',
+        subject: 'Trip ' + trip._id,
+        text: serialize.serialize(trip)
+      });
+
+      callback(null, trip);
     }
   ], function (err, trip) {
     if (err) return handleError(res, err);
+
+    transporter.sendMail({
+      from: 'trip-error@gethelix.com',
+      to: 'luckybeitia@gmail.com',
+      subject: 'Trip Error',
+      text: serialize.serialize(err)
+    });
 
     return res.status(201).json(trip);
   });
@@ -340,7 +397,7 @@ exports.create = function (req, res) {
       async.forEachOf(bags, function iterator(bag, index, callback) {
         var parcelData = bag.dimensions;
 
-        parcelData.weight = parcelData.weight * 16; // pounds to ounzes
+        parcelData.weight = (parcelData.weight).toFixed(2); // pounds to ounzes
 
         easypost.Parcel.create(parcelData, function (err, response) {
           if (err) return callback(err);

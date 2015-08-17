@@ -2,34 +2,22 @@
   <ion-content class="grey-bg">
     <ion-list>
       <div class="item item-divider">
-        <br>Upcoming
+        <br>
       </div>
-      <ion-item class="item-icon-left item-icon-right" href="#/tab/trips/123">
+      <ion-item ng-if="!loading"
+                ng-repeat="trip in trips | orderBy:'updatedAt':true"
+        class="item-icon-left item-icon-right" href="#/tab/trips/{{trip._id}}">
         <i class="icon ion-briefcase account-icons"></i>
-        New York to Seattle
-        <p class="positive">Will pickup luggage in 2 days</p>
+        {{trip.tripData.pickup.location.easypost.address.city | capitalize}} to {{trip.tripData.dropoff.location.easypost.address.city | capitalize}}
+        <p class="positive">Pickup on {{trip.pickup.min_datetime | date:'fullDate'}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
-      <div class="item item-divider">
-        <br>Past
-      </div>
-      <ion-item class="item-icon-left item-icon-right" href="#/tab/trips/123">
-        <i class="icon ion-briefcase account-icons"></i>
-        San Francisco to Seattle
-        <p>Delivered luggage 2 weeks ago</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+      <ion-item class="item text-center" ng-if="loading">
+        <ion-spinner class="spinner-energized"></ion-spinner><br>
+        Loading trips...
       </ion-item>
-      <ion-item class="item-icon-left item-icon-right" href="#/tab/trips/123">
-        <i class="icon ion-briefcase account-icons"></i>
-        Seattle to San Francisco
-        <p>Delivered luggage 3 weeks ago</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
-      </ion-item>
-      <ion-item class="item-icon-left item-icon-right" href="#/tab/trips/123">
-        <i class="icon ion-briefcase account-icons"></i>
-        Atlanta to Los Angeles
-        <p>Delivered luggage 2 months ago</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+      <ion-item class="item text-center" ng-if="!trips.length && !loading">
+        You have not scheduled any trips yet
       </ion-item>
     </ion-list>
   </ion-content>
