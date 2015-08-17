@@ -1,0 +1,40 @@
+<ion-view view-title="Payment Settings">
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear" ng-click="edit()">
+      <span ng-if="!shouldShowDelete">Edit</span>
+      <span ng-if="shouldShowDelete">Done</span>
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="grey-bg">
+    <div class="item item-divider"><br>Payment Methods</div>
+    <ion-list show-delete="shouldShowDelete" can-swipe="true">
+      <ion-item ng-repeat="card in cards" class="item" ng-if="!loading">
+        <div class="item-icon-left" style="padding-left: 42px">
+          <img src="images/credit-card-icons/{{card.stripe.brand}}-curved-128px.png" class="icon"
+               style="height: 35px;padding-top: 15px;"/>
+          <span style="display: inline">{{card.name || card.stripe.brand}}</span>
+
+          <p style="display: inline; float: right">···· ···· ···· {{card.stripe.last4}}</p>
+        </div>
+        <ion-delete-button class="ion-minus-circled" ng-click="remove(card, $index)">
+        </ion-delete-button>
+        <ion-option-button class="button-assertive" ng-click="remove(card, $index)">
+          Remove
+        </ion-option-button>
+      </ion-item>
+      <ion-item class="item text-center" ng-if="loading">
+        <ion-spinner class="spinner-energized"></ion-spinner><br>
+        Loading payment methods...
+      </ion-item>
+      <ion-item class="item text-center" ng-if="!cards.length && !loading">
+        You have not added any payment methods yet
+      </ion-item>
+    </ion-list>
+    <div ng-if="!shouldShowDelete">
+      <div class="item item-divider"><br></div>
+      <ion-item class="item text-center positive" ng-click="addNewCard()">
+        Add a new card
+      </ion-item>
+    </div>
+  </ion-content>
+</ion-view>

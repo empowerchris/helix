@@ -1,0 +1,105 @@
+<ion-view view-title="Helix" hide-back-button="true">
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear" ng-click="next()">
+      Next
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="grey-bg">
+    <div id="tab-new">
+      <div class="fields">
+        <div class="card text-center">
+          <div class="item card-field two-lines" ng-click="openPickupCityModal()">
+            <p class="subtitle">
+              PICKUP MY LUGGAGE IN
+            </p>
+
+            <p ng-if="storage.pickup.location.easypost">
+              {{storage.pickup.location.description || storage.pickup.location.subtitle}}
+            </p>
+
+            <p ng-if="!storage.pickup.location.easypost">
+              Select Location
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="openDropoffCityModal()">
+            <p class="subtitle">
+              GOING TO
+            </p>
+
+            <p ng-if="storage.dropoff.location.easypost">
+              {{storage.dropoff.location.description || storage.dropoff.location.subtitle}}
+            </p>
+
+            <p ng-if="!storage.dropoff.location.easypost">
+              Select Location
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="openTravelDatesSelectModal()">
+            <p class="subtitle">
+              TRAVEL DATES
+            </p>
+
+            <p ng-if="storage.travel.arrival && storage.travel.departure">
+              {{storage.travel.arrival | date:'EEEE, MMMM d'}} to {{storage.travel.departure | date:'EEEE, MMMM d'}}
+            </p>
+
+            <p ng-if="!storage.travel.arrival || !storage.travel.departure">
+              Select dates
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="openDateSelectModal()">
+            <p class="subtitle">
+              PICKUP LUGGAGE ON
+            </p>
+
+            <div ng-if="storage.pickup.date">
+              <p>Pickup on {{storage.pickup.date | date:'fullDate'}}</p>
+
+              <div ng-if="storage.travel.arrival && storage.travel.departure" style="font-size: small; opacity: 0.85">
+                <p ng-if="differenceInDays(storage.pickup.date, storage.travel.arrival) > 0">
+                  ({{differenceInDays(storage.pickup.date, storage.travel.arrival)}} days before arrival)
+                </p>
+
+                <p ng-if="differenceInDays(storage.pickup.date, storage.travel.arrival) <= 0 && differenceInDays(storage.pickup.date, storage.travel.departure) >= 0">
+                  ({{differenceInDays(storage.pickup.date, storage.travel.departure)}} days before departure)
+                </p>
+              </div>
+            </div>
+
+            <p ng-if="!storage.pickup.date">
+              Select pickup date
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="openTimeSelectModal()">
+            <p class="subtitle">
+              LUGGAGE PICKUP TIME
+            </p>
+
+            <p ng-if="storage.pickup.time">
+              Between {{formatHour(storage.pickup.time.earliest)}} and {{formatHour(storage.pickup.time.latest)}}
+            </p>
+
+            <p ng-if="!storage.pickup.time">
+              Select pickup time
+            </p>
+          </div>
+          <div class="item card-field two-lines" ng-click="openBagOptionsModal()">
+            <p class="subtitle">
+              LUGGAGE DETAILS
+            </p>
+
+            <p ng-if="storage.bags">
+              <span ng-repeat="size in storage.bags | omit:'!amount'">
+                {{size.amount}} x {{size.name}}<span ng-if="$index + 1 < (storage.bags | omit:'!amount').length">, </span>
+              </span>
+            </p>
+
+            <p ng-if="!storage.bags">
+              Select number of bags
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

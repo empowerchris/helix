@@ -1,0 +1,24 @@
+<ion-view view-title="My Trips" hide-back-button="true">
+  <ion-content class="grey-bg">
+    <ion-list>
+      <div class="item item-divider">
+        <br>
+      </div>
+      <ion-item ng-if="!loading"
+                ng-repeat="trip in trips | orderBy:'updatedAt':true"
+        class="item-icon-left item-icon-right" href="#/tab/trips/{{trip._id}}">
+        <i class="icon ion-briefcase account-icons"></i>
+        {{trip.tripData.pickup.location.easypost.address.city | capitalize}} to {{trip.tripData.dropoff.location.easypost.address.city | capitalize}}
+        <p class="positive">Pickup on {{trip.pickup.min_datetime | date:'fullDate'}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+      <ion-item class="item text-center" ng-if="loading">
+        <ion-spinner class="spinner-energized"></ion-spinner><br>
+        Loading trips...
+      </ion-item>
+      <ion-item class="item text-center" ng-if="!trips.length && !loading">
+        You have not scheduled any trips yet
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

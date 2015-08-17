@@ -1,0 +1,61 @@
+<ion-view>
+  <ion-nav-title>
+    {{title}}
+  </ion-nav-title>
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear"
+            ng-click="next()">
+      Next
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="grey-bg">
+    <br><br>
+
+    <div ng-repeat="date in dates" ng-if="!loading">
+      <ion-checkbox ng-model="date.selected" ng-change="changedSelection($index)">
+        <span ng-if="date.shipments[0].rate.delivery_date">
+          {{date.shipments[0].rate.delivery_date | date:'EEEE, MMMM d'}}
+        </span>
+        <span ng-if="!date.shipments[0].rate.delivery_date">
+          {{addDays(storage.pickup.date, date.shipments[0].rate.delivery_days) | date:'EEEE, MMMM d'}}
+          (Estimated)
+        </span>
+        <br>
+        <span ng-if="date.shipments[0].rate.delivery_date">
+          {{date.shipments[0].rate.delivery_date | utc | date:'h:mm a'}}
+        </span>
+        <span ng-if="!date.shipments[0].rate.delivery_date">
+          During the day
+        </span>
+        <br>
+        <!--<p>{{date.shipments[0].rate.delivery_days}} days after pickup</p>-->
+
+        <p ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) > 0">
+          {{differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival)}} days before arrival
+        </p>
+
+        <p style="color: green;font-size: medium;"
+          ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) === 0">
+          On the day of arrival
+        </p>
+
+        <p ng-if="differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) < 0">
+          {{differenceInDays(addDays(storage.pickup.date, date.shipments[0].rate.delivery_days), storage.travel.arrival) * -1}} days after arrival
+        </p>
+      </ion-checkbox>
+    </div>
+
+    <ion-item class="item text-center" ng-if="loading">
+      <ion-spinner class="spinner-energized"></ion-spinner>
+      <br>
+      Loading delivery dates...
+    </ion-item>
+
+    <ion-item class="item text-center" ng-if="!loading && dates.length < 1">
+      We couldn't find any dates to deliver your luggage.
+      <br>
+      Please go back and change the amount of bags or dates and try again.
+    </ion-item>
+    <br><br>
+  </ion-content>
+</ion-view>

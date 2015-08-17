@@ -1,0 +1,27 @@
+<ion-modal-view ng-controller="ModalTravelDatesSelectCtrl">
+  <ion-header-bar>
+    <h1 class="title">Travel Dates</h1>
+    <button class="button button-clear button-positive" ng-click="done()">Done</button>
+  </ion-header-bar>
+  <ion-header-bar class="bar-subheader">
+    <div class="button-bar">
+      <a class="button"
+         ng-click="setMode('arrival')"
+         ng-class="{'button-positive': storage.mode === 'arrival'}">
+        Arrival</a>
+      <a class="button"
+         ng-click="setMode('departure')"
+         ng-class="{'button-positive': storage.mode === 'departure'}">
+        Departure</a>
+    </div>
+  </ion-header-bar>
+
+  <ion-content class="grey-bg" scroll="false" style="margin-top: -2px">
+    <date-picker ng-if="storage.mode === 'arrival'"
+                 ng-model="travel.arrival" on-date-selected="dateSelected(travel.arrival)">
+    </date-picker>
+    <date-picker ng-if="storage.mode === 'departure'"
+                 ng-model="travel.departure" on-date-selected="dateSelected(travel.departure)">
+    </date-picker>
+  </ion-content>
+</ion-modal-view>

@@ -1,0 +1,46 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">New Card</h1>
+    <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
+  </ion-header-bar>
+  <ion-content class="grey-bg" style="margin-top: -2px">
+    <ion-list>
+      <form name="paymentForm">
+        <div class="item item-divider"><br></div>
+        <ion-item class="item-input item-stacked-label" style="background-color: white">
+          <span class="input-label">Card Number</span>
+          <input type="text" ng-model="card.number" name="cardNumber" cc-number cc-format
+                 cc-type="card.cardType" autofocus placeholder="4242 4242 4242 4242"/>
+        </ion-item>
+        <ion-item class="item-input item-stacked-label" style="background-color: white">
+          <span class="input-label">Verification Code</span>
+          <input type="text" ng-model="card.cvc" cc-type="cardNumber.$ccType" placeholder="123"/>
+        </ion-item>
+      <span cc-exp>
+      <ion-item class="item-input item-stacked-label" style="background-color: white">
+        <span class="input-label">Expiration Month</span>
+        <input type="text" ng-model="card.exp_month" cc-exp-month placeholder="MM"/>
+      </ion-item>
+      <ion-item class="item-input item-stacked-label" style="background-color: white">
+        <span class="input-label">Expiration Year</span>
+        <input type="text" ng-model="card.exp_year" cc-exp-year placeholder="YY"/>
+      </ion-item>
+        </span>
+
+        <div class="item item-divider"><br></div>
+        <ion-item class="item-input item-stacked-label" style="background-color: white">
+          <span class="input-label">Alias for this card</span>
+          <input type="text" ng-model="card.name"
+                 placeholder="{{paymentForm.cardNumber.$ccType || 'Alias'}}"/>
+        </ion-item>
+      </form>
+      <div class="item item-divider"><br><br></div>
+    </ion-list>
+  </ion-content>
+  <ion-footer-bar align-title="left" class="bar-positive">
+    <button class="button button-block button-clear"
+            ng-click="saveCard()" style="color: white;margin: 0;">
+      Add Card
+    </button>
+  </ion-footer-bar>
+</ion-modal-view>

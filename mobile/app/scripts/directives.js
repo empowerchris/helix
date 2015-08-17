@@ -1,58 +1,39 @@
+"use strict";
+
 angular.module('helix.directives', [])
 
-  .directive('focusMe', function($timeout) {
+  .directive('focusMe', function ($timeout, $parse) {
     return {
-      link: function(scope, element, attrs) {
-        $timeout(function() {
-          element[0].focus();
-        }, 500);
+      link: function (scope, element, attrs) {
+        var model = $parse(attrs.focusMe);
+        scope.$watch(model, function (value) {
+          if (value === true) {
+            $timeout(function () {
+              element[0].focus();
+            });
+          }
+        });
+        element.bind('blur', function () {
+          scope.$apply(model.assign(scope, false));
+        });
       }
     };
   })
 
-  .directive('googleplace', [function () {
-    return {
-      require: 'ngModel',
-      scope: {
-        ngModel: '=',
-        details: '=?'
-      },
-      link: function (scope, element, attrs, model) {
-        var options = {
-          types: ['(cities)'],
-          componentRestrictions: {}
-        };
-
-        scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
-
-        google.maps.event.addListener(scope.gPlace, 'place_changed', function () {
-          var geoComponents = scope.gPlace.getPlace();
-          var latitude = geoComponents.geometry.location.lat();
-          var longitude = geoComponents.geometry.location.lng();
-          var addressComponents = geoComponents.address_components;
-
-          addressComponents = addressComponents.filter(function (component) {
-            switch (component.types[0]) {
-              case "locality": // city
-                return true;
-              case "administrative_area_level_1": // state
-                return true;
-              case "country": // country
-                return true;
-              default:
-                return false;
-            }
-          }).map(function (obj) {
-            return obj.long_name;
-          });
-
-          addressComponents.push(latitude, longitude);
-
-          scope.$apply(function () {
-            scope.details = addressComponents; // array containing each location component
-            model.$setViewValue(element.val());
-          });
-        });
-      }
+  .filter('utc', function(){
+    return function(val){
+      var date = new Date(val);
+      return new Date(date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        date.getUTCHours(),
+        date.getUTCMinutes(),
+        date.getUTCSeconds());
     };
-  }]);
+  })
+
+  .filter('capitalize', function() {
+    return function(input, all) {
+      return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) : '';
+    }
+  });

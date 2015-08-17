@@ -1,7 +1,262 @@
 @charset "UTF-8";
 
-@import "variables";
+$positive: #F58B1F !default;
+$secondary: #27316D !default;
 
 @import "../bower_components/ionic/scss/ionic";
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,600);
 
-@import "styles";
+* {
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Source Sans Pro', sans-serif !important;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.grey-bg {
+  background-color: #fafafa;
+}
+
+.positive-bg {
+  background-color: $positive;
+}
+
+.positive {
+  color: $positive !important;
+
+  * {
+    color: $positive !important;
+  }
+}
+
+.pull-right {
+  float: right;
+}
+
+.secondary-bg {
+  background-color: $secondary !important;
+}
+
+.xx-large {
+  font-size: xx-large !important;
+}
+
+.back-arrow {
+  margin: 0.2em;
+}
+
+.input-spinner {
+  position: relative;
+  background-color: #EEEEEE;
+  height: 25px;
+  fill: $positive;
+  display: block;
+}
+
+#tab-new {
+  .hero {
+    text-align: center;
+
+    .brand {
+      * {
+        color: white;
+        font-family: 'Source Code Pro', monospace;
+      }
+    }
+
+    .padded {
+      padding: 2em;
+      padding-top: 1em;
+    }
+
+    img {
+      height: 16vh;
+      margin-top: 5vh;
+    }
+  }
+
+  .location-suggestion {
+    .subtitle {
+      font-size: 0.7em;
+      font-weight: bold;
+      color: $positive;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1.1em;
+    }
+  }
+
+  .location-suggestion.two-lines {
+    padding: 0.5em
+  }
+}
+
+.search-bar {
+  text-align: center;
+  padding: 0.3em !important;
+
+  .icon {
+    font-size: 1.5em;
+    padding: 0.6em;
+    clear: both;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+
+  p {
+    text-align: left;
+    margin-left: 2em;
+    font-size: 1em;
+  }
+}
+
+.card-field {
+  .subtitle {
+    font-size: 0.7em;
+    font-weight: bold;
+    color: $positive;
+    margin: 0.3em;
+  }
+
+  p {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+  }
+}
+
+.card-field.two-lines {
+  padding: 1em
+}
+
+.top-map {
+  width: 100vw;
+  height: 30vh;
+  z-index: -99;
+  margin-top: -1px;
+  padding: 0;
+
+  .gradient-mask {
+    background: linear-gradient(rgba(243, 243, 243, 0) 0%, rgba(243, 243, 243, 0) 90%, #FAFAFA 95%, #FAFAFA 100%);
+    height: 30vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    z-index: 2;
+  }
+
+  .angular-google-map-container {
+    height: 30vh;
+    //border: 1px solid #DDDDDD;
+    z-index: -1;
+
+    * {
+      height: inherit;
+    }
+  }
+}
+
+.no-back-text {
+  .back-text {
+    display: none !important;
+  }
+}
+
+.rounded {
+  border-radius: 200px;
+}
+
+.big-footer {
+  height: 60px;
+  padding: 0 10px;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.button-continue {
+  font-size: larger !important;
+  height: 40px;
+
+  .icon {
+    float: right;
+    margin-right: 5px;
+  }
+}
+
+#tab-new-places {
+  .fields {
+
+    * {
+      z-index: 100;
+    }
+  }
+}
+
+.angular-date-picker {
+  .arrow {
+    position: relative;
+    top: -8px;
+  }
+
+  ._days {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+
+    ._day, ._day-of-week {
+      width: (100%/7);
+      padding: 5px;
+      font-size: larger;
+    }
+  }
+  ._day.-selectable {
+    color: $positive;
+  }
+}
+
+#tab-new-options {
+  .item {
+    padding: 0.5em;
+  }
+
+  .item-content {
+    margin-left: 4em;
+  }
+
+  .right {
+    float: right;
+    font-weight: bold;
+
+    .price {
+      color: $positive;
+    }
+
+    .difference {
+      opacity: 0.6;
+    }
+  }
+}
+
+.input-label {
+  color: #B2B2B2;
+  opacity: 1;
+}
+
+.account-icons {
+  //color: $positive;
+  transform: scale(0.7);
+}
+
+.transparent-inputs {
+  input {
+    background: transparent;
+  }
+}

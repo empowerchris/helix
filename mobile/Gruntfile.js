@@ -1,4 +1,4 @@
-// Generated on 2015-07-26 using generator-ionic 0.7.3
+// Generated on 2015-08-02 using generator-ionic 0.7.3
 'use strict';
 
 var _ = require('lodash');
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
+        port: 9900,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost'
       },
@@ -95,7 +95,7 @@ module.exports = function (grunt) {
       },
       coverage: {
         options: {
-          port: 9002,
+          port: 9902,
           open: true,
           base: ['coverage']
         }
@@ -161,7 +161,7 @@ module.exports = function (grunt) {
       }
     },
 
-    
+
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
         }
       }
     },
-    
+
 
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
@@ -395,7 +395,7 @@ module.exports = function (grunt) {
       },
       continuous: {
         browsers: ['PhantomJS'],
-        singleRun: true,
+        singleRun: true
       }
     },
 
@@ -542,15 +542,19 @@ module.exports = function (grunt) {
     'autoprefixer',
     'concat',
     'ngAnnotate',
+    'copy:styles',
+    'copy:vendor',
+    'copy:fonts',
     'copy:dist',
+    'copy:tmp',
     'cssmin',
     'uglify',
     'usemin',
     'htmlmin'
   ]);
 
-  grunt.registerTask('coverage', 
-    ['karma:continuous',
+  grunt.registerTask('coverage', [
+    'karma:continuous',
     'connect:coverage:keepalive'
   ]);
 

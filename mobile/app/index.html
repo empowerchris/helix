@@ -1,61 +1,87 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title>Helix</title>
 
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css" />
-    <link rel="stylesheet" href="bower_components/ion-autocomplete/dist/ion-autocomplete.css" />
-    <link rel="stylesheet" href="bower_components/angular-google-places-autocomplete/src/autocomplete.css" />
-    <link rel="stylesheet" href="bower_components/angular-google-places-autocomplete/dist/autocomplete.min.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- <link href="styles/style.css" rel="stylesheet"> -->
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/angular-date-picker/angular-date-picker.css" />
+  <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <link href="styles/main.css" rel="stylesheet">
 
-    <!-- build:css({.temp,app}) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css" />
-    <!-- endbuild -->
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+  <!-- ionic/angularjs js -->
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
+  <script src="bower_components/ngstorage/ngStorage.js"></script>
+  <script src="bower_components/lodash/lodash.js"></script>
+  <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+  <script src="bower_components/angular-date-picker/angular-date-picker.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/angular-momentjs/angular-momentjs.js"></script>
+  <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/ionic/release/js/ionic.js"></script>
+  <script src="bower_components/ionic/release/js/ionic-angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-credit-cards/release/angular-credit-cards.js"></script>
+  <script src="bower_components/angular-stripe/release/angular-stripe.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
 
-    <!-- ionic/angularjs js -->
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/ionic/release/js/ionic.js"></script>
-    <script src="bower_components/ionic/release/js/ionic-angular.js"></script>
-    <script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
-    <script src="bower_components/lodash/lodash.js"></script>
-    <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
-    <script src="bower_components/ion-autocomplete/dist/ion-autocomplete.js"></script>
-    <script src="bower_components/angular-google-places-autocomplete/src/autocomplete.js"></script>
-    <script src="bower_components/angular-google-places-autocomplete/dist/autocomplete.min.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
 
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+  <!-- your app's js -->
+  <!-- build:js scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers.js"></script>
+  <script src="scripts/services.js"></script>
+  <script src="scripts/directives.js"></script>
+  <script src="scripts/configuration.js"></script>
 
-    <!-- your app's js -->
-    <!-- build:js scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
-    <script src="scripts/controllers.js"></script>
-    <script src="scripts/directives.js"></script>
-    <script src="scripts/configuration.js"></script>
-    <script src="scripts/newPickup/newPickup.controller.js"></script>
-    <script src="scripts/locationSearch.controller.js"></script>
-    <script src="scripts/dateSelection.controller.js"></script>
-    <script src="scripts/timeSelection.controller.js"></script>
-    <!-- endbuild -->
-  </head>
+  <script src="scripts/components/auth/auth.service.js"></script>
+  <script src="scripts/components/auth/user.service.js"></script>
 
-  <body ng-app="helix">
-    <ion-nav-view></ion-nav-view>
-  </body>
+  <script src="scripts/controllers/login.controller.js"></script>
+  <script src="scripts/controllers/signup.controller.js"></script>
+
+  <script src="scripts/controllers/modal.dateSelect.controller.js"></script>
+  <script src="scripts/controllers/modal.timeSelect.controller.js"></script>
+  <script src="scripts/controllers/modal.bagOptions.controller.js"></script>
+  <script src="scripts/controllers/modal.addressSearch.controller.js"></script>
+  <script src="scripts/controllers/modal.travelDatesSelect.controller.js"></script>
+
+  <script src="scripts/controllers/tab.new.controller.js"></script>
+  <script src="scripts/controllers/tab.new.shipping.controller.js"></script>
+  <script src="scripts/controllers/tab.new.done.controller.js"></script>
+  <script src="scripts/controllers/tab.new.estimate.controller.js"></script>
+
+  <script src="scripts/controllers/tab.trips.controller.js"></script>
+  <script src="scripts/controllers/tab.trips.detail.controller.js"></script>
+
+  <script src="scripts/controllers/tab.account.controller.js"></script>
+  <script src="scripts/controllers/tab.account.settings.controller.js"></script>
+  <script src="scripts/controllers/tab.account.payment.controller.js"></script>
+  <script src="scripts/controllers/tab.account.connected.controller.js"></script>
+  <!-- endbuild -->
+</head>
+<body ng-app="helix" class="grey-bg">
+<ion-nav-bar class="bar-positive">
+  <ion-nav-back-button class="button-clear no-back-text">
+    <i class="ion-ios-arrow-thin-left xx-large back-arrow"></i>
+  </ion-nav-back-button>
+</ion-nav-bar>
+<ion-nav-view></ion-nav-view>
+</body>
 </html>

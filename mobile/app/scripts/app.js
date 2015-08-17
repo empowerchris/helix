@@ -1,82 +1,227 @@
+'use strict';
+
 angular.module('helix', [
   'ionic',
   'helix.controllers',
+  'helix.services',
   'helix.directives',
+  'ngCordova',
+  'ngStorage',
+  'ngResource',
   'uiGmapgoogle-maps',
-  'google.places'
+  'mp.datePicker',
+  'angular-momentjs',
+  'angular.filter',
+  'credit-cards',
+  'angular-stripe'
 ])
-
-  .run(function ($ionicPlatform) {
-    $ionicPlatform.ready(function () {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      if (window.cordova && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(false);
-      }
-      if (window.StatusBar) {
-        // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
-      }
-    });
+  .constant('Api', {
+    endpoint: 'https://gethelix.herokuapp.com' //'http://localhost:9000'
   })
 
-  .config(function ($stateProvider, $urlRouterProvider) {
+  .constant('STRIPE_KEY', 'pk_test_tBLnCyjvGT1AcTBr7seToAAi')
+
+  .config(function ($stateProvider, $urlRouterProvider, $httpProvider, STRIPE_KEY, stripeProvider) {
     $stateProvider
 
-      .state('app', {
-        url: '/app',
-        abstract: true,
-        templateUrl: 'templates/menu.html',
-        controller: 'AppCtrl'
+      .state('login', {
+        url: '/login',
+        controller: 'LoginCtrl',
+        templateUrl: 'templates/login.html'
       })
 
-      .state('app.newPickup', {
+      .state('signup', {
+        url: '/signup',
+        controller: 'SignupCtrl',
+        templateUrl: 'templates/signup.html'
+      })
+
+      .state('tab', {
+        url: '/tab',
+        abstract: true,
+        controller: 'TabsCtrl',
+        templateUrl: 'templates/tabs.html'
+      })
+
+      .state('tab.new', {
         url: '/new',
         views: {
-          'menuContent': {
-            templateUrl: 'templates/newPickup.html',
-            controller: 'NewPickupCtrl'
+          'tab-new': {
+            templateUrl: 'templates/tab-new.html',
+            controller: 'NewCtrl'
           }
         }
       })
 
-      .state('app.search', {
-        url: '/search',
+      .state('tab.new-shipping', {
+        url: '/new/shipping',
         views: {
-          'menuContent': {
-            templateUrl: 'templates/search.html'
+          'tab-new': {
+            templateUrl: 'templates/tab-new-shipping.html',
+            controller: 'NewShippingCtrl'
           }
         }
       })
 
-      .state('app.browse', {
-        url: '/browse',
+      .state('tab.new-estimate', {
+        url: '/new/estimate',
         views: {
-          'menuContent': {
-            templateUrl: 'templates/browse.html'
-          }
-        }
-      })
-      .state('app.playlists', {
-        url: '/playlists',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/playlists.html',
-            controller: 'PlaylistsCtrl'
+          'tab-new': {
+            templateUrl: 'templates/tab-new-estimate.html',
+            controller: 'NewEstimateCtrl'
           }
         }
       })
 
-      .state('app.single', {
-        url: '/playlists/:playlistId',
+      .state('tab.new-done', {
+        url: '/new/done',
         views: {
-          'menuContent': {
-            templateUrl: 'templates/playlist.html',
-            controller: 'PlaylistCtrl'
+          'tab-new': {
+            templateUrl: 'templates/tab-new-done.html',
+            controller: 'NewDoneCtrl'
+          }
+        }
+      })
+
+      .state('tab.trips', {
+        url: '/trips',
+        views: {
+          'tab-trips': {
+            templateUrl: 'templates/tab-trips.html',
+            controller: 'TripsCtrl'
+          }
+        }
+      })
+
+      .state('tab.trip-detail', {
+        url: '/trips/:id',
+        views: {
+          'tab-trips': {
+            templateUrl: 'templates/tab-trips-detail.html',
+            controller: 'TripsDetailCtrl'
+          }
+        }
+      })
+
+      .state('tab.account', {
+        url: '/account',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account.html',
+            controller: 'AccountCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-settings', {
+        url: '/account/settings',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-settings.html',
+            controller: 'AccountSettingsCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-payment', {
+        url: '/account/payment',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-payment.html',
+            controller: 'AccountPaymentCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-connected', {
+        url: '/account/connected',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-connected.html',
+            controller: 'AccountConnectedCtrl'
+          }
+        }
+      })
+
+      .state('tab.account-faq', {
+        url: '/account/faq',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-faq.html'
+          }
+        }
+      })
+
+      .state('tab.account-terms', {
+        url: '/account/terms',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-terms.html'
+          }
+        }
+      })
+
+      .state('tab.account-privacy', {
+        url: '/account/privacy',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account-privacy.html'
           }
         }
       });
-    // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/playlists');
+
+    $urlRouterProvider.otherwise('/tab/new');
+    stripeProvider.setPublishableKey(STRIPE_KEY);
+    $httpProvider.interceptors.push('authInterceptor');
+  })
+
+  .factory('authInterceptor', function ($rootScope, $q, $localStorage, $location) {
+    return {
+      // Add authorization token to headers
+      request: function (config) {
+        config.headers = config.headers || {};
+        if ($localStorage.token) {
+          config.headers.Authorization = 'Bearer ' + $localStorage.token;
+        }
+        return config;
+      },
+
+      // Intercept 401s and redirect you to login
+      responseError: function (response) {
+        if (response.status === 401) {
+          $location.path('/login');
+          // remove any stale tokens
+          delete $localStorage.token;
+          return $q.reject(response);
+        }
+        else {
+          return $q.reject(response);
+        }
+      }
+    };
+  })
+
+  .run(function ($ionicPlatform, $rootScope, $location, Auth, $cordovaSplashscreen) {
+    $ionicPlatform.ready(function () {
+      setTimeout(function() {
+        $cordovaSplashscreen.hide()
+      }, 2000);
+
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
+      }
+
+      if (window.StatusBar) {
+        StatusBar.overlaysWebView(true);
+      }
+    });
+
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      Auth.isLoggedInAsync(function (loggedIn) {
+        if (next.authenticate && !loggedIn) {
+          $location.path('/login');
+        }
+      });
+    });
   });
