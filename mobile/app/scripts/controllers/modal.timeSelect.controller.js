@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('ModalTimeSelectCtrl', function ($scope, utils, $cordovaDialogs, $localStorage) {
+  .controller('ModalTimeSelectCtrl', function ($scope, utils, $cordovaDialogs, $localStorage, $moment) {
     $scope.storage = $localStorage;
     $scope.time = {};
 
@@ -24,6 +24,11 @@ angular.module('helix.controllers')
       $scope.storage.pickup.time.latest = $scope.time.latest;
 
       $scope.modal.hide();
+    };
+
+    $scope.substractDays = function (date, days) {
+      var a = $moment(date);
+      return a.businessSubtract(days)._d;
     };
   });
 

@@ -17,4 +17,6 @@ router.post('/', controller.create);
 router.post('/cards', auth.isAuthenticated(), controller.addCard);
 router.post('/cards/delete', auth.isAuthenticated(), controller.removeCard);
 
+router.get('/concur/reports', auth.isAuthenticated(), controller.concurReports);
+
 module.exports = router;

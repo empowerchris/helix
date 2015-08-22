@@ -120,11 +120,39 @@ angular.module('helix.controllers')
               $scope.selected.name = place.name;
             }
 
-            var components = place.formatted_address.split(', ');
+            /*var components = place.formatted_address.split(', ');
             $scope.selected.address_1 = components[0];
             $scope.selected.city = components[1];
             $scope.selected.postcode = components[2].split(' ')[1];
-            $scope.selected.state = components[2].split(' ')[0];
+            $scope.selected.state = components[2].split(' ')[0];*/
+
+            var additional = '';
+
+            for (var i = 0, component; i < place.address_components.length; i++) {
+              component = place.address_components[i];
+              if (component.types[0] === 'route' || component.types[0] === 'street_address') {
+                $scope.selected.address_1 = component['long_name'];
+              }
+
+              if (component.types[0] === 'locality') {
+                $scope.selected.city = component['long_name'];
+              }
+
+              if (component.types[0] === 'postal_code') {
+                $scope.selected.postcode = component['long_name'];
+              }
+
+              if (component.types[0] === 'administrative_area_level_1') {
+                $scope.selected.state = component['long_name'];
+              }
+
+              if (component.types[0] === 'post_box' || component.types[0] === 'street_number'
+                || component.types[0] ==='floor' || component.types[0] ==='room') {
+                additional = component['long_name'] + ' ';
+              }
+            }
+
+            $scope.selected.address_1 = additional + $scope.selected.address_1;
           });
         }
       });

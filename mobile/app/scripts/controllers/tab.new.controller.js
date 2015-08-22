@@ -9,6 +9,7 @@ angular.module('helix.controllers')
         location: {
           easypost: null
         },
+        advance: 2,
         time: {
           earliest: 9,
           latest: 17
@@ -117,8 +118,12 @@ angular.module('helix.controllers')
         return $cordovaDialogs.alert('Please select drop-off address.', 'Missing Information', 'OK');
       }
 
-      if (!$scope.storage.pickup.date) {
+      /*if (!$scope.storage.pickup.date) {
         return $cordovaDialogs.alert('Please select a pickup date.', 'Missing Information', 'OK');
+      }*/
+
+      if (!$scope.storage.travel.arrival) {
+        return $cordovaDialogs.alert('Please select a an arrival date.', 'Missing Information', 'OK');
       }
 
       if (!$scope.storage.pickup.time) {
@@ -138,10 +143,11 @@ angular.module('helix.controllers')
       $http.post(Api.endpoint + '/api/trips', {
         pickup: $scope.storage.pickup,
         dropoff: $scope.storage.dropoff,
-        bags: $scope.storage.bags
+        bags: $scope.storage.bags,
+        travel: $scope.storage.travel
       }).then(function (response) {
         $scope.storage.trip = response.data;
-        $state.go('tab.new-shipping');
+        $state.go('tab.new-estimate');
         $ionicLoading.hide();
       }, function (err) {
         $ionicLoading.hide();
@@ -156,5 +162,10 @@ angular.module('helix.controllers')
       var diff = a.diff(b, 'days') * -1;
 
       return diff;
+    };
+
+    $scope.substractDays = function (date, days) {
+      var a = $moment(date);
+      return a.businessSubtract(days)._d;
     };
   });

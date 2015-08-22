@@ -15,13 +15,14 @@ var TripSchema = new Schema({
   tripData: {},
   spent: Number,
   pickup: {},
-  estimate: {},
-  shipments: [{}],
+  estimate: Number,
   rates: {},
+  shipments: [{}],
   tripStatus: {
     type: String,
     default: 'created'
-  }
+  },
+  cardId: String
 });
 
 TripSchema.plugin(timestamps);

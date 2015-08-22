@@ -1,12 +1,29 @@
 <ion-modal-view ng-controller="ModalTimeSelectCtrl">
   <ion-header-bar>
-    <h1 class="title">Pickup Time</h1>
+    <h1 class="title">Pickup Details</h1>
     <button class="button button-clear button-positive" ng-click="done()">Done</button>
   </ion-header-bar>
-  <ion-content class="grey-bg" scroll="false">
-    <h3 class="text-center" style="padding: 2em">
+  <ion-content class="grey-bg">
+    <div class="item item-divider"><br>Date</div>
+    <ion-radio ng-model="storage.pickup.advance" ng-value="1">
+      1 business day prior to arrival
+      <p ng-if="storage.travel.arrival">
+        {{substractDays(storage.travel.arrival, 1) | date:'fullDate'}}</p>
+    </ion-radio>
+    <ion-radio ng-model="storage.pickup.advance" ng-value="2">
+      2 business days before arrival
+      <p ng-if="storage.travel.arrival">
+        {{substractDays(storage.travel.arrival, 2) | date:'fullDate'}}</p>
+    </ion-radio>
+    <ion-radio ng-model="storage.pickup.advance" ng-value="3">
+      3 business days before arrival
+      <p ng-if="storage.travel.arrival">
+        {{substractDays(storage.travel.arrival, 3) | date:'fullDate'}}</p>
+    </ion-radio>
+    <div class="item item-divider"><br>Time</div>
+    <h4 class="text-center" style="padding: 1em">
       Between {{formatHour(time.earliest)}} and {{formatHour(time.latest)}}
-    </h3>
+    </h4>
 
     <div class="item range range-positive">
       Earliest<input type="range" name="earliest" ng-model="time.earliest" min="1" max="24">

@@ -1,0 +1,61 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Expense Reporting</h1>
+    <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
+  </ion-header-bar>
+
+  <ion-content class="grey-bg">
+    <div ng-if="expenseLoading">
+      <div class="item item-divider"><br></div>
+      <ion-item class="item text-center">
+        <ion-spinner class="spinner-energized"></ion-spinner>
+        <br>Loading connected accounts...
+      </ion-item>
+    </div>
+    <div ng-if="!expenseLoading">
+      <div ng-if="user.concur.accessToken">
+        <div class="item item-divider"><br>Concur</div>
+        <ion-radio class="item" ng-model="report.type" ng-value="-1">
+          Add as a quick expense
+        </ion-radio>
+        <div class="item item-divider"><br></div>
+        <ion-radio class="item" ng-model="report.type" ng-value="-2">
+          Add to a specific Report
+        </ion-radio>
+        <label class="item item-input">
+          <span class="input-label">Report ID</span>
+          <input type="text"
+                 ng-change="report.type = -2"
+                 ng-model="report.id" placeholder="47A257301C9F4941B17Z">
+        </label>
+        <div ng-if="reports.Items.length">
+          <div class="item item-divider"><br>Or select an existing expense report</div>
+          <ion-radio ng-repeat="r in reports.Items" class="item"
+                     ng-click="report.type = -3"
+                     ng-model="report.id" ng-value="r.ID">
+
+            {{r.Name}}
+            <p>{{r.ID}}</p>
+          </ion-radio>
+        </div>
+      </div>
+
+      <div ng-if="!user.concur.accessToken">
+        <ion-item class="item text-center padded">
+          You have not connected any expense reporting accounts
+        </ion-item>
+        <ion-item class="item text-center positive" ng-click="goToConnectedAccounts()">
+          Go to Account Settings
+        </ion-item>
+      </div>
+    </div>
+    <br><br>
+  </ion-content>
+  <ion-footer-bar align-title="left" class="bar-positive" ng-hide="expenseLoading">
+    <button class="button button-block button-clear"
+            ng-click="saveExpense()"
+            style="color: white;margin: 0;">
+      Save
+    </button>
+  </ion-footer-bar>
+</ion-modal-view>

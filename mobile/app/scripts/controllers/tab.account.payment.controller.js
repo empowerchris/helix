@@ -6,7 +6,7 @@ angular.module('helix.controllers')
 
     $scope.loading = true;
 
-    Auth.getCurrentUser().$promise.then(function (user) {
+    Auth.updateCurrentUser().$promise.then(function (user) {
       $scope.cards = user.stripe.cards;
       $scope.loading = false;
     });

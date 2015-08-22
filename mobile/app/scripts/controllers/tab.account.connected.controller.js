@@ -1,10 +1,21 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('AccountConnectedCtrl', function ($scope, $ionicModal, $ionicLoading, $timeout) {
-    $scope.concur = {
-      connected: false
-    };
+  .controller('AccountConnectedCtrl', function ($scope, $ionicModal, $ionicLoading, $timeout, Api, $http, Auth) {
+    $scope.endpoint = Api.endpoint;
+
+    function loadConnectedAccounts() {
+      $scope.loading = true;
+      Auth.updateCurrentUser().$promise.then(function (user) {
+        $scope.loading = false;
+        $scope.userId = user._id;
+        $scope.concur = user.concur;
+      });
+    }
+
+    $scope.$on('$ionicView.enter', function () {
+      loadConnectedAccounts();
+    });
 
     $scope.connectConcur = function() {
       $ionicModal.fromTemplateUrl('templates/modal-connect-concur.html', {
@@ -18,17 +29,7 @@ angular.module('helix.controllers')
     };
 
     $scope.cancel = function() {
+      loadConnectedAccounts();
       $scope.modal.hide();
-    };
-
-    $scope.concurSignIn = function() {
-      $ionicLoading.show({
-        template: '<ion-spinner class=\'spinner-energized\'></ion-spinner><br>Signing in...'
-      });
-      $timeout(function() {
-        $scope.modal.hide();
-        $ionicLoading.hide();
-        $scope.concur.connected = true;
-      }, 1500);
     };
   });

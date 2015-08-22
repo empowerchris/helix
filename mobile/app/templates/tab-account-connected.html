@@ -1,16 +1,32 @@
 <ion-view view-title="Connected Accounts">
   <ion-content class="grey-bg">
-    <div class="item item-divider"><br>Concur</div>
-    <ion-item class="item text-center positive" ng-click="connectConcur()" ng-if="!concur.connected">
-      Connect Concur Account
-    </ion-item>
-    <div ng-if="concur.connected">
+    <div ng-if="loading">
+      <div class="item item-divider"><br></div>
       <ion-item class="item text-center">
-        Connected with {{concur.username}}
+        <ion-spinner class="spinner-energized"></ion-spinner>
+        <br>
+        Loading connected accounts...
       </ion-item>
-      <ion-item class="item text-center positive" ng-click="concur.connected = false">
-        Disconnect Concur Account
+    </div>
+
+    <div ng-if="!loading">
+      <div class="item item-divider"><br>Concur</div>
+      <ion-item class="item text-center positive" ng-click="connectConcur()"
+                ng-if="!concur.accessToken">
+        Connect Concur Account
       </ion-item>
+      <div ng-if="concur.accessToken">
+        <ion-item class="item text-center">
+          Connected via<br>
+          <span class="positive">{{concur.profile.EmailAddress}}</span>
+        </ion-item>
+        <br>
+        <p class="text-center padded">You can now expense your Helix pickups<br>
+           from the app.</p>
+        <!--<ion-item class="item text-center positive" ng-click="concur.connected = false">
+          Disconnect Concur Account
+        </ion-item>-->
+      </div>
     </div>
   </ion-content>
 </ion-view>

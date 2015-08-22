@@ -1,10 +1,10 @@
 <ion-view view-title="Your Order">
   <ion-content class="grey-bg">
     <div id="tab-new-estimate">
-      <div class="estimate text-center" style="padding: 2em">
-        <h1>{{storage.estimate.estimate * ((100 - storage.estimate.variability)/100) | currency}}
+      <div class="estimate text-center" style="padding: 1em">
+        <h2>{{storage.trip.estimate * 0.95 | currency:'$':0}}
             —
-            {{storage.estimate.estimate * ((100 + storage.estimate.variability)/100) | currency}}</h1>
+            {{storage.trip.estimate * 1.05 | currency:'$':0}}</h2>
 
         <p style="opacity: 0.5; margin-top: 1em">
           Estimated price. Your card will be charged 24 to 48 hours after pickup.
@@ -32,7 +32,7 @@
 
 
       <ion-list>
-        <ion-radio ng-repeat="card in cards" class="item"
+        <ion-radio ng-repeat="card in cards" class="item" name="card"
                    ng-model="cardId" ng-value="card.stripe.id" ng-if="!loading">
           <div class="item-icon-left" style="padding-left: 42px">
             <img src="images/credit-card-icons/{{card.stripe.brand | lowercase}}-curved-128px.png" class="icon"
@@ -55,6 +55,14 @@
             Go to Payment Settings
           </ion-item>
         </div>
+        <div class="item item-divider"><br>Expense Reporting</div>
+        <ion-item class="text-center" ng-if="expensing">
+          <span ng-if="report.type == -1">Adding as Quick Expense</span>
+          <span ng-if="report.type !== -1">Report {{report.id}}</span>
+        </ion-item>
+        <ion-item class="text-center positive" ng-click="openExpenseReportModal()">
+          Choose Concur Report
+        </ion-item>
       </ion-list>
       <!--<div>
       <div class="item item-divider">

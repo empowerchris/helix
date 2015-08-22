@@ -34,8 +34,7 @@ angular.module('helixApp', [
           // remove any stale tokens
           $cookieStore.remove('token');
           return $q.reject(response);
-        }
-        else {
+        } else {
           return $q.reject(response);
         }
       }

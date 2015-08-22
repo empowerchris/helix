@@ -5,6 +5,7 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var stripe = require('stripe')(config.stripe.apiKey);
+var concur = require('concur-platform');
 
 var validationError = function (res, err) {
   return res.status(422).json(err);
@@ -18,6 +19,20 @@ exports.index = function (req, res) {
   User.find({}, '-salt -hashedPassword', function (err, users) {
     if (err) return res.status(500).send(err);
     res.status(200).json(users);
+  });
+};
+
+exports.concurReports = function (req, res) {
+  if (!req.user) return res.status(401).send('Unauthorized');
+  if (!req.user.concur.accessToken) return res.status(200).json([]);
+
+  concur.reports.get({
+    oauthToken: req.user.concur.accessToken
+  }).then(function (data) {
+    console.log(data);
+    res.status(200).json(data);
+  }).fail(function (error) {
+    handleError(res, error);
   });
 };
 
@@ -164,3 +179,8 @@ exports.removeCard = function (req, res, next) {
     });
   });
 };
+
+function handleError(res, err) {
+  console.log(err);
+  return res.status(500).json(err.message);
+}

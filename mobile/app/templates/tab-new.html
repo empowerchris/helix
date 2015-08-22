@@ -40,14 +40,14 @@
             </p>
 
             <p ng-if="storage.travel.arrival && storage.travel.departure">
-              {{storage.travel.arrival | date:'EEEE, MMMM d'}} to {{storage.travel.departure | date:'EEEE, MMMM d'}}
+              {{storage.travel.arrival | date:'EEEE, MMMM d'}} to<br> {{storage.travel.departure | date:'EEEE, MMMM d'}}
             </p>
 
             <p ng-if="!storage.travel.arrival || !storage.travel.departure">
               Select dates
             </p>
           </div>
-          <div class="item card-field two-lines" ng-click="openDateSelectModal()">
+          <!--<div class="item card-field two-lines" ng-click="openDateSelectModal()">
             <p class="subtitle">
               PICKUP LUGGAGE ON
             </p>
@@ -69,18 +69,20 @@
             <p ng-if="!storage.pickup.date">
               Select pickup date
             </p>
-          </div>
+          </div>-->
           <div class="item card-field two-lines" ng-click="openTimeSelectModal()">
             <p class="subtitle">
-              LUGGAGE PICKUP TIME
+              LUGGAGE PICKUP
             </p>
 
-            <p ng-if="storage.pickup.time">
+            <p ng-if="storage.travel.arrival && storage.pickup.advance">
+              {{substractDays(storage.travel.arrival, storage.pickup.advance) | date:'fullDate'}}
+              <br>
               Between {{formatHour(storage.pickup.time.earliest)}} and {{formatHour(storage.pickup.time.latest)}}
             </p>
 
-            <p ng-if="!storage.pickup.time">
-              Select pickup time
+            <p ng-if="!storage.travel.arrival || !storage.pickup.advance">
+              Select pickup details
             </p>
           </div>
           <div class="item card-field two-lines" ng-click="openBagOptionsModal()">

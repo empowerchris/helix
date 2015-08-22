@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('ModalTravelDatesSelectCtrl', function ($scope, $moment, $localStorage) {
+  .controller('ModalTravelDatesSelectCtrl', function ($scope, $moment, $localStorage, $cordovaDialogs) {
     $scope.storage = $localStorage;
 
     $scope.storage.mode = $scope.storage.mode || 'arrival';
@@ -32,6 +32,11 @@ angular.module('helix.controllers')
       var diff = a.diff(b, 'days') * -1;
 
       if (diff < 0) {
+        if ($scope.storage.mode === 'arrival') {
+          $scope.travel.arrival = null;
+        } else if ($scope.storage.mode === 'departure') {
+          $scope.travel.departure = null;
+        }
         return $cordovaDialogs.alert('Please select a date in the future', 'Invalid Date', 'OK');
       }
 
