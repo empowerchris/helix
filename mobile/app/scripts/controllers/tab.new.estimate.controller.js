@@ -54,16 +54,13 @@ angular.module('helix.controllers')
 
 
     $scope.goToAddNewCard = function () {
-      console.log('ssdfsdf');
-      //$localStorage.comesFromTrip = true;
-      //console.log($localStorage.comesFromTrip, 'hey');
-      //$location.path('tab/account/payment');
+      $localStorage.comesFromTrip = true;
+      $location.path('tab/account/payment');
     };
 
     $scope.goToConnectedAccounts = function () {
       $localStorage.comesFromTrip = true;
-      console.log($localStorage.comesFromTrip);
-      //$location.path('tab/account/connected');
+      $location.path('tab/account/connected');
     };
 
     $scope.openExpenseReportModal = function () {

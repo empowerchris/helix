@@ -1,11 +1,18 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('AccountPaymentCtrl', function ($scope, $ionicModal, $ionicLoading, $localStorage, Auth, $cordovaDialogs, stripe, $http, Api) {
+  .controller('AccountPaymentCtrl', function ($scope, $ionicModal, $ionicLoading, $localStorage, Auth, $cordovaDialogs,
+                                              stripe, $http, Api, $location) {
     $scope.shouldShowDelete = false;
 
     $scope.loading = true;
     $scope.storage = $localStorage;
+
+    $scope.$on('$ionicView.enter', function () {
+      if ($localStorage.comesFromTrip) {
+        $scope.addNewCard();
+      }
+    });
 
     Auth.updateCurrentUser().$promise.then(function (user) {
       $scope.cards = user.stripe.cards;
@@ -41,12 +48,12 @@ angular.module('helix.controllers')
 
     $scope.cancel = function () {
       $scope.modal.hide();
+
+      if ($localStorage.comesFromTrip) {
+        $location.path('tab/new/estimate');
+      }
     };
 
-    $scope.backToPickup = function () {
-      $localStorage.comesFromTrip = false;
-      $location.path('tab/new/estimate');
-    };
 
     $scope.saveCard = function () {
       if (!$scope.card.name) {
@@ -79,6 +86,10 @@ angular.module('helix.controllers')
 
             $scope.modal.hide();
             $ionicLoading.hide();
+
+            if ($localStorage.comesFromTrip) {
+              $location.path('tab/new/estimate');
+            }
           }, function (error) {
             $ionicLoading.hide();
             console.error(error);
