@@ -63,8 +63,9 @@ var all = {
   },
 
   concur: {
-    clientID:     process.env.CONCUR_ID || 'gQA72oS3Zz3fmW8WI2BXTq',
-    clientSecret: process.env.CONCUR_SECRET || 'uMFxYuFqWH3qRkqrvRfIR9ajrFGWQQ7A',
+    clientID:     process.env.CONCUR_ID || 'Yw9WAhagc2OO7jgNViEEN5' || 'gQA72oS3Zz3fmW8WI2BXTq',
+    clientSecret: process.env.CONCUR_SECRET || 'CRVIqUC6B6Pi2vfk8jl2TmaNEHZmx8Dt' || 'uMFxYuFqWH3qRkqrvRfIR9ajrFGWQQ7A',
+    accessToken:  process.env.ACCESS_TOEKN || 'oy86wRG2gUvewhIXtFBJXlgSsy4=',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/concur/callback'
   },
 

@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('AccountPaymentCtrl', function ($scope, $ionicModal, $ionicLoading, Auth, $cordovaDialogs, stripe, $http, Api) {
+  .controller('AccountPaymentCtrl', function ($scope, $ionicModal, $ionicLoading, $localStorage, Auth, $cordovaDialogs, stripe, $http, Api) {
     $scope.shouldShowDelete = false;
 
     $scope.loading = true;
+    $scope.storage = $localStorage;
 
     Auth.updateCurrentUser().$promise.then(function (user) {
       $scope.cards = user.stripe.cards;
@@ -40,6 +41,11 @@ angular.module('helix.controllers')
 
     $scope.cancel = function () {
       $scope.modal.hide();
+    };
+
+    $scope.backToPickup = function () {
+      $localStorage.comesFromTrip = false;
+      $location.path('tab/new/estimate');
     };
 
     $scope.saveCard = function () {

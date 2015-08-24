@@ -2,7 +2,7 @@
 
 angular.module('helix.controllers')
   .controller('NewCtrl', function ($scope, $ionicModal, $rootScope, $state, $localStorage, $ionicLoading,
-                                   $timeout, $cordovaDialogs, utils, $moment, Api, $http, Auth, $location) {
+                                   $timeout, $cordovaDialogs, utils, $moment, Api, $http) {
     $scope.storage = $localStorage;
     $scope.storage.travel = $scope.storage.travel || {};
     $scope.storage.pickup = $scope.storage.pickup || {
@@ -11,8 +11,8 @@ angular.module('helix.controllers')
         },
         advance: 2,
         time: {
-          earliest: 9,
-          latest: 17
+          earliest: 8,
+          latest: 11
         },
         date: null
       };
@@ -22,6 +22,27 @@ angular.module('helix.controllers')
         },
         date: null
       };
+
+    $scope.$on('$ionicView.enter', function () {
+      $scope.storage.travel = $scope.storage.travel || {};
+      $scope.storage.pickup = $scope.storage.pickup || {
+          location: {
+            easypost: null
+          },
+          advance: 2,
+          time: {
+            earliest: 8,
+            latest: 11
+          },
+          date: null
+        };
+      $scope.storage.dropoff = $scope.storage.dropoff || {
+          location: {
+            easypost: null
+          },
+          date: null
+        };
+    });
 
     $scope.formatHour = utils.formatHour;
 
@@ -35,7 +56,7 @@ angular.module('helix.controllers')
         $scope.modal.hide();
       };
 
-      $scope.title = 'Pickup Address';
+      $scope.title = 'Pickup Location';
 
       $ionicModal.fromTemplateUrl('templates/modal-address-search.html', {
         scope: $scope,
@@ -119,8 +140,8 @@ angular.module('helix.controllers')
       }
 
       /*if (!$scope.storage.pickup.date) {
-        return $cordovaDialogs.alert('Please select a pickup date.', 'Missing Information', 'OK');
-      }*/
+       return $cordovaDialogs.alert('Please select a pickup date.', 'Missing Information', 'OK');
+       }*/
 
       if (!$scope.storage.travel.arrival) {
         return $cordovaDialogs.alert('Please select a an arrival date.', 'Missing Information', 'OK');
@@ -165,7 +186,8 @@ angular.module('helix.controllers')
     };
 
     $scope.substractDays = function (date, days) {
-      var a = $moment(date);
-      return a.businessSubtract(days)._d;
+      //var a = $moment(date);
+      return utils.subtractDeliveryDays(date, days)._d;
+      //return a.businessSubtract(days)._d;
     };
   });

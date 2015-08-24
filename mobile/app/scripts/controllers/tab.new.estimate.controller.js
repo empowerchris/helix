@@ -10,6 +10,7 @@ angular.module('helix.controllers')
 
     $scope.$on('$ionicView.enter', function () {
       $scope.loading = true;
+      $scope.storage.comesFromTrip = false;
       Auth.getCurrentUser().$promise.then(function (user) {
         $scope.user = user;
         $scope.cards = user.stripe.cards;
@@ -26,7 +27,7 @@ angular.module('helix.controllers')
       }
 
       $ionicLoading.show({
-        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Processing payment..."
+        template: "<ion-spinner class='spinner-energized'></ion-spinner><br>Processing..."
       });
 
       var options = {
@@ -36,9 +37,12 @@ angular.module('helix.controllers')
       if ($scope.report) {
         options.report = $scope.report;
       }
+
       $http.post(Api.endpoint + '/api/trips/' + $scope.storage.trip._id + '/pay', options)
         .then(function (response) {
           $ionicLoading.hide();
+          $scope.storage.trip = response.data;
+          console.log(response.data);
           $state.go('tab.new-done');
         }, function (err) {
           $ionicLoading.hide();
@@ -48,23 +52,19 @@ angular.module('helix.controllers')
         });
     };
 
-    $scope.next = function () {
-      $state.go('tab.new-review');
-    };
-
-    $scope.remove = function (card) {
-      console.log($scope.cards.indexOf(card));
-    };
 
     $scope.goToAddNewCard = function () {
-      $location.path('tab/account/payment');
+      console.log('ssdfsdf');
+      //$localStorage.comesFromTrip = true;
+      //console.log($localStorage.comesFromTrip, 'hey');
+      //$location.path('tab/account/payment');
     };
 
     $scope.goToConnectedAccounts = function () {
-      $scope.modal.hide();
-      $location.path('tab/account/connected');
+      $localStorage.comesFromTrip = true;
+      console.log($localStorage.comesFromTrip);
+      //$location.path('tab/account/connected');
     };
-
 
     $scope.openExpenseReportModal = function () {
       $scope.expenseLoading = true;
@@ -83,6 +83,17 @@ angular.module('helix.controllers')
           $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
         });
 
+      /*$http.get(Api.endpoint + '/api/users/concur/expenseGroups')
+       .then(function (response) {
+       $scope.groupsLoading = false;
+       $scope.groups = response.data.Items;
+       console.log(response);
+       }, function (err) {
+       console.error(err);
+       $scope.modal.hide();
+       $cordovaDialogs.alert(err.data.message || err.data || 'Please verify the information provided and try again.', 'Error', 'OK');
+       });*/
+
       $ionicModal.fromTemplateUrl('templates/modal-expense-report.html', {
         scope: $scope,
         animation: 'slide-in-up',
@@ -91,6 +102,10 @@ angular.module('helix.controllers')
         $scope.modal = modal;
         $scope.modal.show();
       });
+    };
+
+    $scope.cancel = function () {
+      $scope.modal.hide();
     };
 
     $scope.saveExpense = function () {

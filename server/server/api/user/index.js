@@ -18,5 +18,6 @@ router.post('/cards', auth.isAuthenticated(), controller.addCard);
 router.post('/cards/delete', auth.isAuthenticated(), controller.removeCard);
 
 router.get('/concur/reports', auth.isAuthenticated(), controller.concurReports);
+router.get('/concur/expenseGroups', auth.isAuthenticated(), controller.expenseGroups);
 
 module.exports = router;

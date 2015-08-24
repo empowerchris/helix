@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('TripsDetailCtrl', function ($scope, $stateParams, $cordovaDialogs, $http, Api, utils) {
+  .controller('TripsDetailCtrl', function ($scope, $stateParams, $cordovaDialogs, $http, Api, utils, $state,
+                                           $localStorage) {
     $scope.formatAddress = function(address) {
       return utils.formattedAddressFromEasypostObject(address);
     };
@@ -18,4 +19,9 @@ angular.module('helix.controllers')
           $cordovaDialogs.alert(err.data.message || err.data || 'Something went wrong. Please try again.', 'Error', 'OK');
         });
     });
+
+    $scope.viewLabel = function(postage_label) {
+      $localStorage.labelUrl = postage_label.label_url;
+      $state.go('tab.trip-detail-label');
+    }
   });

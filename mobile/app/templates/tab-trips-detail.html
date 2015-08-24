@@ -19,9 +19,7 @@
       </ion-item>
       <ion-item>
         {{trip.pickup.min_datetime | date:'fullDate'}}
-      </ion-item>
-      <ion-item>
-        Between {{trip.pickup.min_datetime | date:'hh:mm a'}} and {{trip.pickup.max_datetime | date:'hh:mm a'}}
+        <p>Between {{trip.pickup.min_datetime | date:'hh:mm a'}} and {{trip.pickup.max_datetime | date:'hh:mm a'}}</p>
       </ion-item>
       <div class="item item-divider">
         <br>Dropoff
@@ -30,13 +28,24 @@
         {{formatAddress(trip.tripData.dropoff.location.easypost.address)}}
       </ion-item>
       <ion-item>
-        {{trip.shipments[0].selected_rate.delivery_date | date:'fullDate'}} {{trip.shipments[0].selected_rate.delivery_date | date:'at hh:mm a'}}
+        {{trip.shipments[0].selected_rate.delivery_date | date:'fullDate'}}
+        <p>Around {{trip.shipments[0].selected_rate.delivery_date | date:'hh:mm a'}}</p>
       </ion-item>
       <div class="item item-divider">
         <br>Tracking #
       </div>
       <ion-item ng-repeat="shipment in trip.shipments">
         {{shipment.tracking_code}}
+        <p>{{shipment.parcel.length}} x {{shipment.parcel.width}} x {{shipment.parcel.height}}  {{shipment.parcel.weight}} lbs.</p>
+      </ion-item>
+      <div class="item item-divider">
+        <br>Luggage labels
+      </div>
+      <ion-item class="item-icon-right"
+                ng-repeat="shipment in trip.shipments" ng-click="viewLabel(shipment.postage_label)">
+        View label
+        <p>{{shipment.tracking_code}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
       <br><br><br>
     </div>

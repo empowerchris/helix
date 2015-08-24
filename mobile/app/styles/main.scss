@@ -260,3 +260,14 @@ $secondary: #27316D !default;
     background: transparent;
   }
 }
+
+.angular-date-picker > ._days > ._day.-selectable.-selected {
+  font-weight: bold !important;
+  border: 1px solid orange !important;
+  font-size: x-large !important;
+  background-color: white !important;
+}
+
+.angular-date-picker > ._days > ._day.-selectable.-today {
+  border-color: white !important;
+}

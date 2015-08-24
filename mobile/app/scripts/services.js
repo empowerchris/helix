@@ -7,7 +7,7 @@ function capitalize(s) {
 }
 
 angular.module('helix.services', [])
-  .factory('utils', function () {
+  .factory('utils', function ($moment) {
     return {
       formattedAddressFromEasypostObject: function (easypost) {
         var res = '';
@@ -46,6 +46,26 @@ angular.module('helix.services', [])
         } else {
           return n - 12 + ' PM';
         }
+      },
+      addWeekdays: function (date, days) {
+        date = $moment(date);
+        while (days > 0) {
+          date = date.add(1, 'days');
+          if (date.isoWeekday() !== 7) {
+            days -= 1;
+          }
+        }
+        return date;
+      },
+      subtractDeliveryDays: function (date, days) {
+        date = $moment(date);
+        while (days > 0) {
+          date = date.subtract(1, 'days');
+          if (date.isoWeekday() !== 7) {
+            days -= 1;
+          }
+        }
+        return date;
       }
     }
   });

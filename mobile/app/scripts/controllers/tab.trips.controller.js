@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('helix.controllers')
-  .controller('TripsCtrl', function ($scope, Auth, Api, $cordovaDialogs, $http) {
+  .controller('TripsCtrl', function ($scope, Auth, Api, $cordovaDialogs, $http, $moment) {
     $scope.$on('$ionicView.enter', function () {
       $scope.loading = true;
       $http.get(Api.endpoint + '/api/trips/')
@@ -14,4 +14,8 @@ angular.module('helix.controllers')
           $cordovaDialogs.alert(err.data.message || err.data || 'Something went wrong. Please try again.', 'Error', 'OK');
         });
     });
+
+    $scope.fromNow = function(date) {
+      return $moment(date).fromNow();
+    }
   });

@@ -13,10 +13,11 @@ angular.module('helix', [
   'angular-momentjs',
   'angular.filter',
   'credit-cards',
-  'angular-stripe'
+  'angular-stripe',
+  'ui.mask'
 ])
   .constant('Api', {
-    endpoint: 'http://localhost:9000' //'https://gethelix.herokuapp.com'
+    endpoint: 'https://gethelix.herokuapp.com' //'http://localhost:9000'
   })
 
   .constant('STRIPE_KEY', 'pk_test_tBLnCyjvGT1AcTBr7seToAAi')
@@ -99,6 +100,16 @@ angular.module('helix', [
           'tab-trips': {
             templateUrl: 'templates/tab-trips-detail.html',
             controller: 'TripsDetailCtrl'
+          }
+        }
+      })
+
+      .state('tab.trip-detail-label', {
+        url: '/trips/:id/label',
+        views: {
+          'tab-trips': {
+            templateUrl: 'templates/tab-trips-detail-label.html',
+            controller: 'TripsDetailLabelCtrl'
           }
         }
       })

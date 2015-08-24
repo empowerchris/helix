@@ -38,6 +38,17 @@ exports.index = function (req, res) {
     });
 };
 
+function subtractDeliveryDays(date, days) {
+  date = moment(date);
+  while (days > 0) {
+    date = date.subtract(1, 'days');
+    if (date.isoWeekday() !== 7) {
+      days -= 1;
+    }
+  }
+  return date;
+}
+
 // Get a single trip
 exports.show = function (req, res) {
   Trip.findOne({
@@ -270,7 +281,8 @@ exports.pay = function (req, res) {
       var delivery_date = moment(trip.tripData.travel.arrival);
       var advance = trip.tripData.pickup.advance;
       //var pickup_date = delivery_date.subtract(advance, 'days');
-      var pickup_date = delivery_date.businessSubtract(advance);
+      var pickup_date = subtractDeliveryDays(delivery_date, advance);
+
 
       var options = {
         address: address,
@@ -279,7 +291,7 @@ exports.pay = function (req, res) {
         },
         reference: 'Trip id ' + trip._id,
         instructions: 'Pickup scheduled through Helix. Expected ' + batch.num_shipments + ' pieces of luggage.',
-        min_datetime: pickup_date.subtract(1, 'days').hours(trip.tripData.pickup.time.earliest).format('YYYY-MM-DD HH:mm:ss'),
+        min_datetime: pickup_date.hours(trip.tripData.pickup.time.earliest).format('YYYY-MM-DD HH:mm:ss'),
         max_datetime: pickup_date.hours(trip.tripData.pickup.time.latest).format('YYYY-MM-DD HH:mm:ss')
       };
 
@@ -334,7 +346,8 @@ exports.pay = function (req, res) {
         });
       });
     }, function (trip, batch, pickup, spent, callback) {
-      if (!report) return callback(null, trip, batch, pickup, spent);
+      if (!report || !report.type) return callback(null, trip, batch, pickup, spent);
+      if (!req.user.concur || req.user.concur.accessToken) return callback(null, trip, batch, pickup, spent);
 
       console.log('Expense reporting for trip ' + trip._id);
 
@@ -345,36 +358,47 @@ exports.pay = function (req, res) {
       var stripeFee = ((subtotal + helixFee + taxes) * 0.029) + 0.29;
       var estimate = subtotal + helixFee + taxes + stripeFee;
 
-      if (!req.user.concur.accessToken) return callback(null, trip, batch, pickup, spent);
-
       if (report.type === -1) {
-        // Quick expense
-        var quickexpenseJSON = {
-          'Comment': 'Helix trip #' + trip._id,
-          'CurrencyCode': 'USD',
-          'ExpenseTypeCode': 'CARMI',
-          'LocationCity': trip.tripData.pickup.location.easypost.address.city,
-          'LocationCountry': trip.tripData.pickup.location.easypost.address.country,
-          'LocationSubdivision': trip.tripData.pickup.location.easypost.address.state,
-          'TransactionAmount': estimate,
-          'TransactionDate': Date.now(),
-          'VendorDescription': 'Helix'
-        };
-
-        var options = {
+        concur.quickexpenses.send({
+          oauthToken: req.user.concur.accessToken,
+          loginId: req.user.concur.profile.EmailAddress,
+          contentType: 'application/json',
+          body: {
+            'CurrencyCode': 'USD',
+            'TransactionAmount': estimate,
+            'TransactionDate': moment().format("YYYY-MM-DD"),
+            'VendorDescription': 'Helix',
+            'Comment': 'Helix trip #' + trip._id
+          }
+        }).then(function (data) {
+          console.log(data);
+          callback(null, trip, batch, pickup, spent);
+        }).fail(function (error) {
+          console.error(error);
+          return callback(new Error('Error processing expense report.'), trip);
+        });
+      } else if (report.type === -2 || report.type === -3) {
+        concur.entries.send({
           oauthToken: req.user.concur.accessToken,
           contentType: 'application/json',
-          body: quickexpenseJSON
-        };
-
-        concur.quickexpenses.send(options)
-          .then(function (data) {
-            console.log(data);
-            callback(null, trip, batch, pickup, spent);
-          })
-          .fail(function (error) {
-            return callback(error);
-          });
+          loginId: req.user.concur.profile.EmailAddress,
+          body: {
+            'Comment': 'Helix trip #' + trip._id,
+            'CrnCode': 'USD',
+            'Description': 'Helix trip #' + trip._id,
+            'ExpKey': 'SHIPG',
+            'TransactionAmount': estimate,
+            'VendorDescription': 'Helix',
+            'TransactionDate': moment().format("YYYY-MM-DD"),
+            'reportId': report.id
+          }
+        }).then(function (data) {
+          console.log(data);
+          callback(null, trip, batch, pickup, spent);
+        }).fail(function (error) {
+          console.error(error);
+          return callback(new Error('Error processing expense report.'), trip);
+        });
       }
 
     }, function (trip, batch, pickup, spent, callback) {
@@ -392,6 +416,19 @@ exports.pay = function (req, res) {
         'To': 'Payments@GetHelix.com',
         'Subject': 'Trip ' + trip._id,
         'TextBody': trip
+      });
+
+      var labels = '';
+
+      for (var i = 0; i < trip.shipments.length; i++) {
+        labels += trip.shipments[i].postage_label.label_url + ' \n'
+      }
+
+      client.sendEmail({
+        'From': 'notifications@gethelix.com',
+        'To': req.user.email,
+        'Subject': 'Trip ' + trip._id,
+        'TextBody': 'Thank you for using Helix. Please print the following shipping labels and attach them to your luggage: ' + labels
       });
 
       callback(null, trip);
@@ -530,8 +567,8 @@ exports.create = function (req, res) {
         var today = moment();
         var advance = tripData.pickup.advance;
         //var pickup_date = delivery_date.subtract(advance, 'days');
-        var pickup_date = delivery_date.businessSubtract(advance);
-
+        //var pickup_date = delivery_date.businessSubtract(advance);
+        var pickup_date = subtractDeliveryDays(delivery_date, advance);
         var days_until_pickup = pickup_date.diff(today, 'days');
 
         var options = {
@@ -551,7 +588,18 @@ exports.create = function (req, res) {
           bagsWithParcels[index].shipment = shipment;
 
           shipments.push(shipment);
-          //console.log(shipment);
+          console.log(shipment);
+
+          if (shipment.messages.length) {
+            var errors = '';
+
+            for (var i = 0; i < shipment.messages.length; i++) {
+              errors += shipment.messages[i].message + ' ';
+            }
+
+            console.log(errors);
+            return callback(new Error(errors));
+          }
 
           callback(null);
         });
@@ -580,7 +628,7 @@ exports.create = function (req, res) {
 
       var delivery_date = moment(tripData.travel.arrival);
       var advance = tripData.pickup.advance;
-      var pickup_date = delivery_date.businessSubtract(advance);
+      var pickup_date = subtractDeliveryDays(delivery_date, advance);
       var natural_days = delivery_date.diff(pickup_date, 'days');
 
       console.log('Natural days (shipment delivery days)', natural_days);
@@ -612,7 +660,7 @@ exports.create = function (req, res) {
         for (var shipment in rates) {
           console.log(rates, moment(rates[shipment].delivery_date).diff(delivery_date, 'days'));
 
-          if (!rates[shipment] || moment(rates[shipment].delivery_date).diff(delivery_date, 'days') !== 0) {
+          if (!rates[shipment] || moment(delivery_date).diff(rates[shipment].delivery_date, 'days') !== 0) {
             return callback(new Error('One or more bags could not be shipped with the dates specified. Please change the pickup details or luggage information and try again.'))
           }
         }
@@ -707,6 +755,6 @@ exports.create = function (req, res) {
  */
 
 function handleError(res, err) {
-  console.log(err);
+  console.error(err);
   return res.status(500).json(err.message);
 }

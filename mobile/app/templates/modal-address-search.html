@@ -1,7 +1,8 @@
 <ion-modal-view ng-controller="ModalAddressSearchCtrl">
   <ion-header-bar class="item-input-inset">
-    <h1 class="title">{{title}}</h1>
     <button class="button button-clear button-positive" ng-click="cancel()">Cancel</button>
+    <h1 class="title">{{title}}</h1>
+    <button class="button button-clear button-positive" ng-if="selected" ng-click="save()">Done</button>
   </ion-header-bar>
   <ion-header-bar class="item-input-inset bar-subheader" style="top:0px" ng-if="searching">
     <label class="item-input-wrapper">
@@ -131,14 +132,15 @@
           </div>
         </ion-item>
       </ion-list>
+      <br><br>
     </div>
     <div id="map" style="display: none">
     </div>
   </ion-content>
-  <ion-footer-bar class="bar-positive" keyboard-attach ng-if="selected">
+  <!--<ion-footer-bar class="bar-positive" keyboard-attach ng-if="selected">
     <button class="button button-block button-clear"
             ng-click="save()"
             style="color: white;margin: 0;">Save
     </button>
-  </ion-footer-bar>
+  </ion-footer-bar>-->
 </ion-modal-view>

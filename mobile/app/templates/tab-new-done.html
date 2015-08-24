@@ -6,16 +6,25 @@
   </ion-nav-bar>
   <ion-content class="grey-bg">
     <div id="tab-new-done">
-      <div style="text-align: center; padding: 20%; height: 100vh">
-        <h2>Your pickup has been scheduled!</h2>
-        <br>
-        <button class="button button-block button-positive button-clear" ng-click="">
-          <button class="button button-clear button-block button-positive"
-                  ng-click="restart()">
-            <strong>Create another pickup</strong>
-          </button>
-        </button>
+      <h2 class="padded text-center" style="padding: 1em">Your pickup has been scheduled!</h2>
+      <p class="text-center" style="padding: 0.7em">We have sent you a confirmation email with the shipping labels. Please print them and attach them to your luggage.</p>
+      <br>
+
+      <div class="item item-divider">
+        <br>Your Pickup
       </div>
+      <ion-item ng-if="trip.pickup.address">
+        {{formatAddress(trip.pickup.address)}}
+      </ion-item>
+      <ion-item>
+        {{trip.pickup.min_datetime | date:'fullDate'}}
+        <p>Between {{trip.pickup.min_datetime | date:'hh:mm a'}} and {{trip.pickup.max_datetime | date:'hh:mm a'}}</p>
+      </ion-item>
+      <br><br>
+      <ion-item class="item text-center positive" ng-click="restart()">
+        <strong>Create another pickup</strong>
+      </ion-item>
+      <br><br>
     </div>
   </ion-content>
 </ion-view>

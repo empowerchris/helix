@@ -4,7 +4,8 @@ angular.module('helix.controllers')
   .controller('ModalTravelDatesSelectCtrl', function ($scope, $moment, $localStorage, $cordovaDialogs) {
     $scope.storage = $localStorage;
 
-    $scope.storage.mode = $scope.storage.mode || 'arrival';
+    $scope.storage.mode = 'arrival'; //    $scope.storage.mode = 'arrival'; //
+
 
     $scope.travel = {};
 

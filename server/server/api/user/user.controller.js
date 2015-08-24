@@ -36,6 +36,20 @@ exports.concurReports = function (req, res) {
   });
 };
 
+exports.expenseGroups = function (req, res) {
+  if (!req.user) return res.status(401).send('Unauthorized');
+  if (!req.user.concur.accessToken) return res.status(200).json([]);
+
+  concur.expenseGroupConfigurations.get({
+    oauthToken: req.user.concur.accessToken
+  }).then(function (data) {
+    console.log(data);
+    res.status(200).json(data);
+  }).fail(function (error) {
+    handleError(res, error);
+  });
+};
+
 /**
  * Creates a new user
  */
